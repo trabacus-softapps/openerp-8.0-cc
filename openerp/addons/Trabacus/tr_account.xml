@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+<!-- ****************************************************************************** 	   
+				   				Receipt , Refund , Payment Vocuher 
+     ****************************************************************************** -->
+        <record model="ir.ui.view" id="tr_view_voucher_filter_customer_pay">
+            <field name="name">tr_view_voucher_filter_customer_pay</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher.view_voucher_filter_customer_pay"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@string='Posted']" position="after">
+                    <filter icon="terp-document-new" string="For Reconcile" domain="[('pay_type','=','cheque'),('value_date','=',False)]" help="Reconciled Vouchers"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="tr_view_voucher_filter_vendor_pay">
+            <field name="name">tr_view_voucher_filter_vendor_pay</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher.view_voucher_filter_vendor_pay"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@string='Posted']" position="after">
+                    <filter icon="terp-document-new" string="For Reconcile" domain="[('pay_type','=','cheque'),('value_date','=',False)]" help="Reconciled Vouchers"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="tr_view_vendor_receipt_form">
+            <field name="name">tr_account.voucher.receipt.form</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher.view_vendor_receipt_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='reference']" position="attributes">
+                    <attribute name = "required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="account_analytic_id"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_option']" position="after">
+                    <field name="edit_voucher" readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='amount']" position="after">
+                    <button name="auto_pairing" colspan="1" class="oe_inline" states="draft" type="object" icon="gtk-go-forward" width="10"/><newline/>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name = "on_change">onchange_partner_id(partner_id, journal_id,0 , currency_id, type, date, context)</attribute>
+                </xpath>
+                <xpath expr="//field[@name='amount']" position="attributes">
+                    <attribute name = "on_change">onchange_amount(0, payment_rate, partner_id, journal_id, currency_id, type, date, payment_rate_currency_id, company_id, context)</attribute>
+                </xpath> 
+                <xpath expr="//field[@name='journal_id']" position="attributes">
+                    <attribute name = "on_change">onchange_journal(journal_id, line_cr_ids, False, partner_id, date, 0, type, company_id, context)</attribute>
+                </xpath>
+                <xpath expr="//field[@name='journal_id']" position="after">
+                    <field name="pay_type"/>
+                    <field name="cheque_no" attrs="{'invisible':[('pay_type','=','cash')]}"/>
+                    <field name="cheque_date" attrs="{'invisible':[('pay_type','=','cash')]}"/>
+                    <field name="bank_id" attrs="{'invisible':[('pay_type','=','cash')]}"/>
+                    <field name="branch" attrs="{'invisible':[('pay_type','=','cash')]}"/>  
+                    <field name ="value_date" attrs="{'invisible':[('pay_type','=','cash')]}"/>                 
+                </xpath>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="deposit_in" attrs="{'readonly':[('state','not in',('draft'))]}"/>
+                    <field name="deposit_dt" attrs="{'readonly':[('state','not in',('draft'))]}"/>
+                </xpath>
+                <xpath expr="//button[@name='cancel_voucher']" position="after">
+                    <button name="print_receipt" string="Print Receipt" type="object" attrs="{'invisible':[('state','not in','posted')]}"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <!--	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       			Voucher  - readonly for user , editable for manager  
+  		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        --> 
+        <record id="tr_view_vendor_receipt_form_readonly" model="ir.ui.view">
+            <field name="name">tr_view_vendor_receipt_form_readonly</field>
+            <field name="model">account.voucher</field>
+            <field name="groups_id" eval="[(6, 0, [ref('Trabacus.group_traccount_manager')])]"/>
+            <field name="inherit_id" ref="Trabacus.tr_view_vendor_receipt_form"/>
+            <field name="arch" type="xml">
+                <field name='edit_voucher' position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+            </field>
+        </record>  
+        
+<!-- ****************************************************************************** 	   
+				   				Account Voucher 
+     ****************************************************************************** -->
+
+        <record model="ir.ui.view" id="view_tr_account_vendor_receipt_dialog_form">
+            <field name="name">view_tr_account_vendor_receipt_dialog_form</field>
+            <field name="model">account.voucher</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account_voucher.view_vendor_receipt_dialog_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='reference']" position="attributes">
+                    <attribute name = "required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="account_analytic_id"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_option']" position="after">
+                    <field name="edit_voucher" readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='amount']" position="after">
+                    <button name="auto_pairing" colspan="1" class="oe_inline" states="draft" type="object" icon="gtk-go-forward" width="10"/><newline/>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name = "on_change">onchange_partner_id(partner_id, journal_id,0 , currency_id, type, date, context)</attribute>
+                </xpath>
+                <xpath expr="//field[@name='amount']" position="attributes">
+                    <attribute name = "on_change">onchange_amount(0, payment_rate, partner_id, journal_id, currency_id, type, date, payment_rate_currency_id, company_id, context)</attribute>
+                </xpath> 
+                <xpath expr="//field[@name='journal_id']" position="attributes">
+                    <attribute name = "on_change">onchange_journal(journal_id, line_cr_ids, False, partner_id, date, 0, type, company_id, context)</attribute>
+                </xpath>
+                <xpath expr="//field[@name='journal_id']" position="after">
+                    <field name="pay_type"/>
+                    <field name="cheque_no" attrs="{'invisible':[('pay_type','=','cash')]}"/>
+                    <field name="cheque_date" attrs="{'invisible':[('pay_type','=','cash')]}"/>
+                    <field name="bank_id" attrs="{'invisible':[('pay_type','=','cash')]}"/>
+                    <field name="branch" attrs="{'invisible':[('pay_type','=','cash')]}"/>                   
+                </xpath>
+            </field>
+        </record>
+        
+        <!--	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       			Voucher  - readonly for user , editable for manager  
+  		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        --> 
+        <record id="tr_view_vendor_receipt_dialog_form_readonly" model="ir.ui.view">
+            <field name="name">tr_view_vendor_receipt_dialog_form_readonly</field>
+            <field name="model">account.voucher</field>
+            <field name="groups_id" eval="[(6, 0, [ref('Trabacus.group_traccount_manager')])]"/>
+            <field name="inherit_id" ref="Trabacus.view_tr_account_vendor_receipt_dialog_form"/>
+            <field name="arch" type="xml">
+                <field name='edit_voucher' position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+            </field>
+        </record>  
+        
+<!-- ****************************************************************************** 	   
+				   			Supplier Payment
+     ****************************************************************************** -->
+
+        <record model="ir.ui.view" id="view_tr_account_vendor_payment_form">
+            <field name="name">view_tr_account_vendor_payment_form</field>
+            <field name="model">account.voucher</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account_voucher.view_vendor_payment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='reference']" position="attributes">
+                    <attribute name = "required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="account_analytic_id"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_option']" position="after">
+                    <field name="edit_voucher" readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='amount']" position="after">
+                    <button name="auto_pairing" colspan="1" class="oe_inline" states="draft" type="object" icon="gtk-go-forward" width="10"/><newline/>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name = "on_change">onchange_partner_id(partner_id, journal_id,0 , currency_id, type, date, context)</attribute>
+                </xpath>
+                <xpath expr="//field[@name='amount']" position="attributes">
+                    <attribute name = "on_change">onchange_amount(0, payment_rate, partner_id, journal_id, currency_id, type, date, payment_rate_currency_id, company_id, context)</attribute>
+                </xpath> 
+                <xpath expr="//field[@name='journal_id']" position="attributes">
+                    <attribute name = "on_change">onchange_journal(journal_id, line_cr_ids, False, partner_id, date, 0, type, company_id, context)</attribute>
+                </xpath>
+                <xpath expr="//field[@name='journal_id']" position="after">
+                    
+                    <field name="pay_type"/>
+                    <field name="cheque_no" attrs="{'invisible':[('pay_type','=','cash')]}"/>
+                    <field name="cheque_date" attrs="{'invisible':[('pay_type','=','cash')]}"/>
+                    <field name="bank_id" attrs="{'invisible':[('pay_type','=','cash')]}"/>
+                    <field name="branch" attrs="{'invisible':[('pay_type','=','cash')]}"/>
+                    <field name ="value_date" attrs="{'invisible':[('pay_type','=','cash')]}"/>
+                </xpath>
+                <xpath expr="//button[@name='cancel_voucher']" position="after">
+                    <button name="print_receipt" string="Print Voucher" type="object" attrs="{'invisible':[('state','not in','posted')]}"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <!--	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       			Voucher  - readonly for user , editable for manager  
+  		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        --> 
+        <record id="view_tr_account_vendor_payment_form_readonly" model="ir.ui.view">
+            <field name="name">view_tr_account_vendor_payment_form_readonly</field>
+            <field name="model">account.voucher</field>
+            <field name="groups_id" eval="[(6, 0, [ref('Trabacus.group_traccount_manager')])]"/>
+            <field name="inherit_id" ref="Trabacus.view_tr_account_vendor_payment_form"/>
+            <field name="arch" type="xml">
+                <field name='edit_voucher' position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+            </field>
+        </record>
+   
+<!-- 
+ 				==========================================================================	
+ 				   						Bank Statments 				
+ 				==========================================================================
+-->
+		<record model="ir.ui.view" id="view_bank_statement_form_inheritedtr">
+			<field name="name">view.bank.statement.form.inheritedtr</field>
+			<field name="model">account.bank.statement</field>
+			<field name="type">form</field>
+            <field name="inherit_id" ref="account.view_bank_statement_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="edit_bankcash" readonly="1"/>
+                </xpath>
+                    
+                <xpath expr="//button[@string='Import Invoices']" position="attributes">
+                    <attribute name = "invisible">1</attribute>
+                </xpath>
+                
+                <xpath expr="//field[@name='account_id']" position="after">
+                    <field name="pay_type"/>
+                    <field name="cheq_no"/>
+                    <field name="cheq_date"/>
+                    <field name="bank_id"/>
+                    <field name="branch"/>
+                    <field name="value_date"/>
+                </xpath>
+                
+            	<notebook position="inside">
+            		<page string="Receipts">
+            			<field name="receipt_ids"/>
+        			</page>
+        			<page string="Payments">
+            			<field name="payment_ids"/>
+        			</page>
+            	    <page string="Cash Register">
+            	        <field name="cash_ids">
+            	            <tree string="Cash Register"> 
+            	                <field name="sequence" invisible="1"/>
+            	                <field name="date"/>
+            	                <field name="name"/>
+            	                <field name="ref"/>
+            	                <field name="partner_id"/>
+            	                <field name="type" />
+            	                <field name="account_id"/>
+            	                <field name="analytic_account_id"  />
+            	                <field name="tr_debit" sum="debit"/>
+            	                <field name="tr_credit" sum="credit"/> 
+            	            </tree>
+            	        </field>
+            	    </page>
+            	</notebook>
+            </field>
+		</record>
+		
+		 <record model="ir.ui.view" id="view_bank_statement_form_voucher_inheritedtr">
+			<field name="name">view.bank.statement.form.voucher.inheritedtr</field>
+			<field name="model">account.bank.statement</field>
+			<field name="type">form</field>
+            <field name="inherit_id" ref="account_voucher.view_bank_statement_form_voucher"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//field[@name='voucher_id']" position="attributes">
+                    <attribute name = "invisible">1</attribute>
+            	 </xpath>
+            </field>
+		</record> 
+
+        <!--	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       			Bankstatement  - readonly for user , editable for manager  
+  		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        --> 
+        <record id="view_bank_statement_form_inheritedtr_readonly" model="ir.ui.view">
+            <field name="name">view_bank_statement_form_inheritedtr_readonly</field>
+            <field name="model">account.bank.statement</field>
+            <field name="groups_id" eval="[(6, 0, [ref('Trabacus.group_traccount_manager')])]"/>
+            <field name="inherit_id" ref="Trabacus.view_bank_statement_form_inheritedtr"/>
+            <field name="arch" type="xml">
+                <field name='edit_bankcash' position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+            </field>
+        </record>
+
+<!--             ==========================================================================	
+ 				   						Cash Registers
+ 				========================================================================== -->
+        
+        <record model="ir.ui.view" id="tr_view_bank_statement_form2">
+            <field name="name">tr_view_bank_statement_form2</field>
+            <field name="model">account.bank.statement</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.view_bank_statement_form2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="edit_bankcash" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+        
+   <!--	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       			Cash Registers  - readonly for user , editable for manager  view_move_form
+  		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        --> 
+        <record id="tr_view_bank_statement_form2_readonly" model="ir.ui.view">
+            <field name="name">tr_view_bank_statement_form2_readonly</field>
+            <field name="model">account.bank.statement</field>
+            <field name="groups_id" eval="[(6, 0, [ref('Trabacus.group_traccount_manager')])]"/>
+            <field name="inherit_id" ref="Trabacus.tr_view_bank_statement_form2"/>
+            <field name="arch" type="xml">
+                <field name='edit_bankcash' position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+            </field>
+        </record>
+ 
+<!--             ==========================================================================	
+ 				   						Move
+ 				========================================================================== -->
+        
+        <record model="ir.ui.view" id="tr_view_move_form">
+            <field name="name">tr_view_move_form</field>
+            <field name="model">account.move</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='to_check']" position="after">
+                    <field name="edit_move" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <!--	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       			  move - readonly for user , editable for manager  
+  		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        --> 
+        <record id="tr_view_move_form_readonly" model="ir.ui.view">
+            <field name="name">tr_view_move_form_readonly</field>
+            <field name="model">account.move</field>
+            <field name="groups_id" eval="[(6, 0, [ref('Trabacus.group_traccount_manager')])]"/>
+            <field name="inherit_id" ref="Trabacus.tr_view_move_form"/>
+            <field name="arch" type="xml">
+                <field name='edit_move' position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+            </field>
+        </record>
+        
+ 	</data>
+</openerp>
+
+

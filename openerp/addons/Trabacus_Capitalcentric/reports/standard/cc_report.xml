@@ -1,0 +1,11 @@
+<openerp>
+    <data>
+        <report auto="False" id="account.account_3rdparty_ledger" menu="False" model="res.partner"
+            name="accoount.third_party_ledger"
+            rml="Trabacus_Capitalcentric/reports/standard/cc_partner_ledger.rml" string="Partner Ledger"/>
+        <report auto="False" id="account.account_3rdparty_ledger_other" menu="False"
+            model="res.partner" name="account.third_party_ledger_other"
+            rml="Trabacus_Capitalcentric/reports/standard/cc_partner_ledger_other.rml"
+            string="Partner Ledger"/>
+    </data>
+</openerp>

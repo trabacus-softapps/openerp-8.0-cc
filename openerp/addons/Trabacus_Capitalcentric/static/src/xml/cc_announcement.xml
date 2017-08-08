@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="cc_template" xml:space="preserve">
+  <t t-extend="WebClient">
+    <t t-jquery="span.url" t-operation="replace"/>    
+    <t t-jquery="span.message" t-operation="replace"/>    
+  </t>
+  
+</templates>

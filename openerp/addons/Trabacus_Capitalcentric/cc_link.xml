@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<!-- ======================================================== CRM =====================================================-->
+
+		<delete model="ir.ui.view"
+			search="[('name','=','CRM - Opportunities - Quote Inherit'),('model','=','crm.lead')]"/>
+		<delete model="ir.ui.view"
+			search="[('name','=','CRM - Leads Form'),('model','=','crm.lead')]"/>
+
+		<!-- ======================================================== Partner =====================================================-->
+
+		<delete model="ir.ui.view"
+			search="[('name','=','res.partner.view.buttons'),('model','=','res.partner'),('xml_id','=','crm.res_partner_view_buttons')]"/>
+		<delete model="ir.ui.view"
+			search="[('name','=','res.partner.view.address_type'),('model','=','res.partner'),('xml_id','=','sale.res_partner_address_type')]"/>
+		<delete model="ir.ui.view"
+			search="[('name','=','view.res.partner.form.crm.inherited1'),('model','=','res.partner'),('xml_id','=','crm.view_partners_form_crm1')]"/>
+
+		<!-- ======================================================== Default Data : crm.case.stage =====================================================-->
+
+		<delete model="crm.case.stage"
+			search="[('name','=','Qualification'),('type','=','opportunity'),('sequence','=',100)]"/>
+		<delete model="crm.case.stage"
+			search="[('name','=','Proposition'),('type','=','opportunity'),('sequence','=',110)]"/>
+		<delete model="crm.case.stage"
+			search="[('name','=','Negotiation'),('type','=','opportunity'),('sequence','=',120)]"/>
+		<delete model="crm.case.stage"
+			search="[('name','=','Won'),('type','=','opportunity'),('sequence','=',130)]"/>
+		<delete model="crm.case.stage"
+			search="[('name','=','Lost'),('type','=','opportunity'),('sequence','=',140)]"/>
+
+		<!-- ======================================================== account.invoice =====================================================-->
+
+		<delete model="ir.actions.report.xml" search="[('name','=','Invoices'),('model','=','account.invoice')]"/>
+
+	</data>
+</openerp>

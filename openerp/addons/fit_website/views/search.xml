@@ -1,0 +1,1577 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+<!--    ==============================================================          
+            Westfield GreenWich Grid View and Events Result Page    
+        ==============================================================   -->
+
+        <template id="westfield_search" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="fit_website.capitalcentric_layout">
+                <t t-set="ref_content">
+                    <div class="main-wrapper">
+                        <div class="second-search-restaurant-wrapper">
+                            <div class="container">
+                                    <form id="modify_search" action="/capital_centric/fit/grid_view" method="post">
+                                        <div class="second-search-result-inner" style="padding-left:0px;">
+                                            <div class="row">
+                                                <div class="col-xss-12 col-xs-6 col-sm-6 col-md-4">
+                                                    <div class="form-group form-lg">
+                                                        <select class="form-control" name="location_id">
+                                                            <option t-att-selected="'selected' if post.get('location_id') == 'all' else ''" value="all">All Locations</option>
+                                                            <t t-foreach="city_browse" t-as="city">
+                                                                <option t-att-selected="'selected' if post.get('location_id') != 'all' and int(post.get('location_id')) == city.id else ''" t-att-value="city.id"><t t-esc="city.name"/></option>
+                                                            </t>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xss-12 col-xs-6 col-sm-6 col-md-2">
+                                                    <div class="form-group form-lg">
+                                                            <select class="form-control" name="no_persons">
+                                                                <!--<option t-att-selected="'selected' if post.get('no_persons') == 'all' else ''" value="all">All</option>-->
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '1' else ''" value="1">1 person</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '2' else ''" value="2">2 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '3' else ''" value="3">3 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '4' else ''" value="4">4 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '5' else ''" value="5">5 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '6' else ''" value="6">6 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '7' else ''" value="7">7 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '8' else ''" value="8">8 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '9' else ''" value="9">9 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '10' else ''" value="10">10 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '11' else ''" value="11">11 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '12' else ''" value="12">12 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '13' else ''" value="13">13 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '14' else ''" value="14">14 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '15' else ''" value="15">15 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '16' else ''" value="16">16 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '17' else ''" value="17">17 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '18' else ''" value="18">18 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '19' else ''" value="19">19 people</option>
+                                                                <option t-att-selected="'selected' if post.get('no_persons') == '20' else ''" value="20">20 people</option>
+                                                            </select>
+                                                        </div>
+                                                </div>
+                                                <div class="col-xss-12 col-xs-6 col-sm-6 col-md-2">
+                                                    <div class="form-group form-lg">
+                                                        <input placeholder="Select Date" type="text" name="resv_date" class="form-control datepicker" t-att-value="post.get('resv_date')"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xss-12 col-xs-6 col-sm-6 col-md-2">
+                                                    <div class="form-group form-lg">
+                                                        <select class="form-control" name="type">
+                                                            <option t-att-selected="'selected' if post.get('type') == 'break_fast' else ''" value="break_fast">Breakfast</option>
+                                                            <option t-att-selected="'selected' if post.get('type') == 'lunch' else ''" value="lunch">Lunch</option>
+                                                            <option t-att-selected="'selected' if post.get('type') == 'at' else ''" value="at">Afternoon Tea</option>
+                                                            <option t-att-selected="'selected' if post.get('type') == 'dinner' else ''" value="dinner">Dinner</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xss-12 col-xs-6 col-sm-4 col-md-2">
+                                                    <button type="submit" class="btn btn-block search_btn">Search Again</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                            </div>
+                        </div>
+                        <!-- end restaurant search -->
+
+                        <!-- start breadcrumb -->
+                        <div class="breadcrumb-wrapper">
+                            <div class="container">
+
+                            <ol class="breadcrumb-list booking-step">
+                                <li><a href="/">Home</a></li>
+                                <li><span>Restaurant</span></li>
+                            </ol>
+
+                             </div>
+                        </div>
+                        <!-- end breadcrumb -->
+
+                        <div class="section sm">
+                            <div class="container">
+                                <div style="cursor: pointer;position: fixed;_position: absolute;display: block;top: 15%;_top: expression(eval(document.body.scrollTop)+422);right: 0px;z-index: 2147000000;" class="main_color">
+                                    <table>
+                                        <tr>
+                                            <td style="vertical-align:top;padding:0;">
+                                                <div class="border_main text-center" style="padding: 10px 5px 10px 10px;" title="Contact Us" id="button">
+                                                    <i class="fa fa-envelope" style="font-size:2em;"/>
+                                                    <br/>
+                                                    <span style="">Email Us</span>
+                                                </div>
+                                            </td>
+                                            <td style="padding:0;">
+                                                <div id="contact_us_pop_up" class="border_main">
+                                                    <form action="/website_capitalcentric/contact_us_form/pop_up" name="" method="POST" id="pop_up_contact_form">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h3 class="modal-title">Contact Us</h3>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="col-md-12">
+                                                                    <div class="reservation-left-side">
+                                                                        <div class="form-horizontal">
+                                                                            <!-- Form Horizontal -->
+                                                                            <div class="form-group">
+                                                                                <!-- Full Name -->
+                                                                                <label class="col-sm-3 control-label">Name&amp;nbsp;</label>
+                                                                                <div class="col-sm-9">
+                                                                                    <input id="contact_name" required="True" class="form-control operator_inputs" type="text" name="name" title=""/>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- Full Name end -->
+
+                                                                            <div class="form-group">
+                                                                                <!-- Email Address -->
+                                                                                <label class="col-sm-3 control-label">Email Address&amp;nbsp;</label>
+                                                                                <div class="col-sm-9">
+                                                                                    <input id="contact_email" required="True" class="form-control operator_inputs" type="email" name="email" placeholder="" title=""/>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- Email Address end -->
+
+                                                                            <div class="form-group">
+                                                                                <!-- Telephone/Mobile Number -->
+                                                                                <label class="col-sm-3 control-label">Tel/Mob Number&amp;nbsp;</label>
+                                                                                <div class="col-sm-9">
+                                                                                    <input required="True" id="contact_phone" class="form-control operator_inputs" type="text" name="phone" placeholder="" title=""/>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- Telephone/Mobile Number end -->
+
+                                                                            <div class="form-group">
+                                                                                <!-- Special Guest -->
+                                                                                <label class="col-sm-3 control-label">Message</label>
+                                                                                <div class="col-sm-9">
+                                                                                    <textarea  required="True" id="contact_message" class="form-control operator_inputs" type="text" name="message" title=""/>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- Special Guest end -->
+
+                                                                            <div class="form-group hidden">
+                                                                                <!-- Captcha -->
+                                                                                <label class="col-sm-3 control-label hidden-xs"></label>
+                                                                                <div class="col-sm-9">
+                                                                                    <div class="g-recaptcha" data-sitekey="6Lcglw8TAAAAAN3HEiMa0JwmjgM1Y3HNqHURokq3" data-theme="light"></div>
+                                                                                    <p class="alert alert-danger contact_us_msg" style="margin:0;width:100%;text-align:center;">
+                                                                                        Thank you. We will get back to you shortly.
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- Captcha end -->
+
+                                                                        </div>
+                                                                        <!-- Form Horizontal end -->
+                                                                    </div>
+                                                                </div>
+                                                                <p class="alert alert-danger contact_us_msg" style="">
+                                                                    Thank you. We will get back to you shortly.
+                                                                </p>
+                                                            </div>
+                                                            <div class="modal-footer" style="border-top:0px;">
+                                                                <input type="reset" id="reset_button" class="btn btn-primary pull-right" name="contact_us_reset">  </input>
+                                                                <input name="contact_submit_button" type="submit" id="submit_button" class="btn btn-primary pull-right" style="margin-right: 15px;">  </input>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-5 col-md-3">
+                                        <div class="company-detail-sidebar" style="padding:44px 15px 40px;">
+                                            <h2 class="heading mb-15">Filters</h2>
+                                            <ul class="meta-list clearfix">
+                                                <li>
+                                                    <input type="text" class="form-control" placeholder="Name/Address/Postcode" id="hotel_namesearch" style="">
+                                                        <i class="ion-android-search" style="float: right;margin-top: -25px;margin-right: 7px;font-size: 16px;"/>
+                                                    </input>
+                                                </li>
+                                                <li>
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <a data-toggle="collapse" class="btn btn-toggle collapsed filter_btn" data-target="#category_filter" aria-expanded="false">Type <i class="fa fa-plus-circle"></i></a>
+                                                        </label>
+
+                                                        <div class="collapse" id="category_filter">
+                                                            <div id="res_category" class="job-type-checkbox-wrapper clearfix" style="width:100%;"/>
+                                                        </div>
+
+                                                    </div>
+                                                </li>
+                                                <t t-if="website.user_id != user_id">
+                                                    <li>
+                                                        <div class="form-group">
+                                                            <label>
+                                                                <a data-toggle="collapse" class="btn btn-toggle collapsed filter_btn" data-target="#price_filter" aria-expanded="false">Price <i class="fa fa-plus-circle"></i></a>
+                                                            </label>
+                                                            <div class="sidebar-module-inner collapse" id="price_filter">
+                                                                <div id="price-range"></div>
+                                                                <br />
+                                                                <span class="min-price-label pull-left"></span>
+                                                                <span class="max-price-label pull-right"></span>
+                                                                <input type="text" readonly="readonly" id="prc_input" class="slider_inputs text-right hidden" value=""/>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </t>
+                                                <li>
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <a data-toggle="collapse" class="btn btn-toggle collapsed filter_btn" data-target="#table_filter" aria-expanded="false">Table Size <i class="fa fa-plus-circle"></i></a>
+                                                        </label>
+                                                        <div class="sidebar-module-inner collapse" id="table_filter">
+                                                            <div id="table-range"></div>
+                                                            <br />
+                                                            <span class="min-table-label pull-left"></span>
+                                                            <span class="max-table-label pull-right"></span>
+                                                            <input type="text" readonly="readonly" id="table_input" class="slider_inputs text-right hidden" value=""/>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <a data-toggle="collapse" class="btn btn-toggle collapsed filter_btn" data-target="#cuisine_filter" aria-expanded="false">Cuisine <i class="fa fa-plus-circle"></i></a>
+                                                        </label>
+                                                        <div class="collapse" id="cuisine_filter">
+                                                            <div id="res_cuisine" class="job-type-checkbox-wrapper clearfix" style="width:100%;"/>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <a data-toggle="collapse" class="btn btn-toggle collapsed filter_btn" data-target="#dining_filter" aria-expanded="false">Dining Style <i class="fa fa-plus-circle"></i></a>
+                                                        </label>
+                                                        <div class="collapse" id="dining_filter">
+                                                            <div id="res_dining" class="job-type-checkbox-wrapper clearfix" style="width:100%;"/>
+                                                        </div>
+                                                        <!--<select class="selectpicker show-tick form-control" data-selected-text-format="count > 3" data-done-button="true" data-done-button-text="OK" multiple="">
+                                                            <option value="0" selected="selected">All</option>
+                                                            <option value="1">Burger</option>
+                                                            <option value="2">Chicken</option>
+                                                            <option value="3">Chinese</option>
+                                                            <option value="4">English</option>
+                                                            <option value="6">Fast Food</option>
+                                                            <option value="7">Grill</option>
+                                                            <option value="7">Indian</option>
+                                                            <option value="7">Italian</option>
+                                                            <option value="7">Thai</option>
+                                                        </select>-->
+                                                    </div>
+                                                </li>
+                                                <li style="clear: both;">
+                                                    <label>
+                                                        <a data-toggle="collapse" class="btn btn-toggle collapsed filter_btn" data-target="#others_filter" aria-expanded="false">Others <i class="fa fa-plus-circle"></i></a>
+                                                    </label>
+                                                    <div class="collapse" id="others_filter">
+                                                        <div class="job-type-checkbox-wrapper clearfix">
+                                                        <div style="width: 100%;" class="checkbox-block job-type-checkbox" id="kids_menu">
+                                                            <input id="job_type_checkbox-1-mobile" name="job_type_checkbox" type="checkbox" class="checkbox" value="true" />
+                                                            <label class="" for="job_type_checkbox-1-mobile">Kids Menu</label>
+                                                        </div>
+                                                        <div style="width: 100%;" class="checkbox-block job-type-checkbox" id="markup_added">
+                                                            <input id="job_type_checkbox-2-mobile" name="job_type_checkbox" type="checkbox" class="checkbox" value="true" />
+                                                            <label class="" for="job_type_checkbox-2-mobile">Markup Added</label>
+                                                        </div>
+                                                        <div style="width: 100%;" class="checkbox-block job-type-checkbox" id="fav_only">
+                                                            <input id="job_type_checkbox-3-mobile" name="job_type_checkbox" type="checkbox" class="checkbox" value="true" />
+                                                            <label class="" for="job_type_checkbox-3-mobile">Favourites Only</label>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <button class="btn btn-primary btn-sm clear_filters" style="width: 100%;margin-top: 15px;">CLEAR FILTERS</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-7 col-md-9">
+                                        <div class="company-detail-wrapper">
+                                            <div class="sorting-wrappper alt">
+                                                <div class="GridLex-grid-middle">
+                                                    <div class="GridLex-col-6_sm-12_xs-12">
+                                                        <div class="sorting-header">
+                                                            <h3 class="sorting-title"><t t-esc="json_dict"/> restaurant</h3>
+                                                        </div>
+                                                    </div>
+                                                    <div class="GridLex-col-6_sm-6_xs-6_xss-12">
+                                                        <div class="sorting-content">
+                                                            <div class="form-group GridLex-gap-10-wrappper">
+                                                                    <div class="GridLex-grid-middle pull-right">
+                                                                        <div class="sort-by-price" style="width:100px;margin-right: 10px;">
+                                                                                <a href="#" class="btn btn-primary btn-inverse sort-by-container" onclick="sort_results($(this))" style="width:100%;">
+                                                                                    <span>Price</span>
+                                                                                </a>
+                                                                            </div>
+                                                                        <div class="sort-by-table" style="margin-right: 10px;">
+                                                                            <a class="btn btn-primary btn-inverse sort-by-container" href="#" onclick="sort_results($(this))">
+                                                                                <span>Table Size</span>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="sort-by-group">
+                                                                            <a class="btn btn-primary btn-inverse sort-by-container" href="#" onclick="sort_results($(this))">
+                                                                                <span>Group Size</span>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="content col-md-12" style="padding-left: 0px;">
+                                                            <div id="pagination" class="movies-pagination col-md-9" style="padding-left: 0px;"></div>
+                                                            <div class="col-md-3 content hidden">
+                                                                Per Page: <span id="per_page" class="content"></span>
+                                                            </div>
+                                                        </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="restaurant-list-wrapper">
+                                            <ul style="list-style-type:none;padding:0;" class="list" id="restaurant_list"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+             <!-- Restaurant Template Script - List View-->
+            <script id="restaurant_template" type="text/html">
+                <li class="%=markup_border%">
+
+                        <form action="/capital_centric/fit/grid_view/result/%= id %" method="post">
+                            <input name="restaurant_id" class="hidden" value="%= id %"/>
+                            <input name="no_persons" class="hidden" t-att-value="return_vals.get('no_persons')"/>
+                            <input name="resv_date" class="hidden" t-att-value="return_vals.get('resv_date')"/>
+                            <input name="location_id" class="hidden" t-att-value="return_vals.get('location_id')"/>
+                            <input name="type" class="hidden" t-att-value="return_vals.get('type')"/>
+                            <input name="location" class="hidden" t-att-value="return_vals.get('location')"/>
+                            <input name="min_time" class="hidden" value="%= min_time %"/>
+                            <input name="max_time" class="hidden" value="%= max_time %"/>
+                            <input name="time_selected" class="hidden" value=""/>
+                            <div class="restaurant-item-list">
+                                <div class="image">
+                                    <img src="/website/image/res.partner/%= id %/image_medium"/>
+                                </div>
+                                <div class="content">
+                                    <div class="restaurant-item-list-info">
+
+                                        <div class="row">
+
+                                            <div class="col-sm-7 col-md-8">
+
+                                                <h4 class="heading">%= name % %= kidsmenu_btn %</h4>
+                                                <div class="meta-div clearfix mb-25">
+                                                    <span>at <a style="cursor: default;">%= street % %= street2 % %= city % %= zip % %= country % </a></span>
+                                                </div>
+
+                                                <p class="texing">%= short_desc %</p>
+                                            </div>
+
+                                            <div class="col-sm-5 col-md-4">
+                                                <ul class="meta-list">
+                                                    <li>
+                                                        <span>Dining Style:</span>
+                                                        %= dining %
+                                                    </li>
+                                                    <li>
+                                                        <span>Cuisine:</span>
+                                                        %= cuisine %
+                                                    </li>
+                                                    <li>
+                                                        <span>Max. Table Size: </span>
+                                                        <span class="table_sort">%= max_covers %</span>
+                                                    </li>
+                                                    <li>
+                                                        <span>Max. Group Size: </span>
+                                                        <span class="group_sort">%= covers %</span>
+                                                    </li>
+                                                    <t t-if="website.user_id != user_id or user.is_wlabeling">
+                                                        <li>
+                                                            <span>Starting From: </span>
+                                                            £ <span class="price_sort">%= min_price.toFixed(2) %</span>
+                                                        </li>
+                                                    </t>
+                                                    <li><a data-toggle="modal" data-target="#view_%= id %" class="trigger main_color" onclick="onclick_view_availabilty($(this))">View current availability</a>
+                                                        <!--<div class="popover-markup">
+                                                             <a href="#" class="trigger main_color" onmouseover="onmouseover_availabilty($(this))">View current availability</a>
+                                                             <div class="head hide">
+                                                                 <span id="avlblty_popup" style="font-size: 9pt;font-weight: bold;"></span>
+                                                             </div>
+                                                             <div class="content hide" id="display_avlblty">
+                                                                 <t t-call="fit_website.popover_content"/>
+                                                             </div>
+                                                         </div>-->
+                                                        <!--<a href="#" data-placement="left" data-toggle="popover" class="view_availability" onmouseover="onmouseover_availabilty($(this))" >View current availability</a>-->
+                                                    </li>
+
+                                                    <t t-if="website.user_id == user_id and not user.is_wlabeling">
+                                                        <li>
+                                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#book_%= id %">BOOK NOW</button>
+                                                        </li>
+                                                    </t>
+                                                </ul>
+                                            </div>
+                                            <t t-if="website.user_id != user_id or user.is_wlabeling">
+                                                <div class="col-md-12">
+                                                    %= time_btn %
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             <t t-if="website.user_id == user_id">
+                                <div class="modal fade" tabindex="-1" role="dialog" id="book_%= id %">
+                                      <div class="modal-dialog modal-sm" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&amp;times;</span></button>
+                                                <h4 class="modal-title" id="myModalLabel">Sign In to your Account</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <!-- Label -->
+                                                    <span id="login_error" style="color: maroon;display:none;">Incorrect Email or Password</span>
+                                                    <label class="control-label">Email</label>
+                                                    <!-- Input -->
+                                                    <input type="email" name="login" class="form-control email" id="email_res" placeholder="Email Address" required="True"/>
+                                                    <span id="email_error" style="color: maroon;display:none;">Please enter an email.</span>
+                                                    <!--<input type="text" class="form-control" placeholder="Enter Email"/>-->
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Password</label>
+                                                    <input id="password_res" type="password" name="password" class="form-control password password_res" placeholder="Password" required="True"/>
+                                                    <span id="password_error" style="color: maroon;display:none;">Please enter a password.</span>
+                                                    <!--<input type="password" class="form-control" placeholder="Enter Password"/>-->
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary" onclick="onclick_sign_in($(this))">Sign In</button>
+                                                <a href="/sign-in#register-block" class="btn btn-primary">Sign Up</a>
+                                            </div>
+                                        </div>
+                                      </div>
+                            </div>
+                            </t>
+                            <div class="modal fade" tabindex="-1" role="dialog" id="view_%= id %">
+                              <div class="modal-dialog modal-sm" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&amp;times;</span></button>
+                                        <h4 class="modal-title text-center"></h4>
+                                    </div>
+                                    <div class="modal-body"></div>
+                                </div>
+                              </div>
+                            </div>
+                        </form>
+
+                </li>
+            </script>
+        </template>
+        
+        <template id="display_result">
+            <div id="login_fader"/>
+            <div class="modal-dialog" id="no_partners" style="background-color:transparent;width:48%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" style="font-size:x-large;text-indent:0;">Warning !!</h3>
+                    </div>
+                    <div class="modal-body" style="padding:15px;">
+                        <p class="alert alert-danger text_span" style="width:100%;text-align:center;">
+                            No results found for your search. Please try with another combination <span t-if="from_which != 'events'" >or use the <a t-attf-href="/capital_centric/fit/search" style="color:#c00000;font-size:10pt;font-weight:bold;"> Map View</a> for more options </span>
+                        </p>
+                    </div>
+                    <div class="modal-footer" style="margin-top:0;padding:15px;">
+                        <input type="button" class="btn btn-priCmary" value="Close" id="close_partners_tab" style="width:84px;background-color:#c00000;color:white;"/>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="mapbuttons">                                
+                <t t-if="from_which != 'events'">
+                    <a t-attf-href="/capital_centric/fit/search" style="color:#c00000;font-size:10pt;font-weight:bold;"> Switch to Map View </a>
+                </t>
+                <t t-if="from_which == 'events'">
+                    <p></p>
+                </t>
+            </div>
+            
+            <div id = "refine_main">
+                <div id="refine_main">
+                    <div id="refine_search">
+                        <div id="titleblock"> <span id="refine_text"> Refine  your  search </span> </div>
+                        <br></br>
+                        <form id="refine_form" t-action="/capital_centric/fit/search/result" method="Post">
+                            <table style="width:100%;table-layout:fixed;">
+                                <tr style="display:none;">
+                                    <td>
+                                        <label> Chk_Flag </label>
+                                        <input name="rest_letter" class="form-control refine_search_input" value=""/>
+                                        <p></p>
+                                    </td>
+                                </tr>
+                                <t t-if="from_which == 'events'">
+                                    <tr>
+                                        <label> Event Date </label>
+                                        <input style="" type="text" name='event_date' class="datepicker form-control refine_search_input" title="" t-att-value="'event_date' in return_vals and return_vals['event_date'] or ''"/>
+                                        <p></p>
+                                    </tr>
+                                    <tr>
+                                        <label> Event Name </label>
+                                        <input name="event_name" class="form-control refine_search_input" t-att-value="'event_name' in return_vals and return_vals['event_name'] or ''"/>
+                                        <p></p>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td>
+                                        <label> Restaurant Name </label>
+                                        <input name="rest_name" class="form-control refine_search_input" t-att-value="'rest_name' in return_vals and return_vals['rest_name'] or ''"/>
+                                        <p></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td> 
+                                        <label> Address </label>
+                                        <input name="rest_add" class="form-control refine_search_input" t-att-value="'rest_add' in return_vals and return_vals['rest_add'] or ''" placeholder="Enter street/location/city"/>
+                                        <p></p>
+                                    </td>
+                                </tr>
+                                <t t-if="from_which == 'westfield_search'">
+                                    <tr>
+                                        <td>
+                                            <label> City </label>
+                                            <select style="padding:1px;" name="City_westfield" id="city_westfield" class="form-control refine_search_input">
+                                                <option value=""> Select a City </option>
+                                                <t t-foreach="partner_category_ids or []" t-as="partner_category">
+                                                    <t t-if="partner_category.name != 'Westfield'">
+                                                        <option t-att-value="partner_category.id" t-att-selected="partner_category.id == ('City_westfield' in return_vals and return_vals['City_westfield'] and int(return_vals['City_westfield']) or 0)"><t t-esc="partner_category.name"/></option>
+                                                    </t>
+                                                </t>
+                                            </select>
+                                            <p></p>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-if="from_which != 'westfield_search' and from_which != 'greenwich_search'">                                    
+                                    <tr>
+                                        <td>
+                                            <label> Post Code </label>
+                                            <input name="post_code" class="form-control refine_search_input" t-att-value="'post_code' in return_vals and return_vals['post_code'] or ''"/>
+                                            <p></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <table border="0" style="width:100%;">
+                                                <tr>
+                                                    <td style="width:90%;"> <label style=""> Tube Station </label> </td>
+                                                    <td style="width:10%;"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <select name="tstation" id="" class="form-control input_val" title="" style="padding:1px;">
+                                                            <option value=""> Select a Tube Station.. </option>
+                                                            <t t-foreach="tstation_ids or []" t-as="tstation">
+                                                                <option t-att-value="tstation.id" t-att-selected="'tstation' in return_vals and return_vals['tstation'] and int(return_vals['tstation'])==tstation.id"><t t-esc="tstation.name"/></option>
+                                                            </t>
+                                                        </select>
+                                                        <p></p>
+                                                    </td>
+                                                    <td style="vertical-align:top;text-align:right;">
+                                                        <a title="Click to search for restaurants around tube stations using the map view" t-attf-href="/capital_centric/fit/search" style=""><i style="font-size:1.7em;color:#404040;" class="fa fa-map-marker"></i></a>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td>
+                                        <label> Cuisine </label>
+                                        <select name="Cuisine" id="cuisine" class="form-control input_val" title="Select Cuisine. Tour operators will be able to filter their search based on the cuisine" multiple="multiple" onchange='textarea_for_c_n_d(this)'>
+                                            <t t-foreach="cuisine_ids or []" t-as="cuisine">
+                                                <option t-att-value="cuisine.id" t-att-selected="cuisine.id in selc_cuisine"><t t-esc="cuisine.name"/></option>
+                                            </t>
+                                        </select>  
+                                        <textarea class="hidden" name="cuisine_selected" id="cuisine_ids"><t t-esc="'cuisine_selected' in return_vals and return_vals['cuisine_selected'] or ''"/></textarea>
+                                        <p></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label> Dining Style </label>
+                                        <select name="Dining" id="dining_style" class="form-control input_val" title="Select a Dining Style. Tour operators will be able to filter their search based on the dining style" multiple="multiple" onchange='textarea_for_c_n_d(this)'>
+                                            <t t-foreach="dining_ids or []" t-as="dining">
+                                                <option t-att-value="dining.id" t-att-selected="dining.id in selc_dining"><t t-esc="dining.name"/></option>
+                                            </t>
+                                        </select>
+                                        <textarea class="hidden" name="dining_selected" id="dining_ids"><t t-esc="'dining_selected' in return_vals and return_vals['dining_selected'] or ''"/></textarea>
+                                        <p></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table style="width:100%">
+                                            <tr>
+                                                <td style="width:50%;">
+                                                    <label> Min Price </label>
+                                                    <input name="min_p" class="form-control refine_search_input" t-att-value="'min_p' in return_vals and return_vals['min_p'] or ''"/>
+                                                    <p></p>
+                                                </td>
+                                                <td style="">-</td>
+                                                <td style="width:50%;">
+                                                    <label> Max Price </label>
+                                                    <input name="max_p" class="form-control refine_search_input" t-att-value="'max_p' in return_vals and return_vals['max_p'] or ''"/>
+                                                    <p></p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label> Table Size </label>
+                                        <select name="table_size" id="table_size" style="padding:2px;" class="form-control input_val">
+                                            <option value=''>Select Table Size</option>
+                                            <option t-att-selected="'table_size' in return_vals and return_vals['table_size'] == '10 and under' or ''">10 and under</option>
+                                            <option t-att-selected="'table_size' in return_vals and return_vals['table_size'] == '11 - 20' or ''">11 - 20</option>
+                                            <option t-att-selected="'table_size' in return_vals and return_vals['table_size'] == 'Over 20' or ''">Over 20</option>
+                                        </select>      
+                                        <p></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    
+                                </tr>
+                                <t t-if="from_which == 'westfield_search' or from_which == 'greenwich_search' or from_which == 'grid_view'">
+                                    <tr>
+                                        <td>
+                                            <table style="width:100%">
+                                                <tr>
+                                                    <td style="width:50%;">
+                                                        <input type="checkbox" name="fav_rest" t-att-checked="'checked' if 'fav_rest' in return_vals else None" style="display:inline-block;cursor:pointer" class="checkbox"  title="Check this box if you want to view your list of Favourite Restaurants"></input>
+                                                        <label id="" style="display:inline-block;text"> Favourites Only </label>
+                                                    </td>
+
+                                                    <td colspan="2">
+                                                        <input type="checkbox" name="kids_menu" style="cursor:pointer;display:inline-block;" t-att-checked="'checked' if 'kids_menu' in return_vals else None" class="checkbox"  title="Check this box if you want to view list of Restaurants having Kids Menus"></input>
+                                                        <label id="" style="display:inline-block;"> Kids Menu </label>
+                                                    </td>
+                                                </tr>
+                                                    <tr>
+                                                        <td style="width:50%;" t-if="uid.role != 'client_cust'">
+                                                            <input type="checkbox" name="markup_added" style="cursor:pointer;display:inline-block;" t-att-checked="'checked' if 'markup_added' in return_vals else None" class="checkbox"  title="Check this box if you want to view list of Restaurants with your markup added"></input>
+                                                            <label id="" style="display:inline-block;"> Markup Added </label>
+                                                        </td>
+                                                    </tr>
+                                            </table>
+                                            <p></p>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td>
+                                        <input class="hidden" name="sort_by" id="sort_by" t-att-value="'sort_by' in return_vals and return_vals['sort_by']"/>
+                                        <button style="display:inline-block;" type="button" id="searchbutton" class="button"> Search </button>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                        <button style="display:inline-block;" type="button" id="resetbutton" class="button"> Reset </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form> 
+                        <br></br>
+                    </div>
+                    <div id="display">
+                        <div id="titleblock" style="" class=""> <span id="refine_text" style="padding-left:0;"> Displaying <t t-esc="len(partners)"/> <t t-if ="len(partners) == 1"> result for your search </t> <t t-if ="len(partners) == 0 or len(partners) > 1"> results for your search </t></span>
+                        </div> 
+                        <p></p>
+                        <div id="search_alphabet">                     
+                            <t t-foreach="range(65,91)" t-as="alphabet">
+                                <a class="alphabet_style main_color"
+                                   t-att-style="return_vals.get('rest_letter','') == str(alphabet) and 'color: #2a6496;text-decoration: underline;' or ''" 
+                                   t-attf-href="/capital_centric/fit/#{from_which}?rest_letter=#{alphabet}">&amp;#<t t-esc="alphabet"/>;</a>&amp;nbsp;&amp;nbsp;
+                            </t>
+                            <a class="alphabet_style main_color"
+                               t-att-style="return_vals.get('rest_letter','') == 'others' and 'color: #2a6496;text-decoration: underline;' or ''" 
+                               t-attf-href="/capital_centric/fit/#{from_which}?rest_letter=others"> Others</a>&amp;nbsp;&amp;nbsp;                            
+                            <a class="alphabet_style main_color" 
+                               t-att-style="return_vals.get('rest_letter','') == '' and 'color: #2a6496;text-decoration: underline;' or ''" 
+                               t-attf-href="/capital_centric/fit/#{from_which}"> All </a>
+                        </div>
+                        <div id="sortby">
+                            <select id="slct_sort" style="padding:2px;" class="form-control input_val">
+                                <option>Sort By..</option>
+                                <option value="l_h" t-att-selected="return_vals.get('sort_by','') == 'l_h'"> Lowest - Highest(Price) </option>
+                                <option value="h_l" t-att-selected="return_vals.get('sort_by','') == 'h_l'"> Highest - Lowest(Price) </option>
+                                <option value="l_tbl_sz" t-att-selected="return_vals.get('sort_by','') == 'l_tbl_sz'"> Lowest - Highest(Table Size) </option>
+                                <option value="h_tbl_sz" t-att-selected="return_vals.get('sort_by','') == 'h_tbl_sz'"> Highest - Lowest(Table Size) </option>
+                                <t t-if="from_which != 'events'">
+                                    <option value="l_grp_sz" t-att-selected="return_vals.get('sort_by','') == 'l_grp_sz'"> Lowest - Highest(Group Size) </option>
+                                    <option value="h_grp_sz" t-att-selected="return_vals.get('sort_by','') == 'h_grp_sz'"> Highest - Lowest(Group Size) </option>
+                                </t>
+                            </select>    
+                        </div>
+                        <p></p>
+                        <div style="" id="display_result">
+                            <p id="partners_length" style="display:none;"><t t-esc="len(partners)"/></p>
+                            <t t-if ="len(partners) == 0">
+                                <p class="alert alert-danger text_span" style="width:100%;text-align:center;">
+                                    No results found for your search. Please try with another combination <span t-if="from_which != 'events'" >or use the <a t-attf-href="/capital_centric/fit/search" style="color:#c00000;font-size:10pt;font-weight:bold;"> Map View</a> for more options </span>
+                                </p>
+                            </t>
+                            <table style="width:100%" id="search_result">
+                                <t t-foreach="partners" t-as="partner">
+                                    <t t-if="from_which == 'events'">
+                                        <t t-set="event" t-value="partner"/>
+                                        <t t-set="partner" t-value="event.partner_id"/>                                    
+                                    </t>   
+                                    <t t-set="operator" t-value="user.partner_id"/>
+                                    <t t-if="user.role == 'client_mng'">
+                                        <t t-set="operator" t-value="user.partner_id.parent_id"/>
+                                    </t>
+                                    <t t-set="wcolor" t-value="user.partner_id.wbsite_color or user.partner_id.parent_id and user.partner_id.parent_id.wbsite_color or ''"/>
+                                    
+                                    <tr class="individualrecord" t-att-style="partner.id in markup_thr and user.is_wlabeling and uid.role != 'client_cust' and 'border-left:5px solid ' + str(wcolor or '#793487') +';' or partner.id in markup_thr and uid.role != 'client_cust' and 'border-left:5px solid #793487;' or ''">
+                                        <td style="width:20%;vertical-align:top;">
+                                            <div class="imgrounded">
+                                                <img id="" class="image_within" t-att-src="'/website/image?model=res.partner&amp;field=image_medium&amp;id='+str(partner.id)" title=""/>
+                                            </div> 
+                                        </td>
+                                        <td style="width:30%;vertical-align:top;">
+                                            <div class="textrounded">
+                                                <div>                                        
+                                                    <span style="width:auto;" class="text_span" id="res_name">
+                                                        <t t-esc="partner.name"/>
+                                                    </span>
+                                                    <span style="float:right;">
+                                                        <t t-if="from_which == 'events' and event.id in kids_menu">
+                                                            <img id="" class="" src="/fit_website/static/src/img/kidsmenu.png" alt="Kids Menu Icon" style="height:22px;margin-bottom:15%;" title="Kids Menu Available"/>
+                                                        </t>
+                                                        <t t-if="from_which != 'events' and partner.id in kids_menu">
+                                                            <img id="" class="" src="/fit_website/static/src/img/kidsmenu.png" alt="Kids Menu Icon" style="height:22px;margin-bottom:15%;" title="Kids Menu Available"/>
+                                                        </t>
+                                                        <t t-if="user.id == uid.id">
+                                                            <a class="main_color" t-if="from_which != 'events'" t-attf-href="/capital_centric/star/#{partner.id}">
+                                                                <i t-attf-title="#{partner in user.fav_rest_ids and 'Remove from Favourites' or 'Add to Favourites'}" t-attf-class="empty_star fa #{partner in user.fav_rest_ids and 'fa-star' or 'fa-star-o'} main_color" style="cursor:pointer;font-size:1.2em;" id="empty_star"/>
+                                                            </a>
+                                                        </t>
+                                                        <t t-if="user.role in ('client','client_mng') and user.id == uid.id">
+                                                            <a class="main_color" t-if="from_which != 'events'" t-attf-href="/capital_centric/checkbox/#{partner.id}">
+                                                                <i title="Uncheck to hide restaurant" t-attf-class="empty_checkbox fa #{partner in operator.contact_ids and 'fa-square-o' or 'fa-check-square-o'} main_color" style="cursor:pointer;font-size:1.2em;" id="empty_checkbox"/>
+                                                            </a>
+                                                        </t>
+                                                    </span>
+                                                    
+                                                </div>
+                                                <p class="pspace"></p>
+                                                <span class="text_span_9"><t t-esc="partner.street"/></span>
+                                                <p class="pspace"></p>
+                                                <span class="text_span_9"> Dining Style :                                        
+                                                    <t t-set="count" t-value="0"/>
+                                                    <t t-foreach="partner.dining_style_ids" t-as="dining">
+                                                        <t t-set="count" t-value="count+1"/>
+                                                        <span class="text_span_9"><t t-esc="dining.name"/></span>
+                                                        <t t-if="count &lt; len(partner.dining_style_ids)">
+                                                            <span class="text_span_9">,</span>
+                                                        </t>
+                                                    </t>
+                                                </span> 
+                                                <p class="pspace"></p>
+                                                <span class="text_span_9"> Cuisine :
+                                                    <t t-set="count" t-value="0"/>
+                                                    <t t-foreach="partner.cuisine_ids" t-as="cuisine">
+                                                        <t t-set="count" t-value="count+1"/>
+                                                        <span class="text_span_9"><t t-esc="cuisine.name"/></span> 
+                                                        <t t-if="count &lt; len(partner.cuisine_ids)">
+                                                            <span class="text_span_9">,</span>
+                                                        </t>
+                                                    </t>
+                                                </span>  
+                                                <p class="pspace"></p>                                                
+                                                <span class="text_span_9"> Max. Table Size :
+                                                    <t t-if="from_which != 'events'">
+                                                        <t t-if="not user.is_group">
+                                                            <span class="text_span_9"><t t-esc="partner.max_covers"/>;</span>
+                                                        </t>
+                                                        <t t-if="user.is_group">
+                                                            <span class="text_span_9"><t t-esc="partner.no_of_covers"/>;</span>
+                                                        </t>
+                                                    </t>
+                                                    <t t-if="from_which == 'events'">
+                                                        <span class="text_span_9"><t t-esc="event.covers"/>;</span>
+                                                    </t>
+                                                </span>                                               
+                                                <t t-if="not user.is_group and from_which != 'events' and grp_size.get(partner.id)">
+                                                    <span class="text_span_9"> Max. Group Size :
+                                                        <span class="text_span_9"><t t-esc="grp_size.get(partner.id,'')"/></span>                               
+                                                    </span>
+                                                </t>
+                                            </div>
+                                        </td>
+                                        <td style="width:35%;vertical-align:top; border-left:solid 1px #bfbfbf;border-right:solid 1px #bfbfbf;">
+                                            <div class="menurounded">
+                                                <t t-if="from_which == 'events'">
+                                                    <span style="width:auto;" class="text_span" id="res_name"><t t-esc="event.name"/> (<span t-field="event.date_from"/> <t t-if="event.date_from != event.date_to"> to <span t-field="event.date_to"/></t>)</span><br/>
+                                                </t>
+                                                <span id="desc" class="text_span_9"><t t-esc="from_which == 'events' and event.description or partner.descp_venue"/></span>
+                                            </div>
+                                        </td>
+                                        <td style="width:15%;vertical-align:top;padding-top:10px;">
+                                            <div class="buttonrounded">
+                                                <t t-set="x" t-value="from_which == 'events' and event and event.id or partner.id"/>
+                                                <t t-if="price[x]['min_price'] != price[x]['max_price']">
+                                                    <span class="text_span" style="font-weight:bold;">
+                                                        <t t-esc="partner.company_id.currency_id.symbol"/><t t-esc="'%.2f' % price[x]['min_price']"/> 
+                                                        to 
+                                                        <t t-esc="partner.company_id.currency_id.symbol"/><t t-esc="'%.2f' % price[x]['max_price']"/>
+                                                    </span>
+                                                </t>
+                                                <t t-if="price[x]['min_price'] == price[x]['max_price']">
+                                                    <span class="text_span" style="font-weight:bold;">
+                                                        <t t-esc="partner.company_id.currency_id.symbol"/><t t-esc="'%.2f' % price[x]['min_price']"/>
+                                                    </span>
+                                                </t>
+                                                <p></p>
+                                                <a id="selectbutton" t-attf-href="/capital_centric/fit/#{from_which}/result/#{from_which == 'events' and event.id or partner.id}" class="button" style="padding-top:5px;display:block;"> Select </a>
+                                                <p></p>
+                                                <div class="popover-bar">
+                                                     <a href="#" class="trigger main_color" style="font-style: italic;
+                                                                                                     text-align: center;
+                                                                                                     font-size: 8pt;
+                                                                                                     vertical-align: text-bottom;
+                                                                                                     display: block;">
+                                                         <i class="empty_star fa fa-star main_color" style="font-size:1em;" id="empty_star"/> Tax Included
+                                                     </a>
+                                                     <div class="content hide" id="display_avlblty">
+                                                         <span style="font-size: 8pt;">VAT &amp; applicable Service Charge Included.</span>
+                                                     </div>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                        <td class="hidden">
+                                            <t t-set="x" t-value="from_which == 'events' and event and event.id or partner.id"/>
+                                            <t t-esc="price[x]['min_price']"/>
+                                        </td>
+                                        <td class="hidden">
+                                            <t t-if="from_which != 'events'">
+                                                <t t-if="not user.is_group">
+                                                    <t t-esc="partner.max_covers"/>
+                                                </t>
+                                                <t t-if="user.is_group">
+                                                    <t t-esc="partner.no_of_covers"/>
+                                                </t>
+                                            </t>
+                                            <t t-if="from_which == 'events'">
+                                                <t t-esc="event.covers"/>
+                                            </t>
+                                        </td>
+                                        <td class="hidden">
+                                            <t t-if="not user.is_group and from_which != 'events' and grp_size.get(partner.id)">
+                                                <t t-esc="grp_size.get(partner.id,0)"/>                               
+                                            </t>
+                                        </td>
+                                        <td class="hidden">
+                                            <t t-esc="partner.name"/>
+                                        </td>
+                                        <td class="hidden">
+                                            <t t-esc="partner.sequence"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+          </div>   
+        </template>
+        
+<!--    ==============================================================          
+                            Payments For Operators       
+        ==============================================================   -->     
+        
+        
+        <template id="payments" page="True" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="fit_website.capitalcentric_layout">
+                <t t-set="ref_content"> 
+                    <div id="bookinglayout">
+                        <!-- start Main Wrapper -->
+		                <div class="main-wrapper">
+                            <!-- start breadcrumb -->
+                            <div class="breadcrumb-wrapper">
+
+                                <div class="container">
+
+                                    <ol class="breadcrumb-list booking-step">
+                                        <li><a href="/">Home</a></li>
+                                        <li><span>Payments</span></li>
+                                    </ol>
+
+                                </div>
+
+                            </div>
+                            <!-- end breadcrumb -->
+
+			                <div class="admin-container-wrapper">
+				                <div class="container">
+					                <div class="GridLex-gap-15-wrappper">
+						                <div class="GridLex-grid-noGutter-equalHeight">
+                                            <div class="GridLex-col-2_sm-4_xs-12">
+                                                <div class="admin-sidebar">
+                                                    <t t-call = "fit_website.welcome_operator"/>
+                                                    <t t-call="fit_website.operator_buttons"/>
+                                                </div>
+                                            </div>
+                                            <div class="GridLex-col-10_sm-8_xs-12">
+                                                <div class="admin-content-wrapper" style="padding-left:0px;margin-left:0px;">
+                                                    <div class="admin-section-title" style="padding-bottom: 0px;">
+                                                        <h2>payments</h2>
+                                                    </div>
+                                                    <table id="payments_table" class="table table-striped">
+                                                        <tr style="">
+                                                            <th id="p_date" class="columns_text"> Date </th>
+                                                            <th id="p_number" class="columns_text"> Number </th>
+                                                            <th id="p_ref" class="columns_text"> Payment Ref. </th>
+                                                            <th id="p_memo" class="columns_text"> Memo </th>
+                                                            <th id="p_method" class="columns_text"> Payment Method </th>
+                                                            <th id="p_amount" class="columns_number"> Amount(<t t-esc="symbol"/>)</th>
+                                                        </tr>
+
+                                                        <tr class="alternative_record" t-foreach="voucher_ids" t-as="voucher">
+                                                            <t t-if="voucher.amount > 0">
+                                                                <td class="singleblock_text"><span t-field="voucher.date"/></td>
+                                                                <td class="singleblock_text"><t t-esc="voucher.number"/></td>
+                                                                <td class="singleblock_text"><t t-esc="voucher.reference"/></td>
+                                                                <td class="singleblock_text"><t t-esc="voucher.name"/></td>
+                                                                <td class="singleblock_text"><t t-esc="voucher.journal_id.name"/></td>
+                                                                <td class="singleblock_number"><span t-field="voucher.amount"/></td>
+                                                            </t>
+                                                        </tr>
+
+                                                    </table>
+                                                </div>
+                                            </div>
+						                </div>
+					                </div>
+				                </div>
+			                </div>
+                        </div>
+                    </div>
+                    <br></br>
+                </t>
+                <!--<t t-set="ref_content1">
+                    <div id="push" style="height:40px;"></div>
+                </t>-->
+            </t>
+            <!--<div style="height:40px;">
+                <t t-call="fit_website.copyrightsection"/>
+            </div>-->
+        </template>
+        
+        
+<!--    ==============================================================          
+                 Welcome Operator  &  Payment Link dialog Box
+        ==============================================================   -->         
+         
+        
+        <template id="welcome_operator">
+            <div class="admin-user-item">
+            <h4><t t-esc="user and user.partner_id and user.partner_id.name or ''"/></h4>
+                <t t-if="user and user.role != 'client_cust' and not user.is_wlabeling">
+                    <t t-if="user.role in ('client_user','client_mng')">
+                      <t t-set="partner" t-value="user.partner_id and user.partner_id.parent_id or False"/>
+                    </t>
+                    <t t-if="user.role == 'client'">
+                       <t t-set="partner" t-value="user.partner_id"/>
+                    </t>
+                    <h6 class=""><t t-if="partner.payment_type == 'prepaid'">Deposit</t>
+                      <t t-if="partner.payment_type == 'on_purchase'">Payment On Purchase </t>
+                      <t t-if="partner.payment_type == 'monthly'">Full Credit </t>
+                      <t t-if="partner.payment_type == 'pay_adv'">Payment in Advance </t>
+                    </h6>
+                    <h6 class="">
+                        <t t-if="partner.payment_type == 'prepaid' or partner.payment_type in ('monthly','pay_adv')">
+                                  <t t-set="bal_name" t-value="'Account Balance : '"></t>
+                                  <t t-if="partner.payment_type in ('monthly','pay_adv')">
+                                    <t t-set="bal_name" t-value="'Balance : '"/>
+                                  </t>
+                                  <t t-if="partner.payment_type in ('monthly','pay_adv')">
+                                    <t t-set="bal_amt" t-value="partner.credit"/>
+                                  </t>
+                                  <t t-if="partner.payment_type == 'prepaid'">
+                                      <t t-set="bal_amt" t-value="-partner.credit"/>
+                                  </t>
+                                  <t t-esc="bal_name"/><t t-esc="user.company_id.currency_id.symbol or ''"></t><span id="acc_bal" t-esc="'%.2f' %bal_amt"/>
+                                  <!--<span class="headerspace"><a class="payment_link"> Make Payment </a></span>-->
+                              </t>
+                    </h6>
+                </t>
+            </div>
+        </template>
+        
+<!--    ==============================================================          
+                           Operator Buttons           
+        ==============================================================   -->
+        <template id="operator_buttons">
+            <ul class="admin-user-menu clearfix">
+                <t t-if="uid and user.id == uid.id">
+                    <li t-att-class="'active' if url_path == 'bookings' else ''">
+                        <a href="/capital_centric/operator/bookings"><i class="fa fa-tachometer"></i>MY BOOKINGS</a>
+                    </li>
+                </t>
+                 <t t-if="user.role not in ('client_user','client_cust') and (uid and user.id == uid.id)">
+                    <li t-att-class="'active' if url_path == 'invoice' else ''">
+                        <a href="/capital_centric/invoice_details/operator"><i class="fa fa-money"></i>MY INVOICES</a>
+                    </li>
+                </t>
+                <li t-att-class="'active' if url_path == 'payments' else ''">
+                    <a href="/capital_centric/operator/payments"><i class="fa fa-credit-card-alt"></i>MY PAYMENTS</a>
+                </li >
+               <t t-if="user.role not in ('client_user','client_cust') and (not user.is_group) and (uid and user.id == uid.id)">
+                    <t t-set="comision_type" t-value="user.partner_id.comision_type"/>
+                    <t t-if="user.role == 'client_mng'">
+                        <t t-set="comision_type" t-value="user.partner_id.parent_id.comision_type"/>
+                    </t>
+                    <t t-if="comision_type == 'markup'">
+                        <li t-att-class="'active' if path == 'restaurants' else ''">
+                            <a href="/capital_centric/operator/markup"><i class="fa fa-bookmark"></i>MARKUP</a>
+                        </li >
+                    </t>
+                </t>
+                <t t-if="user.role not in ('client_user','client_cust') and (uid and user.id == uid.id)">
+                    <li t-att-class="'active' if url_path == 'company' else ''">
+                        <a href="/capital_centric/company/operator"><i class="fa fa-money"></i>COMPANY</a>
+                    </li>
+                </t>
+                <t t-if="user.role not in ('client_user','client_cust') and (not user.is_group) and (uid and user.id == uid.id)">
+                    <li t-att-class="'active' if url_path == 'contacts' else ''">
+                        <a href="/capital_centric/contacts/operator"><i class="fa fa-phone"></i>MY USERS</a>
+                    </li>
+                </t>
+                <!--<li t-att-class="'active' if url_path == 'tc' else ''">
+                    <a href="/capital_centric/operator/tc"><i class="fa fa-lightbulb-o"></i>TERMS</a>
+                </li>-->
+                <!--<li t-att-class="'active' if path == 'privacy-policy' else ''">
+                    <a href="/capital_centric/operator/help"><i class="fa fa-user"></i>HELP</a>
+                </li>-->
+
+            </ul>
+        </template>
+        
+        
+<!--    ==============================================================          
+                              Google Maps Page      
+        ==============================================================   -->     
+        <template id="google_maps" page="True" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="fit_website.capitalcentric_layout">
+                <t t-set="ref_content">
+                    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&amp;sensor=false"/>
+                    <!--<script type="text/javascript" src="/fit_website/static/src/lib/jquery.expander.js"></script>-->
+<!--                    <link rel="stylesheet" type="text/css" href="https://jqueryui.com/jquery-wp-content/themes/jqueryui.com/style.css"/>-->
+<!--                    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"/>-->
+                    <script type="text/javascript" src="/fit_website/static/src/js/result.js"></script>
+                    <link rel="stylesheet" type="text/css" href="/fit_website/static/src/jquery-ui-multiselect-widget-master/jquery.multiselect.css" />
+                    <link rel="stylesheet" type="text/css" href="/fit_website/static/src/jquery-ui-multiselect-widget-master/jquery.multiselect.filter.css" />
+<!--                    <link rel="stylesheet" type="text/css" href="/fit_website/static/src/jquery-ui-multiselect-widget-master/demos/assets/style.css" />-->
+                    <link rel="stylesheet" type="text/css" href="/fit_website/static/src/jquery-ui-multiselect-widget-master/demos/assets/prettify.css" />
+<!--                    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>-->
+                    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+                    <script type="text/javascript" src="/fit_website/static/src/jquery-ui-multiselect-widget-master/src/jquery.multiselect.js"></script>
+                    <script type="text/javascript" src="/fit_website/static/src/jquery-ui-multiselect-widget-master/src/jquery.multiselect.filter.js"></script>
+                    <script type="text/javascript" src="/fit_website/static/src/jquery-ui-multiselect-widget-master/demos/assets/prettify.js"></script>
+                    <style>
+                        #wrapwrap
+                        {
+                            height: 100%;
+                            margin: 0 auto -40px;
+                        }
+                    </style>   
+                    <link rel='stylesheet' href='/fit_website/static/src/css/search.css'/>
+                           
+                    <script>
+                        $(document).ready(function()
+                        {   
+                            $("#dining_style").multiselect(); 
+                            $("#cuisine").multiselect();
+                            <!--$("#dining_style").multiselect({
+                                noneSelectedText: "Select Dining Styles",
+                                selectedText : "# Dining Style(s) Selected",
+                            });
+                            $("#cuisine").multiselect({
+                                noneSelectedText: "Select Cuisines",
+                                selectedText : "# Cuisine(s) Selected",
+                            });-->
+                            $('.ui-multiselect').css('width','100%');
+                            $('.ui-multiselect').css('border-radius','5px');
+                            $('.ui-multiselect').css('cursor','default');
+                            $(".ui-state-default").css('background-image','none');
+                            $(".ui-state-default").css('background-color','white');
+                            $('.ui-multiselect-checkboxes label input').css('margin-right','3%');
+                            $('.ui-multiselect-menu').outerWidth('20%');                    
+                            $('#reset_filter').on('click',function()
+                            {   
+                                $('button.ui-multiselect').css('max-width','100%');
+                            });
+                            $('div.ui-helper-clearfix a.ui-multiselect-close span').replaceWith(function()
+                            {
+                                return $("<span>Close</span>").append($(this).contents());
+                            });
+                            $(".ui-multiselect-header li.ui-multiselect-close").css('padding-right','1%');
+                        });
+                    </script>
+                    <script>
+                        google.maps.event.addDomListener(window,'load', initialize);
+                    </script>
+                    
+                    <div id="bookinglayout" style="">
+                        <t t-call="fit_website.logo"/>
+                        <t t-call="fit_website.welcome_operator"/>
+                        <t t-call="fit_website.operator_buttons"/>
+                        <br></br>
+                        <input id="api_key" class="form-control" t-att-value="api_key" type="text" style="display:none;"/>
+                        <input id="pac-input" class="form-control" type="text" placeholder="Enter a location/post code/land mark/tube station to search nearby restaurants" style="display:inline-block;margin:0;width:400px;padding-left:0.5%;"/>&amp;nbsp;&amp;nbsp;&amp;nbsp;                        
+                        <div id="filter" style="display:inline-block;font-size:10pt;">
+                            <button style="width:120px;" class="button" id="span_filter"><img src="/fit_website/static/src/img/filled-filter.png" height="15" width="15"> Add Filters </img></button>
+                        </div>
+                        <div id="mapbuttons" style="display:inline-block;float:right;">
+                            <a t-attf-href="/capital_centric/fit/grid_view" style="color:#c00000;font-size:10pt;font-weight:bold;"> Switch to List View </a>
+                        </div>
+                        <span style="font-weight:bold;margin-left:5%;font-size:10pt;" id="distance"> Showing restaurants within <span class="main_color" style="font-weight:bold;" id="actual_distance"> 0 </span> of your searched location </span>
+                        <!--<div id="" style="vertical-align:middle;display:inline-block;font-size:10pt;">
+                            <input id="radius" type="radio" name="common_radio_change"> Radius  
+                                <select id="radius_select" class="form-control" style="font-size:10pt;display:inline-block;height:20px;width:40px;">
+                                <option value="1"> 1 </option>
+                                <option value="2"> 2 </option>
+                                <option value="3"> 3 </option>
+                                <option value="4"> 4 </option>
+                                <option selected="True" value="5"> 5 </option>
+                                <option value="6"> 6 </option>
+                                <option value="7"> 7 </option>
+                                <option value="8"> 8 </option>
+                                <option value="9"> 9 </option>
+                                <option value="10"> 10 </option>
+                            </select>   (in KM)</input>
+                        </div>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                        <div id="" style="vertical-align:middle;display:inline-block;font-size:10pt;">   
+                            <input id="walking" type="radio" name="common_radio_change"> Walking Distance 
+                                <select id="walking_select" class="form-control" style="font-size:8pt;display:inline-block;height:20px;width:40px;">
+                                <option value="5"> 5 </option>
+                                <option value="10"> 10 </option>
+                                <option value="15"> 15 </option>
+                                <option value="30"> 30 </option>
+                                <option value="45"> 45 </option>
+                                <option value="60"> 60 </option>
+                            </select>  (in mins)</input>
+                        </div>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;-->
+                        <div id="content">
+                            <form>
+                                <table style="width:100%;table-layout:fixed;margin-top:1%;">
+                                    <tr>
+                                        <td style="width:18%;padding-left:2%;padding-right:2%;">
+                                            <label style="font-size:10pt;"> Min Price </label>
+                                            <input id="min_p" type="text" style="padding-left:5%;position:initial;" class="form-control input_val"/>
+                                        </td>
+                                        <td style="width:4%;text-align:center;">
+                                            <label style="font-size:10pt;"> to </label>
+                                        </td>
+                                        <td style="width:18%;padding-left:2%;padding-right:2%;">
+                                            <label style="font-size:10pt;"> Max Price </label>
+                                            <input id="max_p" type="text" style="padding-left:5%;position:initial;" class="form-control input_val"/>
+                                        </td>
+                                        <td style="width:20%;padding-left:2%;padding-right:2%;">
+                                            <label style="font-size:10pt;"> Cuisine </label>
+                                            <select name="Cuisine" id="cuisine" class="form-control input_val" title="Select Cuisine. Tour operators will be able to filter their search based on the cuisine" multiple="multiple">
+                                                <t t-foreach="cuisine_ids or []" t-as="cuisine">
+                                                    <option t-att-value="cuisine.id"><t t-esc="cuisine.name"/></option>
+                                                </t>
+                                            </select>  
+                                        </td>
+                                        <td style="width:20%;padding-left:2%;padding-right:2%;">
+                                            <label style="font-size:10pt;"> Dining Styles </label>
+                                            <select name="Dining" id="dining_style" class="form-control input_val" title="Select a Dining Style. Tour operators will be able to filter their search based on the dining style" multiple="multiple">
+                                                <t t-foreach="dining_ids or []" t-as="dining">
+                                                    <option t-att-value="dining.id"><t t-esc="dining.name"/></option>
+                                                </t>
+                                            </select> 
+                                        </td>
+                                        <td style="width:20%;padding-left:2%;padding-right:2%;">
+                                            <input type="checkbox" name="fav_maps" style="display:inline-block;cursor:pointer" class="checkbox"  title="Check this box if you want to view your list of Favourite Restaurants"></input>
+                                            <label id="" style="display:inline-block;text"> Favourites Only </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" style="padding-top:1%;padding-left:1%;padding-right:2%;">
+                                            <button style="margin-left:1%;height:24px;width:100px;" type="button" id = "filter_search" class="button"> Filter </button>
+                                            <button style="margin-left:1%;height:24px;width:100px;" type="reset" id = "reset_filter" class="button"> Reset </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                        <p></p>
+                        <div id="progressbar" style=""><div class="progress-label"></div></div>
+                        <div id="main_map_div">
+                            <div id="grid_view" class="">
+                                <select id="sort" style="background-color:white;height:24px;width:100%;" class="form-control">
+                                    <option> Sort By.. </option>
+                                    <option value="low_to_high">Lowest-Highest(Pricing)</option>
+                                    <option value="high_to_low">Highest-Lowest(Pricing)</option>
+                                    <option> Distance </option>
+                                </select>
+                                <p></p>
+                                <span style="margin-left:1%;font-size:10pt;" id="total_res"> Displaying <span class="main_color" style="font-weight:bold;" id="res_count"></span> result(s) </span>
+                                <div id="grid_table_div">
+                                    <table style="width:100%;margin-top:2%;" id="grid_table">
+                                        <tr> 
+                                            <td style="cursor:default;font-size:10pt;text-align:center;"> No results </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="map_canvas"/>
+                        </div>
+                    </div>  
+                    <br/>
+                </t>
+                <!--<t t-set="ref_content1">
+                    <div id="push" style="height:40px;"></div>
+                </t>-->
+            </t>
+            <!--<div style="height:40px;">
+                <t t-call="fit_website.copyrightsection"/>
+            </div>-->
+        </template>
+        
+        
+        
+<!--    ==============================================================          
+                      MARKUP Template for Operators           
+        ==============================================================   -->     
+        
+        <template id="markup_template" page="True" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="fit_website.capitalcentric_layout">
+                <t t-set="ref_content">
+                    <div id="bookinglayout">
+                        <!--<br></br>
+                        <div>
+                            <span style="font-size:9pt;font-style:italic;color:#c00000">
+                                Note: Using this menu, you can add your markup amount to menus of various restaurants. This amount will be added to the price and displayed to your booking staff, so that they can quote this (final) price to the customers. Please note that this amount will be reduced on the booking completion page and you pay only the purchase amount to FIT FOR PURPOSE.
+                            </span>
+                        </div>
+                        <br/>-->
+                        <input class="hidden" id="check_value"/>                   <!-- Added for checking on 'click' of save if the 'Covers Allocated' Input field is having number or not -->
+                        <input t-att-value="user.partner_id.id" id="partner_id" class="hidden"/>
+                        <t t-set="partner" t-value="user.partner_id"/>
+                        <t t-if="user.role in ('client_user','client_mng')">
+                            <t t-set="partner" t-value="user.partner_id and user.partner_id.parent_id or False"/>
+                        </t>
+                        <!-- start Main Wrapper -->
+		                <div class="main-wrapper">
+                            <!-- start breadcrumb -->
+                            <div class="breadcrumb-wrapper">
+
+                                <div class="container">
+
+                                    <ol class="breadcrumb-list booking-step">
+                                        <li><a href="/">Home</a></li>
+                                        <li><span>Markup</span></li>
+                                    </ol>
+
+                                </div>
+
+                            </div>
+                            <!-- end breadcrumb -->
+
+			                <div class="admin-container-wrapper">
+				                <div class="container">
+					                <div class="GridLex-gap-15-wrappper">
+						                <div class="GridLex-grid-noGutter-equalHeight">
+                                            <div class="GridLex-col-2_sm-4_xs-12">
+                                                <div class="admin-sidebar">
+                                                    <t t-call = "fit_website.welcome_operator"/>
+                                                    <t t-call="fit_website.operator_buttons"/>
+                                                </div>
+                                            </div>
+                                            <div class="GridLex-col-10_sm-8_xs-12">
+                                                <div class="admin-content-wrapper" style="padding-left:0px;margin-left:0px;">
+                                                    <div class="admin-section-title" style="padding-bottom: 0px;">
+                                                        <span class="col-md-12 alert alert-success text-center" id="save_prompt_markup" style="display:none;">Saved Successfully!!</span>
+                                                        <h2>markup</h2>
+                                                    </div>
+                                                    <div>
+                                                        <label style="display:inline-block;">Tour Operator Markup % (for all Restaurants) </label>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;<input t-att-value="'%.2f' %partner.markup_perc" id="" style="width:100px;display:inline-block;" type="text" class="form-control markup_perc"/>
+                                                        <button style="display:inline-block;float:right;" id="" class="btn btn-primary save_markup"  title=""> Save </button>
+                                                    </div>
+                                                    <br/>
+                                                    <!--<table id="markup_table" class="markup_table" style="width:100%;">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th class="columns_text" id="" style="width:40%"> Restaurant </th>
+                                                                <th class="columns_text" id="" style="width:40%"> Menus </th>
+                                                                <th class="columns_center" id="" style="width:15%"> Add </th>
+                                                                <th class="columns_center" id="" style="width:5%"> Delete </th>
+                                                            </tr>
+                                                            <tr class="alternative_record" t-foreach="markup_ids" t-as="markup">
+                                                                    <td class="hidden">
+                                                                        <input id="db_id" name="db_id" t-att-value="markup.id" class="hidden"/>
+                                                                        <input id="restaurant_id" name="" t-att-value="markup.restaurant_id.id" class="hidden"/>
+                                                                        <input id="menu_id" name="" t-att-value="markup.menu_id.id" class="hidden"/>
+                                                                    </td>
+                                                                    <td class="singleblock_text" style="padding-top:1%;padding-bottom:1%;">
+                                                                        <input id="" disabled="true" style="color:black;padding-left:5px;width:100%;height:24px;" type="text" class="form-control" t-att-value="markup.restaurant_id.name" title=""/>
+                                                                    </td>
+                                                                    <td class="singleblock_text" style="padding-top:1%;padding-bottom:1%;">
+                                                                        <input id="" disabled="true" style="color:black;padding-left:5px;width:100%;height:24px;" type="text" class="form-control" t-att-value="markup.menu_id.name" title=""/>
+                                                                    </td>
+                                                                    <td class="singleblock_center" style="padding-top:1%;padding-bottom:1%;">
+                                                                        <button type="submit" class="button" style="width:120px;height:24px;" id="add_markup_button" title=""> Add Markup </button>
+                                                                    </td>
+                                                                    <td class="singleblock_center" style="padding-top:1%;padding-bottom:1%;">
+                                                                        <a id="db_delete" class="bookinginfolink"> <img src="/fit_website/static/src/img/delete_t.png" style="height:18px;width:18px;" id="img_icons" title=""/> </a>
+                                                                    </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <p></p>
+                                                    <div id="add_and_save">
+                                                        <a class="bookinginfolink" id="new_markup_add_link" title="" style="color:#ad4bc2;font-weight:bold;"> Add Markup </a>
+                                                    </div>-->
+                                                    <table class="table">
+                                                        <tr>
+                                                            <td style="width:49%;vertical-align:top;">
+                                                                <div class="main_color" style="font-weight: bold;font-size: 13pt;">
+                                                                    <span> Restaurant Level Exceptions</span>
+                                                                </div>
+                                                                <p></p>
+                                                                <table id="res_ex_table" class="common_del table table-striped">
+                                                                    <tr style="">
+                                                                        <th class="columns_text" style="width:70%"> Restaurant </th>
+                                                                        <th class="columns_number" style="width:20%"> Markup(%) </th>
+                                                                        <th class="columns_center" style="width:10%"> Delete </th>
+                                                                    </tr>
+                                                                    <tr t-foreach="partner.rest_mrkup_ids or []" t-as="rest_mrk_id">
+                                                                        <td class="hidden"><input id="db_id" t-att-value="rest_mrk_id.id"/></td>
+                                                                        <td class="singleblock_text">
+                                                                            <select id="" class="form-control restaurant_select" style="padding-left:5px;">
+                                                                                <option value=""> Select A Restaurant </option>
+                                                                                <t t-foreach="venues or []" t-as="venue">
+                                                                                    <option t-att-value="venue.id" t-att-selected="venue.id == rest_mrk_id.restaurant_id.id"><t t-esc="venue.name"/></option>
+                                                                                </t>
+                                                                            </select>
+                                                                        </td>
+                                                                        <td class="singleblock_number">
+                                                                            <input id="" type="text" class="form-control res_mrkup_per" t-att-value="'%.2f' %rest_mrk_id.markup_perc" title=""/>
+                                                                        </td>
+                                                                        <td class="singleblock_center">
+                                                                            <a id="db_delete" class="bookinginfolink"> <img src="/fit_website/static/src/img/delete_t.png" id="" style="height:18px;width:18px;" title="Click to delete this record"/> </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                <p></p>
+                                                                <div id="add_and_save">
+                                                                    <a class="bookinginfolink mrkup_links main_color" style="font-weight:bold;" id="res_l_add" title=""> Add a Record </a>
+                                                                </div>
+                                                            </td>
+                                                            <td style="width:2%"></td>
+                                                            <td style="width:49%;vertical-align:top;">
+                                                                <div>
+                                                                    <span class="main_color" style="font-weight: bold;font-size: 13pt;"> Menu Level Exceptions</span>
+                                                                </div>
+                                                                <p></p>
+                                                                <table id="menu_ex_table" class="common_del table table-striped">
+                                                                    <tr style="">
+                                                                        <th class="columns_text" style="width:40%"> Restaurant </th>
+                                                                        <th class="columns_text" style="width:30%"> Menus </th>
+                                                                        <th class="columns_number" style="width:20%"> Markup(%) </th>
+                                                                        <th class="columns_center" style="width:10%"> Delete </th>
+                                                                    </tr>
+                                                                    <tr t-foreach="partner.op_mrkup_ids or []" t-as="op_mrk_id">
+                                                                        <td class="hidden"><input id="db_id" t-att-value="op_mrk_id.id"/></td>
+                                                                        <td class="singleblock_text" style="">
+                                                                            <select id="res_select_menu_ex" class="form-control restaurant_select" style="" onchange='change_rest(this)'>
+                                                                                <option value=""> Select A Restaurant </option>
+                                                                                <t t-foreach="venues or []" t-as="venue">
+                                                                                    <option t-att-value="venue.id" t-att-selected="venue.id == op_mrk_id.restaurant_id.id"><t t-esc="venue.name"/></option>
+                                                                                </t>
+                                                                            </select>
+                                                                        </td>
+                                                                        <td>
+                                                                            <select name="multiple_select_name" multiple="multiple" class="form-control input_val multiple_menu" title="" onchange='get_menusvalues(this)'>
+                                                                                <t t-foreach="all_menus[op_mrk_id.id] or []" t-as="all_menu">
+                                                                                    <option t-att-value="all_menu.id" t-att-selected="all_menu.id in sel_menus[op_mrk_id.id]"><t t-esc="all_menu.name"/></option>
+                                                                                </t>
+                                                                            </select>
+                                                                            <textarea class="hidden" name="" id="menu_ids"><t t-esc="sel_menus[op_mrk_id.id]"/></textarea>
+                                                                        </td>
+                                                                        <td class="singleblock_number" style="">
+                                                                            <input id="" style="" type="text" class="form-control menu_mrkup_per" t-att-value="'%.2f' %op_mrk_id.markup_perc" title=""/>
+                                                                        </td>
+                                                                        <td class="singleblock_center">
+                                                                            <a id="db_delete" class="bookinginfolink"> <img src="/fit_website/static/src/img/delete_t.png" id="" style="height:18px;width:18px;" title="Click to delete this record"/> </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                <p></p>
+                                                                <div id="add_and_save">
+                                                                    <a class="bookinginfolink mrkup_links main_color" style="font-weight:bold;" id="menu_l_add" title=""> Add a Record </a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+						                </div>
+					                </div>
+				                </div>
+			                </div>
+                        </div>
+                    </div>
+                    <br></br>
+                </t>
+                <!--<t t-set="ref_content1">
+                    <div id="push" style="height:40px;"></div>
+                </t>-->
+            </t>
+            <!--<div style="height:40px;">
+                <t t-call="fit_website.copyrightsection"/>
+            </div>-->
+        </template>
+        
+        <!--<template id="markup_pricing_template">
+            <div class="replaced_div" style="display:inline-block;">
+                <t t-if="error">
+                    <p class="alert alert-danger" id="" style="width:40%;text-align:center;display:inline;">
+                        <span id="alert_text"><t t-esc="error"/></span>
+                    </p>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                </t>
+                <t t-if="markup">
+                    <div class="modal-header" style="padding:10px;">
+                        <h3 class="modal-title" style="font-size:x-large;text-indent:0;"><span> Restaurant : <t t-esc="markup and markup.restaurant_id.name or ''"/>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Menu : <t t-esc="markup and markup.menu_id.name or ''"/></span></h3>
+                    </div>  
+                    <div class="modal-body" style="padding:10px;padding-bottom:0;">
+                        <table id="markup_price_table" style="width:100%;">
+                            <tr>
+                                <th class="columns_text" id="" style="width:12.5%"> Type </th> 
+                                <th class="columns_number imenu_price" id="" style="width:6.25%;padding-top:1%;padding-bottom:1%;"> Mon Price </th>
+                                <th class="columns_number imenu_price" id="" style="width:6.25%;padding-top:1%;padding-bottom:1%;"> Mon M.U. </th>
+                                <th class="columns_number imenu_price" id="" style="width:6.25%;padding-top:1%;padding-bottom:1%;"> Tue Price </th>
+                                <th class="columns_number imenu_price" id="" style="width:6.25%;padding-top:1%;padding-bottom:1%;"> Tue M.U. </th>
+                                <th class="columns_number imenu_price" id="" style="width:6.25%;padding-top:1%;padding-bottom:1%;"> Wed Price </th>
+                                <th class="columns_number imenu_price" id="" style="width:6.25%;padding-top:1%;padding-bottom:1%;"> Wed M.U </th>
+                                <th class="columns_number imenu_price" id="" style="width:6.25%;padding-top:1%;padding-bottom:1%;"> Thu Price </th>
+                                <th class="columns_number imenu_price" id="" style="width:6.25%;padding-top:1%;padding-bottom:1%;"> Thu M.U </th>
+                                <th class="columns_number imenu_price" id="" style="width:6.25%;padding-top:1%;padding-bottom:1%;"> Fri Price </th>
+                                <th class="columns_number imenu_price" id="" style="width:6.25%;padding-top:1%;padding-bottom:1%;"> Fri M.U. </th>
+                                <th class="columns_number imenu_price" id="" style="width:6.25%;padding-top:1%;padding-bottom:1%;"> Sat Price </th>
+                                <th class="columns_number imenu_price" id="" style="width:6.25%;padding-top:1%;padding-bottom:1%;"> Sat M.U </th>
+                                <th class="columns_number imenu_price" id="" style="width:6.25%;padding-top:1%;padding-bottom:1%;"> Sun Price </th>
+                                <th class="columns_number imenu_price" id="" style="width:6.25%;padding-top:1%;padding-bottom:1%;"> Sun M.U </th>
+                                
+                            </tr>     
+                            <t t-foreach="markup and markup.markup_ids or [] " t-as="pricing">
+                                <tr class="alternative_record">
+                                    <td id="db_id" class="hidden">
+                                        <input class="form-control markup_price" t-att-value="pricing.id" id='db_id' value=""/>
+                                    </td>
+                                    <td class="singleblock_text" id="imenu_price" style="padding-top:1%;padding-bottom:1%;">
+                                        <t t-if="pricing.meal_type == 'bf_non_premium'">
+                                            <input disabled="disabled" style="padding-left:3%;color:black;height:24px;width:100%;" name="meal_type" class="form-control input_menu markup_price" value="B/F Non Premium"/>
+                                        </t>
+                                        <t t-if="pricing.meal_type == 'bf_standard'">
+                                            <input disabled="disabled" style="padding-left:3%;color:black;height:24px;width:100%;" name="meal_type" class="form-control input_menu markup_price" id="imenu_price" value="B/F Standard"/>
+                                        </t>
+                                        <t t-if="pricing.meal_type == 'bf_premium'">
+                                            <input disabled="disabled" style="padding-left:3%;color:black;width:100%;height:24px;" name="meal_type" class="form-control input_menu markup_price" id="imenu_price" value="B/F Premium"/>
+                                        </t>
+                                        <t t-if="pricing.meal_type == 'l_non_premium'">
+                                            <input disabled="disabled" style="padding-left:3%;color:black;width:100%;height:24px;" name="meal_type" class="form-control input_menu markup_price" id="imenu_price" value="Lunch Non Premium"/>
+                                        </t>
+                                        <t t-if="pricing.meal_type == 'l_standard'">
+                                            <input disabled="disabled" style="padding-left:3%;color:black;width:100%;height:24px;" name="meal_type" class="form-control input_menu markup_price" id="imenu_price" value="Lunch Standard"/>
+                                        </t>
+                                        <t t-if="pricing.meal_type == 'l_premium'">
+                                            <input disabled="disabled" style="padding-left:3%;color:black;width:100%;height:24px;" name="meal_type" class="form-control input_menu markup_price" id="imenu_price" value="Lunch Premium"/>
+                                        </t>
+                                        <t t-if="pricing.meal_type == 'at_non_premium'">
+                                            <input disabled="disabled" style="padding-left:3%;color:black;width:100%;height:24px;" name="meal_type" class="form-control input_menu markup_price" id="imenu_price" value="AT Non Premium"/>
+                                        </t>
+                                        <t t-if="pricing.meal_type == 'at_standard'">
+                                            <input disabled="disabled" style="padding-left:3%;color:black;width:100%;height:24px;" name="meal_type" class="form-control input_menu markup_price" id="imenu_price" value="AT Standard"/>
+                                        </t>
+                                        <t t-if="pricing.meal_type == 'at_premium'">
+                                            <input disabled="disabled" style="padding-left:3%;color:black;width:100%;height:24px;" name="meal_type" class="form-control input_menu markup_price" id="imenu_price" value="AT Premium"/>
+                                        </t>
+                                        <t t-if="pricing.meal_type == 'd_non_premium'">
+                                            <input disabled="disabled" style="padding-left:3%;color:black;width:100%;height:24px;" name="meal_type" class="form-control input_menu markup_price" id="imenu_price" value="Dinner Non Premium"/>
+                                        </t>
+                                        <t t-if="pricing.meal_type == 'd_standard'">
+                                            <input disabled="disabled" style="padding-left:3%;color:black;width:100%;height:24px;" name="meal_type" class="form-control input_menu markup_price" id="imenu_price" value="Dinner Standard"/>
+                                        </t>
+                                        <t t-if="pricing.meal_type == 'd_premium'">
+                                            <input disabled="disabled" style="padding-left:3%;color:black;width:100%;height:24px;" name="meal_type" class="form-control input_menu markup_price" id="imenu_price" value="Dinner Premium"/>
+                                        </t>
+                                    </td>
+                                    <td class="singleblock_number" id="" style="padding-top:1%;padding-bottom:1%;">
+                                        <input disabled="disabled" style="padding-right:3%;color:black;text-align:right;width:100%;height:24px;float:left;" class="form-control input_menu" id="monday" t-att-value="'%.2f' %pricing.mon_total" title=""/>
+                                    </td>
+                                    <td class="singleblock_number" id="mon_to_mu" style="padding-top:1%;padding-bottom:1%;">
+                                        <input style="padding-right:3%;text-align:right;width:100%;height:24px;float:right;" class="form-control markup_price" id="monday" t-att-value="'%.2f' %pricing.mon_to_mu" title=""/>
+                                    </td>
+                                    <td class="singleblock_number" id="" style="padding-top:1%;padding-bottom:1%;">
+                                        <input disabled="disabled" style="padding-right:3%;color:black;text-align:right;width:100%;height:24px;float:left;" class="form-control input_menu" id="tuesday" t-att-value="'%.2f' %pricing.tue_total" title=""/>
+                                    </td>
+                                    <td class="singleblock_number" id="tue_to_mu" style="padding-top:1%;padding-bottom:1%;">
+                                        <input style="padding-right:3%;text-align:right;width:100%;height:24px;float:right;" class="form-control markup_price" id="monday" t-att-value="'%.2f' %pricing.tue_to_mu" title=""/>
+                                    </td>
+                                    <td class="singleblock_number" id="" style="padding-top:1%;padding-bottom:1%;">
+                                        <input disabled="disabled" style="padding-right:3%;color:black;text-align:right;width:100%;height:24px;float:left;" class="form-control input_menu" id="wednesday" t-att-value="'%.2f' %pricing.wed_total" title=""/>
+                                    </td>
+                                    <td class="singleblock_number" id="wed_to_mu" style="padding-top:1%;padding-bottom:1%;">
+                                        <input style="padding-right:3%;text-align:right;width:100%;height:24px;float:right;" class="form-control markup_price" id="monday" t-att-value="'%.2f' %pricing.wed_to_mu" title=""/>
+                                    </td>
+                                    <td class="singleblock_number" id="" style="padding-top:1%;padding-bottom:1%;">
+                                        <input disabled="disabled" style="padding-right:3%;color:black;text-align:right;width:100%;height:24px;float:left;" class="form-control input_menu" id="thursday" t-att-value="'%.2f' %pricing.thu_total" title=""/>
+                                    </td>
+                                    <td class="singleblock_number" id="thu_to_mu" style="padding-top:1%;padding-bottom:1%;">
+                                        <input style="padding-right:3%;text-align:right;width:100%;height:24px;float:right;" class="form-control markup_price" id="monday" t-att-value="'%.2f' %pricing.thu_to_mu" title=""/>
+                                    </td>
+                                    <td class="singleblock_number" id="" style="padding-top:1%;padding-bottom:1%;">
+                                        <input disabled="disabled" style="padding-right:3%;color:black;text-align:right;width:100%;height:24px;float:left;" class="form-control input_menu" id="friday" t-att-value="'%.2f' %pricing.fri_total" title=""/>
+                                    </td>
+                                    <td class="singleblock_number" id="fri_to_mu" style="padding-top:1%;padding-bottom:1%;">    
+                                        <input style="padding-right:3%;text-align:right;width:100%;height:24px;float:right;" class="form-control markup_price" id="monday" t-att-value="'%.2f' %pricing.fri_to_mu" title=""/>
+                                    </td>
+                                    <td class="singleblock_number" id="" style="padding-top:1%;padding-bottom:1%;">
+                                        <input disabled="disabled" style="padding-right:3%;color:black;text-align:right;width:100%;height:24px;float:left;" class="form-control input_menu" id="saturday" t-att-value="'%.2f' %pricing.sat_total" title=""/>
+                                    </td>
+                                    <td class="singleblock_number" id="sat_to_mu" style="padding-top:1%;padding-bottom:1%;">    
+                                        <input style="padding-right:3%;text-align:right;width:100%;height:24px;float:right;" class="form-control markup_price" id="monday" t-att-value="'%.2f' %pricing.sat_to_mu" title=""/>
+                                    </td>
+                                    <td class="singleblock_number" id="" style="padding-top:1%;padding-bottom:1%;">
+                                        <input disabled="disabled" style="padding-right:3%;color:black;text-align:right;width:100%;height:24px;float:left;" class="form-control input_menu" id="sunday" t-att-value="'%.2f' %pricing.sun_total" title=""/>
+                                    </td>
+                                    <td class="singleblock_number" id="sun_to_mu" style="padding-top:1%;padding-bottom:1%;">
+                                        <input style="padding-right:3%;text-align:right;width:100%;height:24px;float:right;" class="form-control markup_price" id="monday" t-att-value="'%.2f' %pricing.sun_to_mu" title=""/>
+                                    </td>
+                                    <td class="hidden">
+                                        <input id="markup_id" t-att-value="pricing.op_markup_id.id"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </table>         
+                    </div>
+                </t>
+            </div>
+        </template>-->
+    </data>
+</openerp>

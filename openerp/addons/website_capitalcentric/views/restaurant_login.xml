@@ -1,0 +1,1327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+<!--    ==============================================================          
+                             Header Replace              
+        ==============================================================   -->
+        <template id="header" inherit_id="website.layout" name="Header">
+            <xpath expr="//header" position="replace">
+            </xpath>
+        </template>
+        
+<!--    ==============================================================          
+                             Footer Replace              
+        ==============================================================   -->
+        <template id="footer" inherit_id="website.layout" name="Footer">
+            <xpath expr="//footer" position="replace">
+            </xpath>
+        </template>
+
+<!--    ==============================================================          
+                           Restaurant Login Page               
+        ==============================================================   -->
+        <template id="res_layout" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="website_capitalcentric.capitalcentric_layout">
+                <t t-set="ref_content">
+                    <t t-set="head">
+                        <script type="text/javascript" src="/website_capitalcentric/static/src/js/signup.js"/>
+                        <style>
+                            #wrapwrap
+                            { 
+                                height: 100%;
+                                margin: 0 auto -180px;
+                            }
+                        </style>
+                    </t>
+                    <div id="bookinglayout" style="">
+                        <div style="">
+                            <t t-call="website_capitalcentric.logo"/>
+                            <div id="line"/>
+                            <br/><br/><br/><br/>
+                            <div id="loginblock">
+                                <p id="check_which" class="hidden"><t t-esc="mode"/></p>
+                                <p class="alert alert-danger" t-if="error" style="text-align:center;">
+                                    <t t-esc="error"/> 
+    <!--                                <button type="button" class="close" data-dismiss="alert">&amp;times;</button>-->
+                                </p>
+                                <p></p>
+                                <div id="rloginblock">
+                                    <div id="rloginheaderblock">
+                                        <t t-if="mode != 'reset'">
+                                            <span id="rloginheadertext"> Restaurant Sign In </span>
+                                        </t>
+                                        <t t-if="mode == 'reset'">
+                                            <span id="rloginheadertext"> Reset Your Password </span>
+                                        </t>
+                                    </div>
+                                    <form action="/capital_centric/siginin/login" method="Post" id="rloginformblock">
+                                        <input class="hidden" name="login_type" value="venue"/>
+                                        <input id="email_res" type="email" name="login" class="input-control email_res" placeholder="Email Address" required="True" title="Email Address"/> <span class="error_inline" id="email_error_line"/>
+                                        <t t-if="mode != 'reset'">
+                                            <p></p>
+                                            <input type="password" name="password" class="input-control password_res" placeholder="Password" required="True" title="Password"> </input>
+                                        </t>
+                                        <t t-if="mode == 'reset'">
+                                            <p></p>
+                                            <input id="venue_password" type="password" name="password" class="input-control password_res" placeholder="Password" required="True" title="Password"/> <span class="error_inline" id="first_password"/>
+                                            <p></p>
+                                            <input class="hidden" id="password" value=""></input>
+                                            <input id="venue_cpassword" type="password" name="password" class="input-control password_res" placeholder="Confirm Password" required="True" title="Confirm your Password"/> <span class="error_inline" id="c_password"/>
+                                        </t>
+                                        <input name="fromwch" id="from_wch_button" class="hidden"></input>
+                                        <p></p>
+                                        <p></p>
+                                        <t t-if="mode != 'reset'">
+                                            <div id="submit_button_div">
+                                                <button id="sign_in" type="submit" class="button button_common_res"> Sign In </button>
+                                                <button id="forget_password" type="submit" class="button button_common_res"> Forgot Password? </button>
+                                            </div>
+                                        </t>
+                                        <t t-if="mode == 'reset'">   
+                                            <button style="display:table;" id="submit" type="submit" class="button button_common_res"> Submit </button>
+                                        </t>
+                                    </form>
+                                </div>
+                                <br/><br/><br/><br/><br/>
+                            </div>
+                        </div>
+                    </div>
+                </t> 
+                <t t-set="ref_content1">
+                     <div id="push" style="height:180px;"></div>
+                </t>
+            </t>
+            <div style="height:180px;">
+                <t t-call="website_capitalcentric.footersection"/>
+                <t t-call="website_capitalcentric.copyrightsection"/>
+            </div>
+        </template>
+        
+<!--    ==============================================================          
+                            Capital Centric Layout             
+        ==============================================================   -->
+        <template id="capitalcentric_layout" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="website.layout">
+                <div id="wrap">
+                    <t t-raw="ref_content2"/>
+                    <div class="container">
+                        <div id="google_translate_element" style="text-align:right;margin-bottom:0.3%"></div>
+
+                        <t t-set="head">
+                            &lt;!--[if lt IE 9]&gt;
+                                <link rel="stylesheet" type="text/css" href="/website_capitalcentric/static/src/css/ie.css" />
+                            &lt;![endif]--&gt;
+                            <!--
+                            <meta http-equiv="CACHE-CONTROL" content="NO-CACHE"/>
+                            <meta http-equiv="PRAGMA" content="NO-CACHE"/>
+                            <meta http-equiv="EXPIRES" content="0"/>
+                            -->
+                            <script type="text/javascript" src="/website_capitalcentric/static/src/js/migrate.js"/>
+                            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"/>
+                            <script type="text/javascript" src="/website_capitalcentric/static/src/lib/jquery.ui.datepicker.js"/>
+
+                            <link rel='stylesheet' href='/web/static/lib/jquery.ui.bootstrap/css/custom-theme/jquery-ui-1.9.0.custom.css'/>
+                            <link rel='stylesheet' href='/website_capitalcentric/static/src/css/restaurant_login.css'/>
+                            <t t-if="user.cc_url=='vb.fitforpurposeonline.com'">
+                                <link rel='stylesheet' href='/website_capitalcentric/static/src/css/style.css'/>
+                            </t>
+                            <t t-if="not user.is_wlabeling">
+                                <link rel='stylesheet' href='/website_capitalcentric/static/src/css/help.css'/>
+                            </t>
+                            
+                            <!--     Color Picker         -->
+                            <link rel='stylesheet' href='/website_capitalcentric/static/src/lib/color-picker/spectrum.css'/>
+                            <script type="text/javascript" src="/website_capitalcentric/static/src/lib/color-picker/spectrum.js"/>
+                            <!--
+                            <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"/>
+                            <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.8/jquery.validate.js"/>
+                            -->
+                            <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+                            <script type="text/javascript">
+                                function googleTranslateElementInit() {
+                                new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+                                }
+                            </script>
+                            <script>
+
+                                  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+
+                                  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+
+                                  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+
+                                  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+
+
+                                  ga('create', 'UA-68591524-1', 'auto');
+
+                                  ga('send', 'pageview');
+                            </script>
+                            <style>
+                                .full-spectrum .sp-palette 
+                                {
+                                    max-width: 200px;
+                                }
+                            </style>
+                           <!-- <t t-if="log_out">
+    <!-\-                            <h1 id="back_button" class="hidden"><t t-esc="back_button"/></h1>-\->
+                                <script type="text/javascript">
+                                        window.history.forward();
+                                </script>
+                            </t>-->
+                            
+                            <script type="text/javascript">
+                                <!--window.history.forward();-->
+                                <!--$(window).on('load',function(event)
+                                {
+                                    <!-\-if ($("#back_button").length > 0)
+                                    {
+                                        console.log("Entered");
+                                        window.location.href="/capital_centric/restaurant_login"
+                                    }
+                                    console.log("x",event.clientX);-\->
+                                    <!-\-console.log(document,window);
+                                    console.log(document.URL);-\->
+                                    openerp.jsonRpc("/website_capitalcentric/session_info/", 'call', {"current_url":document.URL,'previous_url':document.referrer})
+                                    .then(function (data) 
+                                    {                                    
+                                        if(data)
+                                        {
+                                            window.location.href=data
+                                        }
+                                    });
+                                });--> 
+                                
+                                function settings_tabs(e)
+                                { 	  
+                                    if(e.id == 'tc') 
+                                    {
+                                        $('#tc_info').show();
+                                        $('#privacy_info').hide();
+                                        $('#interface_info').hide();
+                                        $('#about_info').hide();
+                                        $('#tc').addClass("button_common");
+                                        $('#privacy').removeClass("button_common");
+                                        $('#interface').removeClass("button_common");
+                                        $('#about').removeClass("button_common");
+                                    }
+                                    if(e.id == 'interface') 
+                                    {
+                                        $('#interface_info').show();
+                                        $('#privacy_info').hide();
+                                        $('#tc_info').hide();
+                                        $('#about_info').hide();
+                                        $('#interface').addClass("button_common");
+                                        $('#privacy').removeClass("button_common");
+                                        $('#tc').removeClass("button_common");
+                                        $('#about').removeClass("button_common");
+                                    }
+                                    if(e.id == 'privacy') 
+                                    {
+                                        $('#privacy_info').show();
+                                        $('#interface_info').hide();
+                                        $('#tc_info').hide();
+                                        $('#about_info').hide();
+                                        $('#privacy').addClass("button_common");
+                                        $('#interface').removeClass("button_common");
+                                        $('#tc').removeClass("button_common");
+                                        $('#about').removeClass("button_common");
+                                    }
+                                    if(e.id == 'about') 
+                                    {
+                                        $('#about_info').show();
+                                        $('#interface_info').hide();
+                                        $('#tc_info').hide();
+                                        $('#privacy_info').hide();
+                                        $('#about').addClass("button_common");
+                                        $('#interface').removeClass("button_common");
+                                        $('#tc').removeClass("button_common");
+                                        $('#privacy').removeClass("button_common");
+                                    }
+                                }
+                                 
+                                function color_change(e)
+                                {
+                                    var wbsite_color;
+                                    var submenu_color;
+                                    var header_color;
+                                    var font_website;
+                                    $("#d_"+e.id+"").val(e.value);
+                                    
+                                    if(e.value != undefined)
+                                    {
+                                        wbsite_color     = $("#d_wbsite_color").val();
+                                        submenu_color    = $("#d_submenu_color").val();
+                                        header_color     = $("#d_header_color").val();
+                                        font_website     = $("#d_font_website").val();
+                                        $("#"+e.id+"").val(e.value);
+                                    }
+                                    else
+                                    {
+                                        wbsite_color     = $("#wbsite_color").val();
+                                        submenu_color    = $("#submenu_color").val();
+                                        header_color     = $("#header_color").val();
+                                        font_website     = $("#font_website").val();
+                                    }
+                                    
+                                    
+                                    $.when($.get("/website_capitalcentric/static/src/css/help.css"))
+                                    .done(function(response) 
+                                    {
+                                        
+                                        if(wbsite_color == '')
+                                        {
+                                            var m_color       = response.replace(/\#ad4bc2/g,'#ad4bc2');
+                                            var d_m_color     = m_color.replace(/\#793487/g,'#793487');  // dark Color 30%
+                                        }
+                                        else
+                                        {    
+                                            var m_color       = response.replace(/\#ad4bc2/g,wbsite_color);
+                                            var d_m_color     = m_color.replace(/\#793487/g,ColorLuminance(wbsite_color, -0.3));  // dark Color 30%
+                                        }
+                                        
+                                        
+                                        
+                                        if(submenu_color == '')
+                                        {
+                                            var s_color       = d_m_color.replace(/\#e6e0ec/g,'#e6e0ec');
+                                            var d_s_color     = s_color.replace(/\#bfafce/g,'#bfafce');    
+                                        }
+                                        else
+                                        {
+                                            var s_color       = d_m_color.replace(/\#e6e0ec/g,submenu_color);
+                                            var d_s_color     = s_color.replace(/\#bfafce/g,ColorLuminance(submenu_color, -0.3));
+                                        }
+                                         
+                                        var h_color       = d_s_color.replace(/\#404040/g,header_color);
+                                        
+                                        $('<style id="new_css"/>').text(h_color).appendTo($('head'));
+                                        if(font_website != '')
+                                        {   
+                                            var font = h_color.replace(/\Helvetica Neue/g,font_website);
+                                            $('<style id="new_css"/>').text(font).appendTo($('head'));
+                                            if ($("#google_font_link").length > 0)
+                                            {		
+                                                $("#google_font_link").remove();
+                                            }
+                                            $('head').append('<link id="google_font_link" rel="stylesheet" href="https://fonts.googleapis.com/css?family='+font_website+'" type="text/css"></link>');
+                                         }
+                                         else
+                                         {
+                                            $('<style id="new_css"/>').text(h_color).appendTo($('head'));
+                                         }
+                                     });
+                                }
+                                function ColorLuminance(hex, lum) 
+                                {
+                                    // validate hex string
+                                    hex = String(hex).replace(/[^0-9a-f]/gi, '');
+                                    if (hex.length  &lt; 6) 
+                                    {
+                                        hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+                                    }
+                                    lum = lum || 0;
+                                    
+                                    // convert to decimal and change luminosity
+                                    var rgb = "#", c, i;
+                                    for (i = 0; i  &lt; 3; i++) 
+                                    {
+                                        c = parseInt(hex.substr(i*2,2), 16);
+                                        c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+                                        rgb += ("00"+c).substr(c.length);
+                                    }
+                                    return rgb;
+                               }
+                               $(document).ready(function()
+                               {
+                                   <!--  Get Emulation Function Call -->
+                                    openerp.jsonRpc("/capital_centric/get/emulation", 'call', {})    	
+                                   .then(function (data)
+                                   {
+                                       if(data != false)
+                                       {
+                                           $('#emulation_form').removeClass('hidden');
+                                       }
+                                   });
+                               
+                                   $('#interface').addClass("button_common");
+                                   $('#tc_info,#privacy_info,#about_info').hide();
+                                   function add() 
+                                   {
+                                      if($(this).val() === '')
+                                      {
+                                        $(this).val($(this).attr('placeholder')).addClass('placeholder');
+                                      }
+                                   }
+                               
+                                   function remove() 
+                                   {
+                                       if($(this).val() === $(this).attr('placeholder'))
+                                       {
+                                           $(this).val('').removeClass('placeholder');
+                                       }
+                                   }
+                               
+                                   // Create a dummy element for feature detection
+                                   if (!('placeholder' in $("<input></input>")[0])) 
+                                   {
+                                       if ($.browser.msie &amp;&amp; $.browser.version &lt; 10)
+                                       {
+                                          // Select the elements that have a placeholder attribute
+                                          $('input[placeholder], textarea[placeholder]').blur(add).focus(remove).each(add);
+                                   
+                                          // Remove the placeholder text before the form is submitted
+                                           $('form').submit(function(){
+                                               $(this).find('input[placeholder], textarea[placeholder]').each(remove);
+                                           });
+                                       }
+                                   }
+                               
+                                   // Fade In and Fade Out of Scroll Top
+                                   $(window).scroll(function()
+                                   {
+                                       if ($(this).scrollTop() > 100) 
+                                       {
+                                           $('.scrollToTop').fadeIn();
+                                       } 
+                                       else 
+                                       {
+                                           $('.scrollToTop').fadeOut();
+                                       }
+                                   });
+                                   
+                                   //Click event to scroll to top
+                                   $('.scrollToTop').click(function()
+                                   {
+                                       $('html, body').animate({scrollTop : 0},800);
+                                       return false;
+                                   });
+                                   
+                                   
+                                   <!--if($("#wbsite_color").val() == '')
+                                   {
+                                       wbsite_color = '#ad4bc2';
+                                   }
+                                   else
+                                   {
+                                       wbsite_color = $("#wbsite_color").val();
+                                   }-->
+                                   if($("#is_wlabeling").val() == 'True')
+                                   {
+                                       color_change('w_labelling');
+                                   }
+                                      
+                                    <!--acc_bal = $("#acc_bal").text();
+                                    new_acc_bal = acc_bal.replace("-","");
+                                    $("#acc_bal").text(new_acc_bal);-->
+                                
+                                    var numbers = /^[-+]?[0-9]+$/;  
+                                    var float_numbers = /^[-+]?[0-9]+\.[0-9]+$/;
+                                    $('#payment_continue_button').on('click',function()
+                                    {    
+                                        if($('#entered_amount').val().match(numbers) || $('#entered_amount').val().match(float_numbers))
+                                        {
+    <!--                                        document.getElementById("BuyForm").submit();-->
+                                        }
+                                        else
+                                        {   
+                                            $("#number_alert").show();
+                                            $('#entered_amount').focus();
+                                            $('#entered_amount').select();
+                                            return false;
+                                        }
+                                    });
+                                   
+                                    $(".color_picker").spectrum({
+                                        showInput: true,
+                                        className: "full-spectrum",
+                                        showInitial: true,
+                                        showPalette: true,
+                                        showSelectionPalette: true,
+                                        maxPaletteSize: 10,
+                                        preferredFormat: "hex",
+                                        localStorageKey: "spectrum.demo",
+                                    
+                                        palette: [
+                                        ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
+                                        "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
+                                        ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+                                        "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
+                                        ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
+                                        "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
+                                        "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
+                                        "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
+                                        "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
+                                        "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+                                        "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+                                        "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+                                        "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
+                                        "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
+                                        ]
+                                    });
+                                    
+                                    $(".sp-preview").css({'width':'90%','border':'none'});
+                                    $(".sp-replacer").css({'width':'100%','border-radius':'4px','border-color':'#404040'});
+                                    $(".sp-container").css('border-color','#404040');
+                                    
+                                    $('#entered_amount').on('blur',function()
+                                    {
+                                        if(this.value.match(float_numbers) || this.value.match(numbers))
+                                        {    
+                                            $("#number_alert").hide();
+                                            if($("select[name='paymentType']").val() != '')
+                                            {
+                                                if($("select[name='paymentType']").val() == 'MSCD' || $("select[name='paymentType']").val() == 'VISA')
+                                                {
+                                                    amount_to_add =  ($('#credit_charges').val()/100) * this.value;
+                                                    new_amount = (amount_to_add) + parseFloat(this.value);
+                                                }
+                                                else
+                                                {
+                                                    new_amount = ($('#debit_charges').val()/100) + parseFloat(this.value);
+                                                }
+                                                $('#hidden_amount').val(new_amount);
+                                                $('#amount').val((new_amount).toFixed(2));
+                                            }
+                                        }
+                                        else
+                                        {
+                                            $("#number_alert").show();
+                                            $('#amount').val(''); 
+                                        }
+                                    });
+                                
+                                    $("#number_alert").hide();
+                                    $('.cancel_button_cmn').on('click',function()
+                                    {
+                                        $("#div1").hide();
+                                        $("#settings_dialog").hide();
+                                        $("#tc_signup_dialog").hide();
+                                        $("#ch_pswrd").hide(); 
+                                        if($(this).attr('id') == 'cancel_button')
+                                        {
+                                        $('input[name="chnge_pswrd"]').prop('required',false);
+                                        }
+                                        fader.style.display = "none";
+                                        if($(this).attr('id') == 'cancel_settings_button')
+                                        {
+                                            location.reload();
+                                        }
+                                    });
+                                    
+                                
+                                    $('.payment_link').on('click',function()
+                                    {
+                                        fader = document.getElementById('login_fader');
+                                        login_box = document.getElementById('div1');
+                                        fader.style.display = "block";
+                                        login_box.style.display = "block";
+                                        $("#div1").show();
+                                        document.getElementById("BuyForm").reset();
+                                        $('#hidden_amount').val('');
+                                        $("#number_alert").hide();
+                                        if($(window).height() &lt; $("#div1 .modal-content").height())
+                                        {
+                                            $("#div1 .modal-content .modal-body").css({ 'overflow-y':'auto','height':''+($(window).height()) - 250+'px'});
+                                        }
+                                    });
+                                    
+                                    inv_id_arr  = [];
+                                    $('.inv_check').on("click", function() 
+                                    {
+                                        var id		= $(this).closest("tr");
+                                        bal_info 	= id.find(".inv_bal").text().trim();
+                                        inv_id 	    = id.find(".inv_id").text().trim();
+                                        var new_amount = 0.00;
+                                        if($("#entered_amount").val() == '')
+                                        {
+                                            var input_val =	0; 
+                                        }
+                                        else
+                                        {
+                                            var input_val =	parseFloat($("#entered_amount").val());
+                                        }
+                                        if ($(this).prop("checked")) 
+                                        {
+                                            entered_amt	= input_val + parseFloat(bal_info);
+                                            inv_ids     = inv_id_arr.push(inv_id);   
+                                        }
+                                        else
+                                        {
+                                            entered_amt	= input_val - parseFloat(bal_info);
+                                            inv_ids     = inv_id_arr.pop(inv_id);
+                                        }
+                                        $("#entered_amount").val(entered_amt.toFixed(2));
+                                        if($("#card_type").val() == 'MSCD' || $("#card_type").val() == 'VISA')
+                                        {
+                                            amount_to_add = $('#credit_charges').val()/100 * $('#entered_amount').val();
+                                            var new_amount = (amount_to_add) + parseFloat($('#entered_amount').val());
+                                        }
+                                        else if($("#card_type").val() == 'MAES' || $("#card_type").val() == 'DMC' || $("#card_type").val() == 'VISD' || $("#card_type").val() == 'VIED')
+                                        {
+                                            amount_to_add =  $('#debit_charges').val()/100 * $('#entered_amount').val();
+                                            var new_amount = (amount_to_add) + parseFloat($('#entered_amount').val());
+                                        }
+                                        $("#amount").val(new_amount.toFixed(2));
+                                        $(".inv_ids").val(inv_id_arr);
+                                    });
+                                    
+                                    $('.settings_icon').on('click',function()
+                                    {
+                                        fader = document.getElementById('login_fader');
+                                        login_box = document.getElementById('settings_dialog');
+                                        fader.style.display = "block";
+                                        login_box.style.display = "block";
+                                        $("#settings_dialog").show();
+                                    });
+                                    
+                                    $('#contact_continue_button').on('click',function()
+                                    {  
+                                        var x = $("#contact_email").val();
+                                        var atpos = x.indexOf("@");
+                                        var dotpos = x.lastIndexOf(".");
+                                        $( "#contactus_pop_alert" ).remove();
+                                        if($('#g-recaptcha-response').val()== '' || $('#g-recaptcha-response').val()== 'undefined')
+                                        {
+                                            $('<p id ='contactus_pop_alert' class="alert alert-danger" style="margin:0;padding:3px;width:320px;font-size:9pt;">Please wait for the reCaptcha image to load and try again.</p>').insertAfter(".g-recaptcha");
+                                            return false;
+                                        }
+
+                                        if (atpos &lt;1 || dotpos &lt; atpos+2 || dotpos+2>=x.length || $("#contact_name").val() == '' || $("#contact_phone").val() == '' || $("#contact_message").val() == '')
+                                        {
+                                            $(".contact_us_msg").hide();
+                                        }
+                                        else
+                                        {
+                                            $(".contact_us_msg").show();
+                                            document.getElementById("pop_up_contact_form").submit();
+                                            var fade_out = function()
+                                            {
+                                                $(".contact_us_msg").fadeOut();
+                                                $("#contact_name").val('');
+                                                $("#contact_email").val('');
+                                                $("#contact_phone").val('');
+                                                $("#contact_message").val('');
+                                            }
+                                            setTimeout(fade_out, 5000);
+                                        }
+                                    });
+                                    
+                                    $('#contact_name').on("focus",function()
+                                    {
+                                        console.log('called contact_name');
+                                        if($('#g-recaptcha-response').val() != '')
+                                        {
+                                            grecaptcha.reset();
+                                        }
+                                    });
+
+                                    $('#card_type').on("change",function()
+                                    { 
+                                        if($('#entered_amount').val().match(numbers) || $('#entered_amount').val().match(float_numbers))
+                                        {
+                                            if(this.value != '')
+                                            {
+                                                if(this.value == 'MSCD' || this.value == 'VISA')
+                                                {
+                                                    amount_to_add = $('#credit_charges').val()/100 * $('#entered_amount').val();
+                                                    new_amount = (amount_to_add) + parseFloat($('#entered_amount').val());
+                                                }
+                                                else
+                                                {
+                                                    amount_to_add =  $('#debit_charges').val()/100 * $('#entered_amount').val();
+                                                    new_amount = (amount_to_add) + parseFloat($('#entered_amount').val());
+    <!--                                                new_amount = (1.50) + parseFloat($('#entered_amount').val());-->
+                                                }
+                                                $('#hidden_amount').val(new_amount);
+                                                $('#amount').val((new_amount).toFixed(2));
+                                            }
+                                            else
+                                            {
+                                                $('#amount').val(''); 
+                                            }
+                                        }
+                                        else
+                                        {
+                                            $("#number_alert").show();
+                                            $('#entered_amount').focus();
+                                            $('#entered_amount').select();
+                                        }
+                                    });
+                                   <!-- $(".contact_button").click(function () 
+                                    {
+                                        fader = document.getElementById('login_fader');
+                                        login_box = document.getElementById('pop_up_contact');
+                                        fader.style.display = "block";
+                                        login_box.style.display = "block";
+                                        $('#pop_up_contact').show(); 
+                                        document.getElementById("pop_up_contact_form").reset();
+                                        $("#contact_us_msg").hide();
+                                    });-->
+                                    // Contact us Slide Event
+                                    $("#button").click(function()
+                                    {
+                                         $('#contact_us_pop_up').toggle('slow');
+                                         document.getElementById("pop_up_contact_form").reset();
+                                         $(".contact_us_msg").hide();
+                                    });
+
+                                    // Popover Hover
+                                    $('.popover-bar > .trigger').popover(
+                                    {
+    	                                html : true,
+    	                                trigger : "hover",
+                                        content: function()
+                                        {
+                                          return $(this).parent().find('.content').html();
+                                        },
+                                        container: 'body',
+                                        placement: 'top'
+	                                });
+
+                               });
+                               
+                               $(function() 
+                               { 
+                                   $("#div1").hide();
+                                   $("#settings_dialog").hide();
+                                   $(".contact_us_msg").hide();
+    <!--                               $("#pop_up_contact").hide();-->
+                                   $("#div1").draggable();  
+                                   $("#settings_dialog").draggable();
+                               });
+                            </script>
+                            <t t-raw="head or ''"/>
+                        </t>
+                        <input class="hidden" t-att-value="user.partner_id.wbsite_color or user.partner_id.parent_id and user.partner_id.parent_id.wbsite_color or ''" id="wbsite_color"/>
+                        <input class="hidden" t-att-value="user.partner_id.submenu_color or user.partner_id.parent_id and user.partner_id.parent_id.submenu_color or ''" id="submenu_color"/>
+                        <input class="hidden" t-att-value="user.partner_id.header_color or user.partner_id.parent_id and user.partner_id.parent_id.header_color or ''" id="header_color"/>
+                        <input class="hidden" t-att-value="user.partner_id.font_website or user.partner_id.parent_id and user.partner_id.parent_id.font_website or ''" id="font_website"/>
+                        <input class="hidden" t-att-value="user.is_wlabeling" id="is_wlabeling"/> 
+                        <a href="#" class="scrollToTop"/>
+                        <t t-raw="ref_content"/>
+                    </div>
+                    <t t-raw="ref_content1"/>
+                </div>
+            </t>
+        </template>
+        
+<!--    ==============================================================         
+                            Fit For Purpose Logo              
+        ==============================================================    -->
+        <template id="logo">
+            <div id="logo_position">
+                <t t-if="user.is_login">
+                    <t t-if="user.role in ['client','client_user','client_mng','client_cust'] ">
+                        <t t-set="href_name" t-value="'/capital_centric/fit/grid_view'"/>
+                    </t>
+                    <t t-if="user.role in ['venue','venue_user','venue_mng']">
+                        <t t-set="href_name" t-value="'/capital_centric/restaurant'"/>
+                    </t>
+                </t>
+                
+                <t t-if="not user.role or not user.is_login">
+                    <t t-set="href_name" t-value="'/'"/>
+                </t>
+                <t t-if="user.cc_url == 'vb.fitforpurposeonline.com'">
+                    <t t-set="href_name" t-value="'https://www.visitbritainshop.com/world'"/>
+                </t>
+                <t t-if="user.cc_url == 'destinationlondon.fitforpurposeonline.com'">
+                    <t t-set="href_name" t-value="'http://www.destinationlondon.se/'"/>
+                </t>
+                <a t-att-href="href_name">
+                    <t t-if="not user.is_wlabeling and not user.is_group">
+                        <img id="img_logo" src="/website_capitalcentric/static/src/img/fitcclogo.jpg" height="100" width="150" alt="Fit for Purpose Logo"/>
+                    </t>
+                    <t t-if="user.is_group">
+                        <img id="img_logo" src="/website_capitalcentric/static/src/img/company_logo.png" height="100" alt="Capital Centric Logo"/>
+                    </t>
+                    <t t-if="user.is_wlabeling">
+                        <t t-set="partner_id" t-value="user.partner_id.id"/>
+                        <t t-if="user.role in ('client_mng','client_user','client_cust')">
+                            <t t-set="partner_id" t-value="user.partner_id.parent_id.id"/>
+                        </t>
+                        <img id="img_logo" t-att-src="'/website/image?model=res.partner&amp;field=image&amp;id='+str(partner_id)" title="" height="100" alt="Logo"></img>
+                   </t>
+                </a>
+<!--                <t t-if="not user.to_count">-->
+                    <p></p>
+<!--                </t>-->
+            </div>
+            <t t-if="user.cc_url=='vb.fitforpurposeonline.com'">
+                <div id="vblogo" style="display:inline-block;margin-left:3%;">
+                    <h1>Official shop of the British Tourist Board</h1>
+                </div>
+            </t>
+        </template>
+        
+<!--    ==============================================================          
+                                 Footer             
+        ==============================================================   -->
+        <template id="footersection">
+            <div id="footerblock" class="">
+                <div class="container">
+                    <table style="width:100%;" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td style="width:21%;vertical-align:top;">
+                                <div class="firstfooterblock">
+                                    <t t-if="not user.is_wlabeling"> 
+                                        <t t-if="not user.is_group">
+                                            <div>
+                                                <a t-attf-href="/capital_centric/sign_up/operator" class="footerlinks contact"> Tour Operator Sign Up </a>
+                                            </div>
+                                        </t>
+                                        <div>
+                                            <a t-attf-href="/" class="footerlinks contact"> Tour Operator Login </a>
+                                        </div>
+                                        <t t-if="not user.is_group">
+                                            <div>
+                                                <a t-attf-href="/capital_centric/sign_up/restaurant" class="footerlinks contact"> Restaurant Sign Up </a>
+                                            </div>
+                                        </t>
+                                        <div>
+                                            <a href="/capital_centric/restaurant_login" class="footerlinks contact"> Restaurant Login </a>
+                                        </div>
+                                    </t>    
+                                    <!--<a href="" class="footerlinks"> API </a>
+                                    <p id="space"></p>-->
+                                </div>
+                            </td>
+                            <td style="width:21%;vertical-align:top;">
+                                <div class="secondfooterblock">
+                                    <div>                                
+                                        <a t-attf-href="/capital_centric/about_us" class="footerlinks contact"> About Us </a>
+                                    </div>
+                                    <div>
+                                        <a t-attf-href="/capital_centric/contact_us" class="footerlinks contact"> Contact Us </a>
+                                    </div>
+                                    <div>
+                                        <a t-attf-href="/capital_centric/terms_footer/operator" class="footerlinks contact" id="terms_footer"> Terms </a>
+                                    </div>
+                                    <div>                                 
+                                        <a t-attf-href="/capital_centric/privacy_policy_footer" class="footerlinks contact"> Privacy Policy </a>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="width:16%;vertical-align:top;">
+                                <t t-if="not user.is_group">
+                                    <div class="newsletter">
+                                        <span class="contact"> Payment Partners </span>
+                                        <!--<form action="" method="Post">
+                                            <input type="email" name="login" class="input-control newsletter_input" placeholder="Email Address"> </input>
+                                            <p id="space"></p>
+                                            <div class="newsletterbutton">
+                                                <button type="submit" class="button button-news"> Submit </button>
+                                            </div>
+                                        </form>-->
+                                       <img style="width:100%;vertical-align:baseline" id="" src="/website_capitalcentric/static/src/img/PaymentPartners.png" height="60" alt="Logo Capital Centric"/>
+                                    </div>  
+                                </t>
+                            </td>
+<!--                            <t t-if="not user.is_wlabeling">                              -->
+                               <t t-set="c_addr" t-value="user.company_id"/>
+<!--                            </t>-->
+                            <!--<t t-if="user.is_wlabeling"> 
+                                <t t-set="c_addr" t-value="user.partner_id"/>
+                                <t t-if="user.role in ('client_mng','client_user','client_cust')">
+                                    <t t-set="c_addr" t-value="user.partner_id.parent_id"/>
+                                </t>
+                            </t>-->
+                            <td style="width:21%;vertical-align:top;">
+                                <div class="contactus">
+                                    <span href="" class="contact"> Contact Us </span>
+                                    <p id="space"> <t t-esc="c_addr.name"/> </p>
+                                    <p id="space"> <t t-esc="c_addr.street"/> </p>
+                                    <p id="space"> <t t-esc="c_addr.street2"/> </p>
+                                    <p id="space"> <t t-esc="c_addr.city"/> - <t t-esc="c_addr.zip"/> </p>
+                                </div>
+                            </td>
+                            <td style="width:21%;vertical-align:top;">
+                                <div class="tel">
+                                    <br/>
+                                    <p id="space"> <t t-esc="c_addr.phone"/> </p>
+                                    <p id="space"> <t t-esc="c_addr.email"/> </p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </template>
+        
+<!--    ==============================================================          
+                               Copyright Text              
+        ==============================================================   -->
+        <template id="copyrightsection">
+            <div id="copyrightblock">
+                <div class="container">
+                    <span id="copyrighttext"> Copyright © 2014 Season &amp; Vine Ltd. All Rights Reserved. This site is compatible with IE Version (9.0 &amp; above), Mozilla Firefox and Google Chrome browsers.</span>
+                </div>
+            </div>
+        </template>
+        
+        
+<!--    ==============================================================          
+                        Operator & Restaurant Sign Up              
+        ==============================================================   -->
+        
+        
+        <template id="signup_page" page="True" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="website_capitalcentric.capitalcentric_layout">
+                <t t-set="ref_content">
+                    <t t-set="head">
+                        <link rel='stylesheet' href='/website_capitalcentric/static/src/css/operator_login.css'/>
+                        <style>
+                            #wrapwrap
+                            {
+                                height: 100%;
+                                margin: 0 auto -180px;
+                            }
+                        </style>   
+                        <!--                        <link rel='stylesheet' href='/website_capitalcentric/static/src/css/restaurant_login.css'/>-->
+                        <script type="text/javascript" src="/website_capitalcentric/static/src/js/signup.js"></script>
+<!--                        <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"/>-->
+                        <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+                        </script>-->
+                    </t>
+                    <div id="bookinglayout" style="">  
+                        <t t-call="website_capitalcentric.logo"/>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <br></br>                              
+                        <t t-if="req == 'signup'"> 
+                        <div id="Sign_up">
+                            <h2><t t-esc="type"/> Sign Up </h2>
+                        </div>
+                        </t>
+                        <t t-if="req == 'requested'">
+                            <br/><br/>
+                            <p style="width:100%;text-align:center;" class="alert alert-danger">
+                                <t t-esc="error"/>
+<!--                                    <button type="button" class="close" data-dismiss="alert">&amp;times;</button>-->
+                            </p>
+                            <t t-if="user.is_wlabeling">
+                                <form action="/capital_centric/siginin/login" method="Post" name='customer_login'>
+                                      <input name='login' t-att-value="post['email']" style="display:none;"/>
+                                    <input name='password' type="password" t-att-value="post['password']" style="display:none;"/>
+                                    <input name='login_type' value="client" style="display:none;"/>
+                                    <br/>
+                                    <br/>
+                                    <button name="request_button" type="submit" id="submit_button" class="button button_operator"> Continue </button>
+                                </form>
+                            </t>
+                        </t>                            
+                        <br></br>
+                        <br></br> 
+                        <form action="/website_capitalcentric/sign_up_details/" method="Post" name='venue_signup'>                                
+                            <t t-if="req == 'signup'">
+                            <p></p>
+                            <div id="restaurant_formleft">                                   
+                                <t t-if="type == 'Restaurant'">
+                                    <input name="type" value="venue" class="hidden"/>
+                                    <t t-set="path" t-value="'restaurant'"/>
+                                </t>
+                                <t t-if="type == 'Tour Operator'">
+                                    <input name="type" value="operator" class="hidden"/>
+                                    <t t-set="path" t-value="'operator'"/>
+                                </t>
+                                <t t-if="user.is_wlabeling">
+                                    <t t-set="path" t-value="'operator'"/>
+                                </t>
+                                <label> Name of the <t t-esc="type"/>/Company </label>
+                                <div>
+                                    <input required="True" id="venue_name" style="padding-left:1%" t-attf-class="input-control operator_inputs #{error and 'name' in error and 'has-error' or ''}" type="text" name="name" title="Enter the name of the company"/>
+                                    <div>
+                                        <span class="error_inline" id="name_error"><t t-if="error and 'name' in error or ''">Please Enter a Name !!</t></span>
+                                    </div>
+                                </div>
+                                <p></p>
+                                <!--<t t-if="type == 'Tour Operator'">
+                                    <label>Preferred Payment Type</label>
+                                    <select style="padding-left:0px" name="payment_type" required="True" id="pyment_type" class="input-control operator_inputs" title="Select a type of a Payment">
+                                        <option value="prepaid">Prepaid</option>
+                                        <option value="on_purchase">On Purchase</option>
+                                        <option value="monthly">Monthly</option>
+                                    </select>
+                                    <p></p>
+                                </t>-->
+                                <t t-if="not user.is_wlabeling">
+                                    <label> Contact Name </label> 
+                                    <div>
+                                        <input required="True" id="contact_name" style="padding-left:1%" t-attf-class="input-control operator_inputs #{error and 'contact_name' in error and 'has-error' or ''}" type="text" name="contact_name" title="Enter the name of the customer"/>
+                                        <div>
+                                            <span class="error_inline" id="cname_error"><t t-if="error and 'contact_name' in error or ''">Please Enter a Contact Name !!</t></span>
+                                        </div>
+                                    </div>
+                                </t>
+                                <p></p>
+                                <label> Email </label> 
+                                <div>
+                                    <input required="True" style="padding-left:1%" id="venue_email" t-attf-class="input-control operator_inputs #{error and 'email' in error and 'has-error' or ''}" type="email" name="email" placeholder="e.g. xyz@gmail.com" title="Enter the email address of the company"/>
+                                    <div>
+                                        <span class="error_inline" id="email_id"><t t-if="error and 'email' in error or ''">Please Enter an Email!!</t></span>
+                                    </div>
+                                </div>                                    
+                                <p></p>
+                                <input class="hidden" id="email" value=""/>
+                                <label> Confirm Email </label>
+                                <div>
+                                    <input required="True" style="padding-left:1%" id="venue_cemail" t-attf-class="input-control operator_inputs #{error and 'email' in error and 'has-error' or ''}" type="email" name="email" placeholder="e.g. xyz@gmail.com" title="Confirm the email address of the company"/>
+                                    <div>
+                                        <span class="error_inline" id="email_c_id"><t t-if="error and 'email' in error or ''">Please Enter Confirm Email!!</t></span>
+                                    </div>
+                                </div>                                    
+                                <p></p>
+                                <label> Password </label>
+                                <div>
+                                    <input style="padding-left:1%" required="True" id="venue_password" t-attf-class="input-control operator_inputs #{error and 'password' in error and 'has-error' or ''}" type="password" name="password" title="Enter a password"/>
+                                    <div>
+                                        <span class="error_inline" id="first_password"><t t-if="error and 'password' in error or ''">Please Enter a Password!!</t></span>
+                                    </div>
+                                </div>
+                                <p></p>
+                                <input class="hidden" id="password" value=""></input>
+                                <label> Confirm Password </label>
+                                <div>
+                                    <input style="padding-left:1%" required="True" id="venue_cpassword" t-attf-class="input-control operator_inputs #{error and 'password' in error and 'has-error' or ''}" type="password" name="password" title="Confirm the password"/>
+                                    <div>
+                                        <span class="error_inline" id="c_password"><t t-if="error and 'password' in error or ''">Please Enter Confirm Password!!</t></span>
+                                    </div>
+                                </div>
+                                <!--<div style="padding-top:2%;">
+                                    <input required="required" type="checkbox" name="accept_tc" id ="accept_tc" class="" title="Accept the TERMS &amp; CONDITIONS"/>
+                                    <span id="" style="font-weight:bold;font-size:10pt;">I accept the <a t-attf-href="/capital_centric/terms_footer/#{path}" target="_blank" class="main_color underline tc_signup">Terms &amp; Conditions </a></span>
+                                </div>-->
+                            </div>
+                            
+                            
+                            <div id="restaurant_formright">
+                                <div id="inner1_formleft">
+                                    <div id="first_half">
+                                        <label> Phone </label>
+                                        <div>
+                                            <input class="input-control operator_inputs_half" type="text" name="phone" placeholder="e.g. (+32).81.81.37.00" title="Enter the phone number of the company"/>
+                                        </div>
+                                    </div> 
+                                    &amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                    <div id="second_half">
+                                        <label> Mobile </label>
+                                        <div>
+                                            <input class="input-control operator_inputs_half" type="text" name="mobile" title="Enter the mobile number of the company, if any"/>
+                                        </div>
+                                    </div>
+                                    <p></p> 
+                                </div>
+                                <div id="inner1_formleft">
+                                    <div id="first_half">
+                                        <label> Country </label>
+                                        <div>
+                                            <select style="padding:4px;" name="Country" id="con_country" class="input-control operator_inputs_half" title="Select a country">
+                                                <option value=""> Select Country.. </option>
+                                                <t t-foreach="country_ids or []" t-as="country">
+                                                    <option t-att-value="country.id"><t t-esc="country.name"/></option>
+                                                </t>
+                                            </select>
+                                        </div>
+                                    </div> &amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                    <div id="second_half">
+                                        <label> County </label>
+                                        <div>
+                                            <select style="padding:4px;" name="State" id="con_state" class="input-control operator_inputs_half" title="Select a county">
+                                                <option value=""> Select County.. </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <p></p>
+                                </div>
+                                <label> City </label>
+                                <div>
+                                    <input style="padding-left:1%" name="city" id="con_city" class="input-control operator_inputs" title="Enter your city"/>
+                                </div>
+                                <p></p>
+                                <div id="">
+                                    <div style="display:none;" id="first_half">
+                                        <label> Location </label>
+                                        <select name="Location" id="con_location" class="input-control operator_inputs_half">
+                                            <option value=""> Select Location.. </option>
+                                        </select>
+                                    </div>
+                                    <div id="second_half">
+                                        <label> Post Code </label>
+                                        <div>
+                                            <input style="padding-left:1%" id="post_code" class="input-control operator_inputs" type="text" name="zip" title="Enter the Post Code"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p></p>
+                                <label> Address 1 </label>
+                                <div>
+                                    <input style="padding-left:1%" class="input-control operator_inputs" type="text" name="street" title="Address 1"/>
+                                </div>
+                                <p></p>
+                                <label> Address 2 </label>
+                                <div>
+                                    <input style="padding-left:1%" class="input-control operator_inputs" type="text" name="street2" title="Address 2"/>
+                                </div>
+                                <p></p>
+                            </div>
+                            <p id="operator_spacing"></p>
+                            </t>                                
+                            <div id="submit_reset">
+                                <t t-if="req == 'signup'">
+                                    <button name="request_button" type="submit" id="submit_button" class="button button_operator"><t t-if="user.is_wlabeling">Sign Up</t><t t-if="not user.is_wlabeling">Request</t></button>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                    <button type="reset" id="reset_button" class="button button_operator"> Reset </button>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                </t>
+                                <t t-if="req != 'requested' or not user.is_wlabeling">
+                                    <a href="/" id="home_button" class="button button_operator text-center"> Home </a>
+                                </t>
+                            </div>
+                        </form>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <!--<div id="login_fader"/>
+                    <div class="modal-dialog" id="tc_signup_dialog" style="background-color:transparent;width:70%;">
+                        <div class="modal-content">
+                            <t t-if="user.is_wlabeling and user.role  in ('client','venue')">
+                                <t t-set="terms" t-value="user.partner_id.terms_conditions"/>
+                            </t>
+                            <t t-if="user.is_wlabeling and user.role  not in ('client','venue')">
+                                <t t-set="terms" t-value="user.partner_id.parent_id.terms_conditions"/>
+                            </t>
+                            <div class="modal-header">
+                                <h3 class="modal-title" style="font-size:x-large;text-indent:0;">Settings</h3>
+                            </div>
+                            <div class="modal-body" style="padding:10px;padding-top:0px;">
+                                <t t-if="user.is_wlabeling">
+                                    <textarea disabled="disabled" style="background:white;resize:none;border:none ;border-right: 1;font-size:10pt;width:100%;height:329px;"><t t-esc="terms"/></textarea>
+                                </t>
+                                <t t-if="not user.is_wlabeling">
+                                    <div style="height:350px;overflow-y:scroll;">
+                                        <t t-call="website_capitalcentric.terms_operator"/>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="modal-footer" style="padding:10px;">
+                                <button class="btn btn-priCmary cancel_button_cmn" id="" style="width:84px;height:40px;background-color:#c00000;color:white;">Close</button>
+                            </div>
+                        </div>
+                    </div>-->
+                </t>
+                <t t-set="ref_content1">
+                    <div id="push" style="height:180px;"></div>
+                </t>
+            </t>
+            <div style="height:180px;">
+                <t t-call="website_capitalcentric.footersection"/>
+                <t t-call="website_capitalcentric.copyrightsection"/>
+            </div>
+        </template>
+        
+        
+<!--    ==============================================================          
+                               Contact Us Page           
+        ==============================================================   -->
+        
+        
+        <template id="contact_us" page="True" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="website_capitalcentric.capitalcentric_layout">
+                <t t-set="ref_content">
+                    <t t-set="head">
+                        <link rel='stylesheet' href='/website_capitalcentric/static/src/css/operator_login.css'/>
+                        <style>
+                            #wrapwrap
+                            {
+                                height: 100%;
+                                margin: 0 auto -180px;
+                            }
+                        </style>   
+                        <script type="text/javascript" src="/website_capitalcentric/static/src/js/signup.js"/>
+                        <script src="https://www.google.com/recaptcha/api.js"/>
+                    </t>
+                    <div id="bookinglayout" style="">  
+                        <t t-call="website_capitalcentric.logo"/>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <div id="Sign_up">
+                            <h2> Contact Us  </h2>
+                        </div>
+                        <br></br>
+                        <br></br>
+                        <form action="/website_capitalcentric/contact_us_form/" method="Post" class="" style="min-height:400px;width:50%;">
+                            <div id="">
+                                <label> Name </label>
+                                <div>
+                                    <input id="contact_form_name" style="padding-left:1%" required="True" class="input-control operator_inputs" type="text" name="name" title="" t-att-value="name or ''"/>
+                                </div>
+                                <p></p>
+                                <label> Email </label>
+                                <div>
+                                    <input style="padding-left:1%" required="True" id="contact_form_email" class="input-control operator_inputs" type="email" name="email" placeholder="" title="" t-att-value="email or ''"/>
+                                </div>
+                                <p></p>
+                                <label> Phone </label>
+                                <div>
+                                    <input style="padding-left:1%" required="True" id="contact_form_phone" class="input-control operator_inputs" type="text" name="phone" placeholder="" title="" t-att-value="phone or ''"/>
+                                </div>
+                                <p></p>
+                                <label> Message </label>
+                                <textarea style="padding-left:1%;height:150px;resize:none;overflow:auto;display:block;" required="True" id="contact_form_message" class="input-control operator_inputs" type="text" name="message" title=""><t t-esc="message or ''"/></textarea>
+                                <p></p>
+                                <div class="g-recaptcha" data-sitekey="6Lcglw8TAAAAAN3HEiMa0JwmjgM1Y3HNqHURokq3" data-theme="light"></div>
+                                <p class="alert alert-danger" style="margin:0;padding:3px;width:320px;font-size:9pt;" t-if="captcha_error">
+                                    <t t-esc="captcha_error"/>
+                                </p>
+                                <p id="operator_spacing">
+                                </p>
+
+                                <div style="margin-bottom:2%;" id="submit_reset">
+                                    <button name="contact_submit_button" type="submit" id="submit_button" class="button button_operator"> Submit </button>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                    <button type="reset" id="reset_button" class="button button_operator" name="contact_us_reset"> Reset </button>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                    <a href="/" id="home_button" class="button button_operator text-center"> Home </a>
+                                </div>
+                                <br/>
+                                <p/>
+                                <p class="alert alert-danger" style="margin:0;text-align:center;" t-if="error">
+                                    <t t-esc="error"/>
+                                </p>
+                                <p id="operator_spacing"></p>
+                            </div>
+                        </form>
+                    </div>
+                </t>
+                <t t-set="ref_content1">
+                    <div id="push" style="height:180px;"></div>
+                </t>
+            </t>
+            <div style="height:180px;">
+                <t t-call="website_capitalcentric.footersection"/>
+                <t t-call="website_capitalcentric.copyrightsection"/>
+            </div>
+        </template>
+
+
+
+
+
+<!--    ==============================================================          
+                               About Us Page           
+        ==============================================================   -->
+        
+        
+        <template id="about_us" page="True" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="website_capitalcentric.capitalcentric_layout">
+                <t t-set="ref_content">
+                    <t t-set="head">
+                        <link rel='stylesheet' href='/website_capitalcentric/static/src/css/operator_login.css'/>
+                        <style>
+                            #wrapwrap
+                            {
+                                height: 100%;
+                                margin: 0 auto -180px;
+                            }
+                        </style>   
+                        <script type="text/javascript" src="/website_capitalcentric/static/src/js/signup.js"/>
+                        <script type="text/javascript">
+                            $(document).ready(function () 
+                            {
+                                $("textarea#aboutus").each(function() 
+                                {
+                                    var h =	(this.scrollHeight);
+                                    var x = $(this).height(h);
+                                });
+                            });
+                            
+                        </script>
+                    </t>
+                    <div id="bookinglayout" style="">  
+                        <t t-call="website_capitalcentric.logo"/>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <div id="Sign_up">
+                            <h2> About Us  </h2>
+                        </div>
+                        <br></br>
+                        <br></br>  
+                        <div t-if="not user.is_wlabeling and not user.is_group">       
+                            <span style="font-size:10pt;width:100%;min-height:200px;">
+                                FIT for Purpose is owned by Season &amp; Vine Ltd who also own Capital Centric. 
+                                FIT for Purpose in an online booking platform designed for travel industry professionals.
+                            </span>                        
+                        </div>
+                        
+                        <t t-if="user.is_wlabeling and user.role  in ('client','venue')">
+                            <t t-set="about_us" t-value="user.partner_id.about_us"/>
+                        </t>
+                        <t t-if="user.is_wlabeling and user.role  not in ('client','venue')">
+                            <t t-set="about_us" t-value="user.partner_id.parent_id.about_us"/>
+                        </t>	
+                        <t t-if="user.is_wlabeling">
+                            <textarea id="aboutus" disabled="disabled" style="background:white;resize:none;border:none ;border-right:0;font-size:10pt;width:100%;"><t t-esc="about_us"/></textarea>
+                        </t>
+                        <t t-if="user.is_group">
+                            <span style="font-size:10pt;width:100%;min-height:200px;">
+                                <div>Capital Centric offers a personal and bespoke booking service for groups of any size and most budgets and we are totally dedicated to placing restaurant groups across the UK and in Scotland.</div>
+                                <br/>
+                                <div>From June 2014 we also offer a unique online booking service for your FIT’s. F.I.T for Purpose, our tailor made online service is available to our Trade Partners and gives instant availability and confirmation for a wide range of venues.</div>
+                                <br/>
+                                <div>
+                                    To access our online service please visit <a class="main_color" href="http://fitforpurposeonline.com" target="_blank">www.fitforpurposeonline.com</a>. You can register as an operator or, if you are a restaurant, please complete the application form you will find at the bottom left hand side (click on the link - Restaurant sign up)
+                                </div>
+                                <br/>
+                                <div>                                
+                                    Capital Centric was created in March 2009 by Janie Clarke.  For many years Janie worked with a national restaurant group, growing their trade and corporate sales business, working closely with Operators, Chefs and Travel Trade and Corporate clients.
+                                </div>
+                                <br/>
+                                <div>
+                                    Capital Centric handpicks their restaurant partners and works with them to offer their client’s groups good value and outstanding service. We believe in creating great working relationships that last.
+                                </div>
+                                <br/>
+                                <ul>
+                                    <li style="list-style-type: disc;">Handpicked restaurants and pubs</li>
+                                    <li style="list-style-type: disc;">Bespoke quotations</li>
+                                    <li style="list-style-type: disc;">Wide range of venues</li>
+                                    <li style="list-style-type: disc;">Friendly, approachable and efficient</li>
+                                </ul>
+                                <br/>
+                                <div>
+                                    If you would like to make an enquiry please use our <a class="main_color" href="http://www.capitalcentric.co.uk/enquiry.php" target="_blank" title="enquiry form">enquiry form</a>
+                                </div>
+                                <br/>
+                                <div>
+                                    If you are a restaurant that would like to be considered for listing with us please send an email to <a class="main_color" href="mailto:info@capitalcentric.co.uk">info@capitalcentric.co.uk</a>
+                                </div>
+                            </span>
+                        </t>
+                        <p id="operator_spacing"></p>
+                        <div id="submit_reset">
+                            <a href="/" id="home_button" class="button button_operator text-center"> Home </a>
+                        </div>
+                        <p id="operator_spacing"></p>
+                    </div>
+                </t>
+                <t t-set="ref_content1">
+                    <div id="push" style="height:180px;"></div>
+                </t>
+            </t>
+            <div style="height:180px;">
+                <t t-call="website_capitalcentric.footersection"/>
+                <t t-call="website_capitalcentric.copyrightsection"/>
+            </div>
+        </template>
+        
+        
+    </data>
+</openerp>

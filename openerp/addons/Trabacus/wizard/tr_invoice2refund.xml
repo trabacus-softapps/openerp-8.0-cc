@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<openerp>
+	<data>
+
+<!-- 
+	Account Refund:
+	by: Kanchan
+-->
+		<record id="view_tr_account_invoice_refund" model="ir.ui.view" >
+            <field name="name">view.tr.account.invoice.refund.</field>
+            <field name="model">account.invoice.refund</field>
+            <field name="inherit_id" ref="account.view_account_invoice_refund"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//group/group" position="attributes">
+            		<attribute name="invisible">1</attribute>
+            	</xpath>
+            	<xpath expr="//field[@name='journal_id']" position="attributes">
+            		<attribute name="invisible">1</attribute>
+            	</xpath>
+            	<xpath expr="//field[@name='period']" position="attributes">
+            		<attribute name="invisible">1</attribute>
+            	</xpath>
+            	<xpath expr="/form/footer" position="before">
+            		<group colspan="4" col="8">
+            			<field name="flight_ids" nolabel="1" mode="tree" string="Passengers"
+            				domain="[('invoice_id','=',context.get('invoice_id')),('is_refunded','=',False)]" 
+            				attrs="{'invisible':[('travel_type', 'not in', ('dom_flight', 'int_flight'))], 
+            							'required':[('travel_type', 'in', ('dom_flight', 'int_flight'))] }" >
+            				<tree string="Flight" create="false" editable="top" >
+            					<field name="tpartner_id"/>
+            					<field name="pax_name"/> 
+            					<field name="basicother"/>
+            					<field name="a_tac"/>
+            					<field name="a_servicechrg"/>
+            					<field name="taxes"/>
+            					<field name="total"/>
+            				</tree>
+            			</field>
+            			<field name="hotel_ids" nolabel="1" mode="tree"  string="Passengers"
+            				domain="[('invoice_id','=',context.get('invoice_id'))]" 
+            				 
+            				attrs="{'invisible':[('travel_type', 'not in', ('dom_hotel','int_hotel'))],
+            				'required':[('travel_type', 'in', ('dom_hotel','int_hotel'))]}" >
+            				<tree string="Hotel" create="false" editable="top" >
+            					<field name="tpartner_id"/> 
+            					<field name="name"/>
+            					<field name="basicother"/>
+            					<field name="tac"/>
+            					<field name="servicechrg"/>
+            					<field name="total"/>
+            				</tree>
+            			</field>
+            			<field name="cruise_ids" nolabel="1" mode="tree" domain="[('invoice_id','=',context.get('invoice_id'))]" 
+            				attrs="{'invisible':[('travel_type', '!=', 'cruise')]}" >
+            				<tree string="Cruise" create="false" editable="top" >
+            					<field name="tpartner_id"/>
+            					<field name="name"/>
+            					<field name="no_nts"/>  
+            					<field name="vessele_id"/>
+            					<field name="sail_dt"/> 
+            					<field name="basicother"/> 
+            					<field name="tac"/>
+            					<field name="taxes"/> 
+            					<field name="total"/>
+            				</tree>
+            			</field>
+            			<field name="railway_ids" nolabel="1" mode="tree" domain="[('invoice_id','=',context.get('invoice_id'))]" 
+            				attrs="{'invisible':[('travel_type', '!=', 'railway')]}" >
+            				<tree string="Railway" create="false" editable="top" >
+            					<field name="tpartner_id"/>
+            					<field name="name"/>
+            					<field name="basicother"/> 
+            					<field name="tac"/>
+            					<field name="taxes"/>
+            					<field name="servicechrg"/>
+            					<field name="total"/>
+            				</tree>
+            			</field>
+            			<field name="visa_ids" nolabel="1" mode="tree" domain="[('invoice_id','=',context.get('invoice_id'))]" 
+            				attrs="{'invisible':[('travel_type', '!=', 'visa')]}" >
+            				<tree string="Visa" create="false" editable="top" >
+            					<field name="tpartner_id"/> 
+            					<field name="name"/>
+            					<field name="basicother"/>
+            					<field name="tac"/>
+            					<field name="markup"/>
+            					<field name="servicechrg"/>
+            					<field name="total"/>
+            				</tree>
+            			</field>
+            			<field name="insurance_ids" nolabel="1" mode="tree" domain="[('invoice_id','=',context.get('invoice_id'))]" 
+            				attrs="{'invisible':[('travel_type', '!=', 'insurance')]}" >
+            				<tree string="Insurance" create="false" editable="top" >
+            					<field name="tpartner_id"/> 
+            					<field name="name"/>
+            					<field name="age_criteria"/>
+            					<field name="no_policy"/>
+            					<field name="basic"/>
+            					<field name="tac"/>
+            					<field name="tptax"/>
+            					<field name="servicechrg"/>
+            					<field name="taxes"/>
+            					<field name="total"/>
+            				</tree>
+            			</field>
+            			<field name="activity_ids" nolabel="1" mode="tree" domain="[('invoice_id','=',context.get('invoice_id'))]" 
+            				attrs="{'invisible':[('travel_type', '!=', 'activity')]}" >
+            				<tree string="Activity" create="false" editable="top" >
+            					<field name="tpartner_id"/>
+            					<field name="name"/>
+            					<field name="basicother"/>
+            					<field name="taxes"/>
+            					<field name="total"/>
+            				</tree>
+            			</field>
+            			<field name="addon_ids" nolabel="1" mode="tree" domain="[('invoice_id','=',context.get('invoice_id'))]" 
+            				attrs="{'invisible':[('travel_type', '!=', 'add_on')]}" >
+            				<tree string="Add-on" create="false" editable="top" >
+            					<field name="tpartner_id"/>
+            					<field name="name"/>
+            					<field name="basicother"/>
+            					<field name="taxes"/>
+            					<field name="total"/>
+            				</tree>
+            			</field>
+            		</group>
+            		<field name="travel_type" invisible="1"/>
+            	</xpath>
+            </field>
+           </record>  
+	</data>
+</openerp>

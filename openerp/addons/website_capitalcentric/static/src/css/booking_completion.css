@@ -1,0 +1,132 @@
+#booking_done
+{
+    width:100%;
+/*    background-color:yellow;*/
+    clear:both;
+}
+#booking_done:before,
+#booking_done:after {
+    content: " "; 
+    display: table;
+}
+
+#booking_done:after { 
+    clear: both;
+}
+#booking_line
+{
+    height:40px;
+}
+#middle_content:before,
+#middle_content:after {
+    content: " "; 
+    display: table;
+}
+
+#middle_content:after {
+    clear: both;
+}
+#middle_content
+{
+    clear:both;
+}
+#booking_address
+{
+    float:left;
+/*    background-color:lightblue;*/
+    margin-left:0.5%;
+    position:relative;
+    width:40%;
+}
+#booking_details
+{
+    float:right;
+/*    background-color:coral;*/
+    width:59%;
+}
+#guest_details
+{
+/*   display:block;*/
+   min-height:70px;
+   width:100%;
+   background-color:#f2f2f2;
+   padding:5px;
+}
+#middle_content
+{
+    display:block;
+    min-height:100px;
+    width:100%;
+}
+.input-control.guest_input
+{
+    display:inline-block;
+    width:32%;
+}
+#guest_inputs
+{
+    margin-left:0.7%;
+}
+.button.button_guest
+{
+    display:inline-block;
+    width:15%;
+    float:right;
+}
+#guest_spacing
+{
+    margin:3px;
+}
+#booking_menu_table
+{
+    width:100%;
+/*    margin-left:5%;*/
+}
+.menu_booking_name
+{
+    width:50%;
+}
+.menu_booking_price,.menu_booking_guests,.menu_booking_nett_rate,.menu_booking_vat
+{
+    width:10%;
+}
+.pspacing_line
+{
+    margin:-19px;
+}
+.ptotal
+{
+    margin:2px;
+}
+#hr_line
+{
+    width:95%;
+    margin-left:5%;
+    height:2px;
+    background-color:#bfbfbf;
+}
+#total
+{
+    width:95%;
+    margin-left:5%;
+    background-color:white;
+    margin-top:-2.5%;
+}
+#second_line_address
+{
+    margin-left:14%;
+}
+.pspacing_address
+{
+    margin:-3px;
+}
+.pspacing_add
+{
+    margin:-1px;
+}
+.toggle-plus,.tot_plus
+{
+    cursor:pointer;
+}
+
+

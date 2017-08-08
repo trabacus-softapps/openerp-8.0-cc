@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        
+<!--	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+       			Invoice: Insurance 
+  		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^	
+--> 
+        
+        <record id="view_invoice_ins_tree" model="ir.ui.view">
+            <field name="name">view.invoice.ins.tree</field>
+            <field name="model">tr.invoice.insurance</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Insurance">
+                    <field name="tpartner_id"/> 
+                    <field name="name"/>
+                    <field name="age_criteria"/>
+                    <field name="no_policy"/>
+                    <field name="basic"/>
+                    <field name="tac"/>
+                    <field name="tptax"/>
+                    <field name="servicechrg"/>
+                    <field name="taxes"/>
+                    <field name="total" sum='total'/>
+                    <field name="currency_id"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_invoice_ins_form" model="ir.ui.view">
+            <field name="name">view.invoice.ins.form</field>
+            <field name="model">tr.invoice.insurance</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Insurance" version="7.0">
+                    <group colspan="2" col="4">
+                        <field name="tpartner_id" context="{'search_default_supplier':1,'default_supplier':1,'default_customer':0}"/> 
+                        <field name="product_id" on_change="onchange_product(product_id)" context="{'default_travel_type':context.get('travel_type')}"/> 
+                        <field name="account_id" invisible="1"/> 
+                        <field name="name"/>
+                        <field name="currency_id"/>
+                        <field name="age_criteria"/>
+                        <field name="passenger"/>
+                        
+                    </group>
+                    <group colspan="2" col="6">
+                        <field name="no_policy" 		on_change="onchange_INS_Total(inv_type, 'all', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                        <field name="basic"     		on_change="onchange_INS_Total(inv_type, 'all', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                        <field name="markup_perc"		on_change="onchange_INS_Total(inv_type, 'all', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                        <field name="markup"			on_change="onchange_INS_Total(inv_type, 'amt', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+                        <field name="tac_perc"  		on_change="onchange_INS_Total(inv_type, 'all', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                        <field name="tac"       		on_change="onchange_INS_Total(inv_type, 'amt', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+                        <field name="tds_perc"			on_change="onchange_INS_Total(inv_type, 'all', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                        <field name="tds"				on_change="onchange_INS_Total(inv_type, 'amt', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+                        <field name="discount"			on_change="onchange_INS_Total(inv_type, 'all', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                        <field name="tds1_perc"			on_change="onchange_INS_Total(inv_type, 'all', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                        <field name="tds1"				on_change="onchange_INS_Total(inv_type, 'amt', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+                        <field name="servicechrg_perc" 	on_change="onchange_INS_Total(inv_type, 'all', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                        <field name="servicechrg"      	on_change="onchange_INS_Total(inv_type, 'amt', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids, True)" class="trab_maroon_css"/>
+                        <field name="cancel_charges"	on_change="onchange_INS_Total(inv_type, 'all', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+                        <field name="cancel_markup"		on_change="onchange_INS_Total(inv_type, 'all', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+                        <field name="cancel_service"	on_change="onchange_INS_Total(inv_type, 'all', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+                        <newline/>
+                        <field name="subtotal" class="trab_boldc_css"/>
+                    </group>
+                    <u><separator string="T.P.Taxes"/></u>
+                    <group colspan="3" col="6">
+                        <field name="tptax_basic" 		on_change="onchange_INS_Total(inv_type, 'all', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                        <field name="tptax_tac"			on_change="onchange_INS_Total(inv_type, 'all', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                        <field name="tptax_tds"			on_change="onchange_INS_Total(inv_type, 'all', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                        <newline/>
+                        <field name="tptax"/>
+                        <field name="tptax_ids" colspan="4" widget="many2many_tags" on_change="onchange_INS_Total(inv_type, 'all', no_policy, basic, markup_perc, markup, tac_perc, tac, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_charges, cancel_markup, cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                        <field name="inv_type" invisible="1"/>
+                        <newline/>
+                    </group>
+                    <u><separator string="Taxes"/></u>
+                    <group colspan="3" col="6">
+                        <field name="tax_basic" 	  class="trab_maroon_css"/>
+                        <field name="tax_mark" 		  class="trab_maroon_css"/>
+                        <field name="tax_tac" 		  class="trab_maroon_css"/>
+                        <field name="tax_tds" 		  class="trab_maroon_css"/>
+                        <field name="tax_tds1" 		  class="trab_maroon_css"/>
+                        <field name="tax_servicechrg" class="trab_maroon_css"/>
+                        <field name="tax_ids" widget="many2many_tags" class="oe_inline, trab_maroon_css" colspan="4"/>
+                    </group>
+                    <group>
+                        <field name="remarks"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        
+    </data>
+</openerp>
+

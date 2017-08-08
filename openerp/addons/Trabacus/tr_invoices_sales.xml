@@ -1,0 +1,1193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+<!--     =================================================        
+                        Sale Orders
+        ==================================================
+-->  
+        
+        <menuitem name="Sales" id="menu_trabacus_sales" sequence="3" groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+        
+        <menuitem name="Sales" id="menu_tr_saleinvoice" parent='menu_trabacus_sales' sequence="0" groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+        
+        <menuitem name="Refunds" id="menu_tr_salerefund" parent='menu_trabacus_sales' sequence="1" groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+        
+
+<!--
+      sale order:  Holiday
+-->
+        <record model="ir.actions.act_window" id="action_trsaleinvoice_pack">
+            <field name="name">Sale Order - Holiday Package</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_invoice'), ('travel_type','=','package')]</field>
+            <field name="context">{"default_travel_type":'package',"travel_type":'package', 'default_type':'out_invoice'
+                , 'type':'out_invoice', 'journal_type': 'sale','sale_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsaleinvoice_pack_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsaleinvoice_pack"/>
+        </record>
+        
+        <record id="action_trsaleinvoice_pack_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form_pack"/>
+            <field name="act_window_id" ref="action_trsaleinvoice_pack"/>
+        </record>
+        
+        <menuitem action="action_trsaleinvoice_pack" id="menu_action_trsaleinvoice_pack"
+            name="Holiday Package" parent="menu_tr_saleinvoice" sequence="6"  
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+        
+         
+<!--
+      sale order:  Domestic Flight
+-->
+        <record model="ir.actions.act_window" id="action_trsaleinvoice_domflight">
+            <field name="name">Sale Order - Domestic Flight</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_invoice'), ('travel_type','=','dom_flight')]</field>
+            <field name="context">{"default_travel_type":'dom_flight',"travel_type":'dom_flight', 'default_type':'out_invoice'
+                , 'type':'out_invoice', 'journal_type': 'sale','sale_view':True,'flight_travel_type':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsaleinvoice_domflight_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsaleinvoice_domflight"/>
+        </record>
+        
+        <record id="action_trsaleinvoice_domflight_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsaleinvoice_domflight"/>
+        </record>
+        
+        <menuitem action="action_trsaleinvoice_domflight" id="menu_action_trsaleinvoice_domflight"
+            name="Domestic Flight" parent="menu_tr_saleinvoice" sequence="3"  
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+        
+<!--
+      sale order:  International Flight
+-->
+        <record model="ir.actions.act_window" id="action_trsaleinvoice_intflight">
+            <field name="name">Sale Order - International Flight</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_invoice'), ('travel_type','=','int_flight')]</field>
+            <field name="context">{"default_travel_type":'int_flight',"travel_type":'int_flight', 'default_type':'out_invoice'
+                , 'type':'out_invoice', 'journal_type': 'sale','sale_view':True,'flight_travel_type':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsaleinvoice_intflight_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsaleinvoice_intflight"/>
+        </record>
+        
+        <record id="action_trsaleinvoice_intflight_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsaleinvoice_intflight"/>
+        </record>
+        
+        <menuitem action="action_trsaleinvoice_intflight" id="menu_action_trsaleinvoice_intflight"
+            name="International Flight" parent="menu_tr_saleinvoice" sequence="4"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>  
+        
+        
+<!--
+      sale order:  Domestic Hotel
+-->
+        <record model="ir.actions.act_window" id="action_trsaleinvoice_domhotel">
+            <field name="name">Sale Order - Domestic Hotel</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_invoice'), ('travel_type','=','dom_hotel')]</field>
+            <field name="context">{"default_travel_type":'dom_hotel',"travel_type":'dom_hotel', 'default_type':'out_invoice'
+                , 'type':'out_invoice', 'journal_type': 'sale','sale_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsaleinvoice_domhotel_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsaleinvoice_domhotel"/>
+        </record>
+        
+        <record id="action_trsaleinvoice_domhotel_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsaleinvoice_domhotel"/>
+        </record>
+        
+        <menuitem action="action_trsaleinvoice_domhotel" id="menu_action_trsaleinvoice_domhotel"
+            name="Domestic Hotel" parent="menu_tr_saleinvoice" sequence="5"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/> 
+        
+<!--
+      sale order:  International Hotel
+-->
+        <record model="ir.actions.act_window" id="action_trsaleinvoice_inthotel">
+            <field name="name">Sale Order - International Hotel</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_invoice'), ('travel_type','=','int_hotel')]</field>
+            <field name="context">{"default_travel_type":'int_hotel',"travel_type":'int_hotel', 'default_type':'out_invoice'
+                , 'type':'out_invoice', 'journal_type': 'sale','sale_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsaleinvoice_inthotel_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsaleinvoice_inthotel"/>
+        </record>
+        
+        <record id="action_trsaleinvoice_inthotel_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsaleinvoice_inthotel"/>
+        </record>
+        
+        <menuitem action="action_trsaleinvoice_inthotel" id="menu_action_trsaleinvoice_inthotel"
+            name="International Hotel" parent="menu_tr_saleinvoice" sequence="6"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>  
+        
+<!--
+      sale order:  Transfers
+-->
+        
+        <record model="ir.actions.act_window" id="action_trsaleinvoice_car">
+            <field name="name">Sale Order - Transfers</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_invoice'), ('travel_type','=','car')]</field>
+            <field name="context">{"default_travel_type":'car',"travel_type":'car', 'default_type':'out_invoice'
+                , 'type':'out_invoice', 'journal_type': 'sale','sale_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsaleinvoice_car_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsaleinvoice_car"/>
+        </record>
+        
+        <record id="action_trsaleinvoice_car_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsaleinvoice_car"/>
+        </record>
+        
+        <menuitem action="action_trsaleinvoice_car" id="menu_action_trsaleinvoice_car"
+            name="Transfers" parent="menu_tr_saleinvoice" sequence="7"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+            
+<!--
+      sale order:  Activities
+-->
+        <record model="ir.actions.act_window" id="action_trsaleinvoice_activity">
+            <field name="name">Sale Order - Activities</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_invoice'), ('travel_type','=','activity')]</field>
+            <field name="context">{"default_travel_type":'activity',"travel_type":'activity', 'default_type':'out_invoice'
+                , 'type':'out_invoice', 'journal_type': 'sale','sale_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsaleinvoice_activity_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsaleinvoice_activity"/>
+        </record>
+        
+        <record id="action_trsaleinvoice_activity_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsaleinvoice_activity"/>
+        </record>
+        
+        <menuitem action="action_trsaleinvoice_activity" id="menu_action_trsaleinvoice_activity"
+            name="Activities" parent="menu_tr_saleinvoice" sequence="8"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>  
+            
+<!--
+      sale order:  Add On
+-->
+        
+        <record model="ir.actions.act_window" id="action_trsaleinvoice_addon">
+            <field name="name">Sale Order - Add On</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_invoice'), ('travel_type','=','add_on')]</field>
+            <field name="context">{"default_travel_type":'add_on',"travel_type":'add_on', 'default_type':'out_invoice'
+                , 'type':'out_invoice', 'journal_type': 'sale','sale_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsaleinvoice_addon_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsaleinvoice_addon"/>
+        </record>
+        
+        <record id="action_trsaleinvoice_addon_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsaleinvoice_addon"/>
+        </record>
+        
+        <menuitem action="action_trsaleinvoice_addon" id="menu_action_trsaleinvoice_addon"
+            name="Add on" parent="menu_tr_saleinvoice" sequence="9"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+            
+<!--
+      sale order:  Visa
+-->
+        
+        <record model="ir.actions.act_window" id="action_trsaleinvoice_visa">
+            <field name="name">Sale Order - Visa</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_invoice'), ('travel_type','=','visa')]</field>
+            <field name="context">{"default_travel_type":'visa',"travel_type":'visa', 'default_type':'out_invoice'
+                , 'type':'out_invoice', 'journal_type': 'sale','sale_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsaleinvoice_visa_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsaleinvoice_visa"/>
+        </record>
+        
+        <record id="action_trsaleinvoice_visa_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsaleinvoice_visa"/>
+        </record>
+        
+        <menuitem action="action_trsaleinvoice_visa" id="menu_action_trsaleinvoice_visa"
+            name="Visa" parent="menu_tr_saleinvoice" sequence="10"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+    
+<!--
+      sale order:  Insurance
+-->
+        
+        <record model="ir.actions.act_window" id="action_trsaleinvoice_ins">
+            <field name="name">Sale Order - Insurance</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_invoice'), ('travel_type','=','insurance')]</field>
+            <field name="context">{"default_travel_type":'insurance',"travel_type":'insurance', 'default_type':'out_invoice'
+                , 'type':'out_invoice', 'journal_type': 'sale','sale_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsaleinvoice_ins_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsaleinvoice_ins"/>
+        </record>
+        
+        <record id="action_trsaleinvoice_ins_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsaleinvoice_ins"/>
+        </record>
+        
+        <menuitem action="action_trsaleinvoice_ins" id="menu_action_trsaleinvoice_ins"
+            name="Insurance" parent="menu_tr_saleinvoice" sequence="11"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+        
+<!--
+      sale order:  Cruise
+-->
+        
+        <record model="ir.actions.act_window" id="action_trsaleinvoice_cruise">
+            <field name="name">Sale Order - Cruise</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_invoice'), ('travel_type','=','cruise')]</field>
+            <field name="context">{"default_travel_type":'cruise',"travel_type":'cruise', 'default_type':'out_invoice'
+                , 'type':'out_invoice', 'journal_type': 'sale','sale_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsaleinvoice_cruise_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsaleinvoice_cruise"/>
+        </record>
+        
+        <record id="action_trsaleinvoice_cruise_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsaleinvoice_cruise"/>
+        </record>
+        
+        <menuitem action="action_trsaleinvoice_cruise" id="menu_action_trsaleinvoice_cruise"
+            name="Cruise" parent="menu_tr_saleinvoice" sequence="12"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"
+            />
+           
+<!--
+      sale order:  Railway
+-->
+        
+        <record model="ir.actions.act_window" id="action_trsaleinvoice_rail">
+            <field name="name">Sale Order - Railway</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_invoice'), ('travel_type','=','railway')]</field>
+            <field name="context">{"default_travel_type":'railway',"travel_type":'railway', 'default_type':'out_invoice'
+                , 'type':'out_invoice', 'journal_type': 'sale','sale_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsaleinvoice_rail_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsaleinvoice_rail"/>
+        </record>
+        
+        <record id="action_trsaleinvoice_rail_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsaleinvoice_rail"/>
+        </record>
+        
+        <menuitem action="action_trsaleinvoice_rail" id="menu_action_trsaleinvoice_rail"
+            name="Railway" parent="menu_tr_saleinvoice" sequence="13"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+
+
+<!--
+      sale order:  Miscellaneous
+-->
+        
+        <record model="ir.actions.act_window" id="action_trsaleinvoice_misc">
+            <field name="name">Sale Order - Miscellaneous</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_invoice'), ('travel_type','=','direct')]</field>
+            <field name="context">{"default_travel_type":'direct',"travel_type":'direct', 'default_type':'out_invoice'
+                , 'type':'out_invoice', 'journal_type': 'sale','sale_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsaleinvoice_misc_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsaleinvoice_misc"/>
+        </record>
+        
+        <record id="action_trsaleinvoice_misc_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsaleinvoice_misc"/>
+        </record>
+        
+        <menuitem action="action_trsaleinvoice_misc" id="menu_action_trsaleinvoice_misc"
+            name="Miscellaneous" parent="menu_tr_saleinvoice" sequence="14"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+
+
+<!--     =================================================        
+                        Sale Orders [Refunds]
+        ==================================================
+-->  
+        
+<!--
+      sale refund: Holiday Package
+-->
+        <record model="ir.actions.act_window" id="action_trsalerefund_pack">
+            <field name="name">Sale Refund - Holiday Package</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_refund'), ('travel_type','=','package')]</field>
+            <field name="context">{"default_travel_type":'package',"travel_type":'package', 'default_type':'out_refund'
+                , 'type':'out_refund', 'journal_type': 'sale','sale_view':True, 'credit_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsalerefund_pack_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsalerefund_pack"/>
+        </record>
+        
+        <record id="action_trsalerefund_pack_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form_pack"/>
+            <field name="act_window_id" ref="action_trsalerefund_pack"/>
+        </record>
+        
+        <menuitem action="action_trsalerefund_pack" id="menu_action_trsalerefund_pack"
+            name="Holiday Package" parent="menu_tr_salerefund" sequence="6"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+        
+        
+<!--
+      sale refund:  Domestic Flight
+-->
+        <record model="ir.actions.act_window" id="action_trsalerefund_domflight">
+            <field name="name">Sale Refund - Domestic Flight</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_refund'), ('travel_type','=','dom_flight')]</field>
+            <field name="context">{"default_travel_type":'dom_flight',"travel_type":'dom_flight', 'default_type':'out_refund'
+                , 'type':'out_refund', 'journal_type': 'sale','sale_view':True, 'credit_view':True,'flight_travel_type':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsalerefund_domflight_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsalerefund_domflight"/>
+        </record>
+        
+        <record id="action_trsalerefund_domflight_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsalerefund_domflight"/>
+        </record>
+        
+        <menuitem action="action_trsalerefund_domflight" id="menu_action_trsalerefund_domflight"
+            name="Domestic Flight" parent="menu_tr_salerefund" sequence="3"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+        
+<!--
+      sale order:  International Flight
+-->
+        <record model="ir.actions.act_window" id="action_trsalerefund_intflight">
+            <field name="name">Sale Refund - International Flight</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_refund'), ('travel_type','=','int_flight')]</field>
+            <field name="context">{"default_travel_type":'int_flight',"travel_type":'int_flight', 'default_type':'out_refund'
+                , 'type':'out_refund', 'journal_type': 'sale','sale_view':True, 'credit_view':True,'flight_travel_type':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsalerefund_intflight_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsalerefund_intflight"/>
+        </record>
+        
+        <record id="action_trsalerefund_intflight_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsalerefund_intflight"/>
+        </record>
+        
+        <menuitem action="action_trsalerefund_intflight" id="menu_action_trsalerefund_intflight"
+            name="International Flight" parent="menu_tr_salerefund" sequence="4"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/> 
+        
+<!--
+      sale refund:  Domestic Hotel
+-->
+        <record model="ir.actions.act_window" id="action_trsalerefund_domhotel">
+            <field name="name">Sale Refund - Domestic Hotel</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_refund'), ('travel_type','=','dom_hotel')]</field>
+            <field name="context">{"default_travel_type":'dom_hotel',"travel_type":'dom_hotel', 'default_type':'out_refund'
+                , 'type':'out_refund', 'journal_type': 'sale','sale_view':True, 'credit_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsalerefund_domhotel_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsalerefund_domhotel"/>
+        </record>
+        
+        <record id="action_trsalerefund_domhotel_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsalerefund_domhotel"/>
+        </record>
+        
+        <menuitem action="action_trsalerefund_domhotel" id="menu_action_trsalerefund_domhotel"
+            name="Domestic Hotel" parent="menu_tr_salerefund" sequence="5"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+        
+<!--
+      sale refund:  International Hotel
+-->
+        <record model="ir.actions.act_window" id="action_trsalerefund_inthotel">
+            <field name="name">Sale Refund - International Hotel</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_refund'), ('travel_type','=','int_hotel')]</field>
+            <field name="context">{"default_travel_type":'int_hotel',"travel_type":'int_hotel', 'default_type':'out_refund'
+                , 'type':'out_refund', 'journal_type': 'sale','sale_view':True, 'credit_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsalerefund_inthotel_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsalerefund_inthotel"/>
+        </record>
+        
+        <record id="action_trsalerefund_inthotel_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsalerefund_inthotel"/>
+        </record>
+        
+        <menuitem action="action_trsalerefund_inthotel" id="menu_action_trsalerefund_inthotel"
+            name="International Hotel" parent="menu_tr_salerefund" sequence="6"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/> 
+        
+<!--
+      sale refund:  Transfers
+-->
+        
+        <record model="ir.actions.act_window" id="action_trsalerefund_car">
+            <field name="name">Sale Refund - Transfers</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_refund'), ('travel_type','=','car')]</field>
+            <field name="context">{"default_travel_type":'car',"travel_type":'car', 'default_type':'out_refund'
+                , 'type':'out_refund', 'journal_type': 'sale','sale_view':True, 'credit_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsalerefund_car_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsalerefund_car"/>
+        </record>
+        
+        <record id="action_trsalerefund_car_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsalerefund_car"/>
+        </record>
+        
+        <menuitem action="action_trsalerefund_car" id="menu_action_trsalerefund_car"
+            name="Transfers" parent="menu_tr_salerefund" sequence="7"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+                        
+<!--
+      sale refund:  Activities
+-->
+        
+        <record model="ir.actions.act_window" id="action_trsalerefund_activity">
+            <field name="name">Sale Refund - Activities</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_refund'), ('travel_type','=','activity')]</field>
+            <field name="context">{"default_travel_type":'activity',"travel_type":'activity', 'default_type':'out_refund'
+                , 'type':'out_refund', 'journal_type': 'sale','sale_view':True, 'credit_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsalerefund_activity_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsalerefund_activity"/>
+        </record>
+        
+        <record id="action_trsalerefund_activity_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsalerefund_activity"/>
+        </record>
+        
+        <menuitem action="action_trsalerefund_activity" id="menu_action_trsalerefund_activity"
+            name="Activities" parent="menu_tr_salerefund" sequence="8"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+                    
+<!--
+      sale refund:  Add On
+-->
+        
+        <record model="ir.actions.act_window" id="action_trsalerefund_addon">
+            <field name="name">Sale Refund - Add On</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_refund'), ('travel_type','=','add_on')]</field>
+            <field name="context">{"default_travel_type":'add_on',"travel_type":'add_on', 'default_type':'out_refund'
+                , 'type':'out_refund', 'journal_type': 'sale','sale_view':True, 'credit_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsalerefund_addon_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsalerefund_addon"/>
+        </record>
+        
+        <record id="action_trsalerefund_addon_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsalerefund_addon"/>
+        </record>
+        
+        <menuitem action="action_trsalerefund_addon" id="menu_action_trsalerefund_addon"
+            name="Add on" parent="menu_tr_salerefund" sequence="9"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+                    
+        
+
+<!--
+      sale refund:  Visa
+-->
+        
+       <record model="ir.actions.act_window" id="action_trsalerefund_visa">
+            <field name="name">Sale Refund - Visa</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_refund'), ('travel_type','=','visa')]</field>
+            <field name="context">{"default_travel_type":'visa',"travel_type":'visa', 'default_type':'out_refund'
+                , 'type':'out_refund', 'journal_type': 'sale','sale_view':True, 'credit_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsalerefund_visa_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsalerefund_visa"/>
+        </record>
+        
+        <record id="action_trsalerefund_visa_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsalerefund_visa"/>
+        </record>
+        
+        <menuitem action="action_trsalerefund_addon" id="menu_action_trsalerefund_visa"
+            name="Visa" parent="menu_tr_salerefund" sequence="10"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+                    
+        
+        
+<!--
+      sale refund:  Insurance
+-->
+        
+        <record model="ir.actions.act_window" id="action_trsalerefund_ins">
+            <field name="name">Sale Refund - Add On</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_refund'), ('travel_type','=','insurance')]</field>
+            <field name="context">{"default_travel_type":'insurance',"travel_type":'insurance', 'default_type':'out_refund'
+                , 'type':'out_refund', 'journal_type': 'sale','sale_view':True, 'credit_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsalerefund_ins_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsalerefund_ins"/>
+        </record>
+        
+        <record id="action_trsalerefund_ins_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsalerefund_ins"/>
+        </record>
+        
+        <menuitem action="action_trsalerefund_ins" id="menu_action_trsalerefund_ins"
+            name="Insurance" parent="menu_tr_salerefund" sequence="11"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+                    
+        
+<!--
+      sale refund:  Cruise
+-->
+        
+        <record model="ir.actions.act_window" id="action_trsalerefund_cruise">
+            <field name="name">Sale Refund - Cruise</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_refund'), ('travel_type','=','cruise')]</field>
+            <field name="context">{"default_travel_type":'cruise',"travel_type":'cruise', 'default_type':'out_refund'
+                , 'type':'out_refund', 'journal_type': 'sale','sale_view':True, 'credit_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsalerefund_cruise_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsalerefund_cruise"/>
+        </record>
+        
+        <record id="action_trsalerefund_cruise_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsalerefund_cruise"/>
+        </record>
+        
+        <menuitem action="action_trsalerefund_cruise" id="menu_action_trsalerefund_cruise"
+            name="Cruise" parent="menu_tr_salerefund" sequence="12"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+            
+<!--
+      sale refund:  Railway
+-->
+        
+        <record model="ir.actions.act_window" id="action_trsalerefund_rail">
+            <field name="name">Sale Refund - Railway</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_refund'), ('travel_type','=','railway')]</field>
+            <field name="context">{"default_travel_type":'railway',"travel_type":'railway', 'default_type':'out_refund'
+                , 'type':'out_refund', 'journal_type': 'sale','sale_view':True, 'credit_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsalerefund_rail_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsalerefund_rail"/>
+        </record>
+        
+        <record id="action_trsalerefund_rail_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsalerefund_rail"/>
+        </record>
+        
+        <menuitem action="action_trsalerefund_rail" id="menu_action_trsalerefund_rail"
+            name="Railway" parent="menu_tr_salerefund" sequence="13"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+                    
+<!--
+      sale refund:  Miscellaneous
+-->
+        
+        <record model="ir.actions.act_window" id="action_trsalerefund_misc">
+            <field name="name">Sale Refund - Miscellaneous</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('type','=','out_refund'), ('travel_type','=','direct')]</field>
+            <field name="context">{"default_travel_type":'direct',"travel_type":'direct', 'default_type':'out_refund'
+                , 'type':'out_refund', 'journal_type': 'sale','sale_view':True, 'credit_view':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a customer invoice.
+                </p><p>
+                    OpenERP's electronic invoicing allows to ease and fasten the
+                    collection of customer payments. Your customer receives the
+                    invoice by email and he can pay online and/or import it
+                    in his own system.
+                </p><p>
+                    The discussions with your customer are automatically displayed at
+                    the bottom of each invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsalerefund_misc_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsalerefund_misc"/>
+        </record>
+        
+        <record id="action_trsalerefund_misc_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_form"/>
+            <field name="act_window_id" ref="action_trsalerefund_misc"/>
+        </record>
+        
+        <menuitem action="action_trsalerefund_misc" id="menu_action_trsalerefund_misc"
+            name="Miscellaneous" parent="menu_tr_salerefund" sequence="14"
+            groups="Trabacus.group_trsale_user,Trabacus.group_trsale_consultant,Trabacus.group_trsale_manager"/>
+ 
+    </data>
+</openerp>

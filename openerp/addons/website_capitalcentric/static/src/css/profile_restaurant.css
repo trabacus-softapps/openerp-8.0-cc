@@ -1,0 +1,498 @@
+#res_details
+{ 
+    background-color:#f2f2f2;
+    display:inline-block;
+    width:100%;
+    overflow:hidden;
+    border-radius:5px;
+    clear:both;
+}
+#timings_table,#alloc_table,#break_fast_table,#lunch_table,#at_table,#dinner_table
+{    
+    display:inline-block;
+    width:100%;
+}
+#blackout_table,#menu_table,#menu_individual,#drinks_table,#events_menu_table,#events_table
+{
+    width:100%;
+}
+#other_content,#timings_content,#tables_content,#menu_content,#image_content,#blackout_content,#drinks_content,#events_content,#private_room_content
+{
+    border-left: 1px solid #bfbfbf;
+    border-right: 1px solid #bfbfbf;
+    border-bottom: 1px solid #bfbfbf;
+    min-height :293px;
+    width:100%;
+    padding-top:1%;
+}
+#active_checkbox
+{
+    font-size:10pt;
+}
+#add_and_save
+{   
+    padding-left:1%;
+    padding-right:1%;
+    padding-top:0.5%;
+}
+.ui-multiselect:focus 
+{
+    border-color:#ad4bc2;
+    outline:0;
+    -webkit-box-shadow:inset 0 0px 0px #ad4bc2,0 0 6px #ad4bc2;
+    box-shadow:inset 0 0px 0px #ad4bc2,0 0 6px #ad4bc2;
+}
+/*.con_save
+{
+    display:inline-block;
+    width:110px;
+}
+.con_save_back
+{
+    display:inline-block;
+    width:110px;
+}*/
+.input-control.input_vals.style_cuisine
+{
+    width:240px;
+}
+.input-control.dress
+{
+    margin-left:3%;
+    width:500px;
+    height:24px;
+}
+.res_textarea.res_textarea_details
+{
+    width:94%;
+    margin-left:1.5%;
+    padding-left:0.5%;
+}
+.alloc_covers,.max_covers
+{
+    color:black;
+    margin-top:5px;
+    margin-bottom:5px;
+    border-radius:4px;
+    border: 1px solid #bfbfbf;
+    height:22px;
+    background-color:white;
+    font-size:9pt;
+    padding-left:5px;
+    text-align:right;
+    padding-right:5px;
+}
+.alloc_day,.alloc_type,.alloc_time,.alloc_meal_type,.alloc_from_time,.alloc_to_time,.black_inputs
+{
+    color:black;
+    margin-top:5px;
+    margin-bottom:5px;
+    border-radius:4px;
+    border: 1px solid #bfbfbf;
+    height:22px;
+    background-color:white;
+    font-size:9pt;
+}
+.alloc_day:focus,.alloc_type:focus,.alloc_time:focus,.alloc_covers:focus,.max_covers:focus,.alloc_meal_type:focus,.alloc_from_time:focus,.alloc_to_time:focus,.black_inputs:focus
+{
+    border-color:#ad4bc2;
+    outline:0;
+    -webkit-box-shadow:inset 0 0px 0px #ad4bc2,0 0 6px #ad4bc2;
+    box-shadow:inset 0 0px 0px #ad4bc2,0 0 6px #ad4bc2;
+}
+.added_save
+{
+    color:#c00000;
+    border:none;
+    text-decoration:none;
+    border:none;
+    background:transparent;
+    color:#c00000;
+    white-space:nowrap;
+}
+#delete
+{
+    cursor:pointer;
+    text-align:center;
+}
+
+/*#save,#delete,#edit,#added_save
+{
+    border:none;
+    text-decoration:none;
+    border:none;
+    background:transparent;
+    color:#c00000;
+    white-space:nowrap;
+    cursor:pointer;
+}*/
+.table_columns
+{
+    display:inline-block;
+    height:24px;
+    width:100px;
+    text-align:right;
+    padding-right:5px;
+}
+#alloc_add,#menu_add,#menu_add_group,#break_fast,#lunch,#at,#dinner,#blackout_add,#drink_add,#events_menu_add,#event_add,#opening_hours,#pvt_room_add
+{   
+    cursor:pointer; 
+    font-weight:bold;
+    font-size:9pt;
+    color:rgb(173, 75, 194);
+}
+#checkbox_type
+{
+    text-align:center;
+}
+.singleblock_center.checkbox_td
+{
+    padding:0px;
+}
+#checkbox_menu
+{
+    text-align:center;
+}
+.menu_name,.min_covers
+{
+    color:black;
+    border-radius:4px;
+    border: 1px solid #bfbfbf;
+    background-color:white;
+    font-size:9pt;
+    overflow:hidden;
+    height:22px;
+    width:90%;
+    padding-left:5px;
+}
+.menu_desc
+{
+    color:black;
+    margin-left:1px;
+    margin-top:5px;
+    margin-bottom:5px;
+    border-radius:4px;
+    border: 1px solid #bfbfbf;
+    background-color:white;
+    font-size:9pt;
+    padding-left:5px;
+    padding-right:5px;
+    overflow:auto;
+    width:100%;
+    height:100px;
+}
+.menu_status,.menu_course
+{
+    height:22px;
+    color:black;
+    margin-left:1px;
+    margin-top:5px;
+    margin-bottom:5px;
+    border-radius:4px;
+    border: 1px solid #bfbfbf;
+    background-color:white;
+    font-size:9pt;
+}
+.menu_price
+{
+    height:22px;
+    color:black;
+    margin-left:1px;
+    margin-top:5px;
+    margin-bottom:5px;
+    border-radius:4px;
+    border: 1px solid #bfbfbf;
+    background-color:white;
+    font-size:9pt;
+    padding-left:5px;
+    text-align:center;
+}
+.menu_price:focus,.menu_desc:focus,.menu_name:focus,.menu_status:focus,.menu_course:focus,.min_covers:focus
+{
+    border-color:#ad4bc2;
+    outline:0;
+    -webkit-box-shadow:inset 0 0px 0px #ad4bc2,0 0 6px #ad4bc2;
+    box-shadow:inset 0 0px 0px #ad4bc2,0 0 6px #ad4bc2;
+}
+/*#res_available_for
+{
+    width:10%;
+}*/
+/*#res_menu_name
+{
+    width:20%;
+}*/
+/*#res_price
+{
+    width:7%;
+}*/
+/*#res_course
+{
+    width:6%;
+}*/
+/*#res_menu_status
+{
+    width:10%;
+}*/
+/*#res_available_on
+{
+    width:15%;
+}*/
+/*#res_menu_desc
+{
+    width:25%;
+}*/
+/*#res_menu_links_dup
+{
+    width:8%;
+}*/
+/*#res_menu_links_del
+{
+    width:5%;
+}*/
+/*#res_table_button
+{
+    width:7%;
+}*/
+#black_date_from
+{
+    width:15%;
+}
+#black_date_to
+{
+    width:15%;
+}
+#black_desc
+{
+    width:40%;
+}
+#black_time_from
+{
+    width:10%;
+}
+#black_time_to
+{
+    width:10%;
+}
+#black_link
+{
+    width:10%;
+}
+.button.menu_table_button
+{
+   height:22px;
+   font-size:9pt;
+}
+textarea
+{
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+     box-sizing: border-box;  
+     width:90%;
+}
+select
+{
+     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+     box-sizing: border-box;  
+     width:90%;
+}
+input.menu_price
+{
+     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+     box-sizing: border-box;  
+     width:100%;
+}
+input.black_inputs
+{
+     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+     box-sizing: border-box;  
+     width:100%;
+}
+input.alloc_covers, input.max_covers
+{
+     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+     box-sizing: border-box;  
+     width:100%;
+}
+#container
+{
+    text-align:left;
+}
+#profilespacing
+{
+    margin:20px;
+}
+#time_day,#time_type,#time_meal,#time_time,#time_covers
+{
+    width:8%;
+}
+#time_link_apply
+{
+    width:6%
+}
+#time_link_delete
+{
+    width:3%;
+}
+/* Individual Menu*/
+#imenu_type
+{
+    width:12.5%;
+    padding-left:1%;
+}
+.columns_number.imenu_price
+{
+    width:6.25%;
+}
+.input-control.input_menu
+{
+    height:20px;
+    border-radius:0;
+    text-align:right;
+    border-radius:3px;
+    padding-right:3px;
+}
+.input-control.input_menu.imenu_price
+{
+    text-align:left;
+    padding-left:3px;
+}
+input.input_menu
+{
+     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+     box-sizing: border-box;  
+     width:100%;
+}
+select.input_menu
+{
+     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+     box-sizing: border-box;  
+     width:100%;
+}
+.images_block
+{   
+    padding-left:2%;
+    padding-right:2%;
+    overflow:hidden;
+    clear:both;
+    position:relative;
+    width:100%;
+}
+img.img-rounded
+{
+    width:23.55%;
+    height:150px;
+    border-radius:0px;
+    cursor:pointer;
+    border:1px solid #CCC;
+}
+input.date 
+{
+	width: 150px;
+	color: #000;
+}
+.singleblock_center.menu_checkbox
+{
+    padding:0px;
+}
+.button.button_type
+{ 
+    float:left;
+    height:20px;
+    margin-left:3%;
+}
+#pri_save,#go_back_button
+{
+    display:inline-block;
+}
+#price_button
+{
+    float:right;
+}
+#bo_save,#menu_save,#menu_save_group,#din_save,#at_save,#lun_save,#bf_save,#drink_save,#events_menu_save,#event_save,#pr_save,#pvt_room_save
+{
+    height:20px;
+    padding-bottom:3px;
+}
+#below_save_p
+{
+    margin:0px;
+    height:1px;
+}
+.img-input
+{
+    margin:0;
+}
+.img_input
+{
+    display:inline-block;
+    width:23.55%;
+}
+#img_desc_save
+{
+    height: 20px;
+    text-align:center;
+    cursor:pointer;
+    float:right;
+    color:white;
+}
+#sc_included
+{
+    display:inline-block;
+    width:60px;
+    padding-left:0;
+    height:20px;
+}
+#sc_per
+{
+    display:inline-block;
+    width:60px;
+    height:20px;
+    padding-left:3%;
+}
+#sc_disc
+{
+    display:inline-block;
+    width:60px;
+    padding-left:0;
+    height:20px;
+}
+.datepicker 
+{
+    background-image: url(/web/static/src/img/ui/field_calendar.png);
+    background-position: 98% 50%;
+    background-repeat: no-repeat;
+    cursor:pointer;
+}
+#login_fader 
+{
+    background: black;
+    opacity: .5;
+    -moz-opacity: .5;
+    -filter: alpha(opacity=50);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 5;
+    display: none;
+}
+#div4,#restdiv1
+{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin: -230px 0px 0px -305px;
+    z-index: 10;
+    display: none;
+} 
+  
+  
+  

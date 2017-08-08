@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>  
+        
+        <!--    ==============================================================
+                           Homepage Template
+        ==============================================================   -->
+
+        <template id="mainlayout" inherit_id="website.homepage" name="Restaurant Reservations For The Travel Trade">
+            <xpath expr="//t[@t-call='website.layout']" position="replace">
+                <t t-call="fit_website.capitalcentric_layout">
+                    <t t-set="ref_content">
+                              <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>-->
+                              <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+                              <style>
+                                  .carousel-inner > .item > img,
+                                  .carousel-inner > .item > a > img {
+                                      width: 100%;
+                                  }
+                                  .search_div
+                                  {
+                                      position: absolute;
+                                      top: 190px;
+                                      right: 30px;
+                                      left: 30px;
+
+                                      }
+                                  .search_div h1
+                                  {
+                                      color: #FFF;
+                                      font-weight: 400;
+                                      text-transform: capitalize;
+                                      text-align: center;
+                                      font-size: 56px;
+                                      line-height: 1.2;
+
+                                      }
+                                  .search_div p
+                                  {
+                                      color: #FFF;
+                                      text-align: center;
+                                      font-size: 27px;
+                                      margin: 44px 0 65px;
+                                      line-height: 1.2;
+
+                                      }
+                                  .main-search-form-wrapper select.form-control
+                                    {
+                                        color: #fff;
+                                    }
+                              </style>
+                    <!-- start Main Wrapper -->
+                        <div class="main-wrapper">
+                            <!-- myCarousel -->
+                              <div id="myCarousel" class="carousel slide hidden-xs hidden-sm" data-ride="carousel">
+                                <!-- Indicators -->
+                                <ol class="carousel-indicators" style="bottom:5px;">
+                                    <t t-set="count" t-value="0"/>
+                                    <t t-foreach="user.company_id.banner_ids or []" t-as="b">
+                                          <li data-target="#myCarousel" t-att-data-slide-to="count" t-att-class="'active' if count == 0 else ''"></li>
+                                          <t t-set="count" t-value="count + 1"/>
+                                    </t>
+                                </ol>
+                                <!-- Wrapper for slides -->
+                                <div class="carousel-inner" role="listbox" style="height: 572px;">
+                                    <t t-set="count" t-value="1"/>
+                                  <t t-foreach="user.company_id.banner_ids or []" t-as="b">
+                                      <div t-att-class="'item active' if count == 1 else 'item'">
+                                        <img t-attf-src="/website/image/tr.company.banner/#{b.id}/image" t-att-alt="b.img_alt_tag"/>
+                                      </div>
+                                      <t t-set="count" t-value="count + 1"/>
+                                  </t>
+                                </div>
+                              </div>
+                            <!-- myCarousel -->
+                            <div class="search_div hidden-xs hidden-sm">
+                                    <div class="container text-center">
+                                        <h1 style="">your restaurant reservation specialists</h1>
+                                        <p style="">Find and book an amazing selection of local restaurants for your groups and FITs</p>
+                                        <!--<t t-if="website.user_id == user_id">
+                                            <a class="btn btn-primary" href="/sign-in">Sign Up</a>
+                                        </t>-->
+                                        <div class="main-search-form-wrapper">
+                                                <form action="/capital_centric/fit/grid_view" method="post">
+                                                    <div class="form-holder">
+                                                        <div class="row gap-0">
+                                                            <div class="col-xss-6 col-xs-6 col-sm-6 col-md-3">
+                                                                <select class="form-control" name="location_id" style="color:#fff;">
+                                                                    <option value="all">All Locations</option>
+                                                                    <t t-foreach="city_browse or []" t-as="city">
+                                                                        <option t-att-value="city.id"><t t-esc="city.name"/></option>
+                                                                    </t>
+                                                                </select>
+                                                                <!--<input name="location" class="form-control location" placeholder="Location"/>
+                                                                <input name="location_id" class="hidden" value=""/>-->
+                                                            </div>
+                                                            <div class="col-xss-6 col-xs-6 col-sm-6 col-md-3">
+                                                                <select class="form-control" name="no_persons" style="color:#fff;">
+                                                                    <!--<option value="all">All</option>-->
+                                                                    <option value="1">1 person</option>
+                                                                    <option value="2">2 people</option>
+                                                                    <option value="3">3 people</option>
+                                                                    <option value="4">4 people</option>
+                                                                    <option value="5">5 people</option>
+                                                                    <option value="6">6 people</option>
+                                                                    <option value="7">7 people</option>
+                                                                    <option value="8">8 people</option>
+                                                                    <option value="9">9 people</option>
+                                                                    <option value="10">10 people</option>
+                                                                    <option value="11">11 people</option>
+                                                                     <option value="12">12 people</option>
+                                                                     <option value="13">13 people</option>
+                                                                     <option value="14">14 people</option>
+                                                                     <option value="15">15 people</option>
+                                                                     <option value="16">16 people</option>
+                                                                     <option value="17">17 people</option>
+                                                                     <option value="18">18 people</option>
+                                                                     <option value="19">19 people</option>
+                                                                     <option value="20">20 people</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-xss-6 col-xs-6 col-sm-6 col-md-3">
+                                                                <input name="resv_date" type="text" class="form-control datepicker" placeholder="Select Date" t-att-value="resv_date"/>
+                                                                <!--<div class="input-group-addon"><i class="fa fa-calendar"></i></div>-->
+                                                            </div>
+                                                            <div class="col-xss-6 col-xs-6 col-sm-6 col-md-2">
+                                                                <select class="form-control" name="type" style="color:#fff;">
+                                                                    <option value="at">Afternoon Tea</option>
+                                                                    <option value="break_fast">Breakfast</option>
+                                                                    <option selected="selected" value="dinner">Dinner</option>
+                                                                    <option value="lunch">Lunch</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="newsletter-02">
+                                                       <button type="submit" class="btn btn-primary search_btn">SEARCH</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                    </div>
+                            </div>
+
+                            <div class="hero hidden-md hidden-lg" t-attf-style="background-image:url(/website/image/tr.company.banner/#{user.company_id.banner_ids and user.company_id.banner_ids[0].id}/image)">
+                                    <div class="container text-center">
+                                        <h1 style="">your restaurant reservation specialists</h1>
+                                        <p style="">Find and book an amazing selection of local restaurants across Europe</p>
+                                        <!--<t t-if="website.user_id == user_id">
+                                            <a class="btn btn-primary" href="/sign-in">Sign Up</a>
+                                        </t>-->
+                                        <div class="main-search-form-wrapper">
+                                                <form action="/capital_centric/fit/grid_view" method="post">
+                                                    <div class="form-holder">
+                                                        <div class="row gap-0">
+                                                            <div class="col-xss-6 col-xs-6 col-sm-6 col-md-3">
+                                                                <select class="form-control" name="location_id" style="color:#fff;">
+                                                                    <option value="all">All Locations</option>
+                                                                    <t t-foreach="city_browse or []" t-as="city">
+                                                                        <option t-att-value="city.id"><t t-esc="city.name"/></option>
+                                                                    </t>
+                                                                </select>
+                                                                <!--<input name="location" class="form-control location" placeholder="Location"/>
+                                                                <input name="location_id" class="hidden" value=""/>-->
+                                                            </div>
+                                                            <div class="col-xss-6 col-xs-6 col-sm-6 col-md-3">
+                                                                <select style="color:#fff;" class="form-control" name="no_persons">
+                                                                    <option value="1">1 person</option>
+                                                                    <option value="2">2 people</option>
+                                                                    <option value="3">3 people</option>
+                                                                    <option value="4">4 people</option>
+                                                                    <option value="5">5 people</option>
+                                                                    <option value="6">6 people</option>
+                                                                    <option value="7">7 people</option>
+                                                                    <option value="8">8 people</option>
+                                                                    <option value="9">9 people</option>
+                                                                    <option value="10">10 people</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-xss-6 col-xs-6 col-sm-6 col-md-3">
+                                                                <input name="resv_date" type="text" class="form-control datepicker" placeholder="Select Date" t-att-value="resv_date"/>
+                                                                <!--<div class="input-group-addon"><i class="fa fa-calendar"></i></div>-->
+                                                            </div>
+                                                            <div class="col-xss-6 col-xs-6 col-sm-6 col-md-2">
+                                                                <select class="form-control" name="type" style="color:#fff;">
+                                                                    <option value="at">Afternoon Tea</option>
+                                                                    <option value="break_fast">Breakfast</option>
+                                                                    <option selected="selected" value="dinner">Dinner</option>
+                                                                    <option value="lunch">Lunch</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xss-12 col-xs-12 col-sm-12 col-md-12" style="padding-top:10px;">
+                                                       <button type="submit" class="btn btn-primary search_btn">SEARCH</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                    </div>
+                            </div>
+
+                            <div class="post-hero bg-light">
+
+                                <div class="container">
+
+                                    <div class="featured-sm-wrapper mt-15 mb-15">
+
+                                        <div class="row">
+                                            <div class="order-process">
+                                                <div class="col-md-4 col-sm-4">
+                                                    <div class="service-item-box style-4 clearfix">
+                                                        <a>
+                                                            1<!--<i class="fa fa-search"></i>-->
+                                                        </a>
+                                                        <div class="service-text">
+                                                            <h3>Pick a restaurant</h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- end service item -->
+
+                                                <div class="col-md-4 col-sm-4">
+                                                    <div class="service-item-box style-4 clearfix">
+                                                        <a>
+                                                            2<!--<i class="fa fa-cutlery" aria-hidden="true"></i>-->
+                                                        </a>
+                                                        <div class="service-text">
+                                                            <h3>Select menus and drinks</h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- end service item -->
+
+                                                <div class="col-md-4 col-sm-4">
+                                                    <div class="service-item-box style-4 clearfix">
+                                                        <a>
+                                                            3<!--<i class="fa fa-thumbs-up" aria-hidden="true"></i>-->
+                                                        </a>
+                                                        <div class="service-text">
+                                                            <h3>Complete your booking</h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- end service item -->
+
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="pt-80 pb-80">
+
+                                <div class="container">
+
+                                <div class="row">
+
+                                    <div class="col-md-8">
+
+                                        <div class="section-title">
+
+                                            <h2 class="text-left text-center-sm">Featured Restaurant</h2>
+
+                                        </div>
+
+                                        <div class="restaurant-common-wrapper">
+                                            <t t-foreach="venue_browse" t-as="v">
+                                                <a t-att-href="'/sign-in' if website.user_id == user_id else ''" t-att-style="'cursor: default;' if website.user_id != user_id else ''" class="restaurant-common-wrapper-item highlight clearfix">
+                                                    <div class="GridLex-grid-middle">
+                                                        <div class="GridLex-col-6_xs-12">
+                                                            <div class="restaurant-type">
+                                                                <div class="image">
+                                                                    <img t-attf-src="/website/image/res.partner/#{v.id}/image_medium"/>
+                                                                </div>
+                                                                <div class="content">
+                                                                    <h4><t t-esc="v.name"/></h4>
+                                                                    <t t-set="count" t-value="1"/>
+                                                                    <p>
+                                                                        <t t-foreach="v.cuisine_ids" t-as="cus">
+                                                                            <t t-if="count > 1">,</t>
+                                                                            <t t-esc="cus.name"/>
+                                                                            <t t-set="count" t-value="count + 1"/>
+                                                                        </t>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="GridLex-col-4_xs-8_xss-12 mt-10-xss">
+                                                            <div class="job-location">
+                                                                <i class="fa fa-map-marker text-primary"></i> <t t-esc="v.city_id.name"/>, <t t-esc="v.country_id.name"/>
+                                                            </div>
+                                                        </div>
+                                                        <t t-if="website.user_id == user_id">
+                                                            <div class="GridLex-col-2_xs-4_xss-12">
+                                                                <div class="res-btn label label-danger">
+                                                                    BOOK NOW
+                                                                </div>
+                                                               <!-- <span class="font12 block spacing1 font400 text-center">Min: £15</span>-->
+                                                            </div>
+                                                        </t>
+                                                    </div>
+                                                </a>
+                                            </t>
+
+
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-4 mt-50-sm">
+
+                                        <div class="section-title">
+
+                                            <h2 class="text-left text-center-sm">top seller</h2>
+
+                                        </div>
+
+                                        <div class="row gap-20 top-company-wrapper mmt">
+
+                                            <div class="col-xs-6 col-sm-4 col-md-6">
+
+                                                <div class="top-company">
+                                                    <div class="image">
+                                                        <img src="/fit_website/static/src/img/brands/7.jpg" alt="image" />
+                                                    </div>
+                                                    <!--<h5>Spice Delight</h5>-->
+                                                    <!--<a href="#">place order</a>-->
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-xs-6 col-sm-4 col-md-6">
+
+                                                <div class="top-company">
+                                                    <div class="image">
+                                                        <img src="/fit_website/static/src/img/brands/18.jpg" alt="image" />
+                                                    </div>
+                                                    <!--<h5>Spice Delight</h5>-->
+                                                    <!--<a href="#">place order</a>-->
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-xs-6 col-sm-4 col-md-6">
+
+                                                <div class="top-company">
+                                                    <div class="image">
+                                                        <img src="/fit_website/static/src/img/brands/l1.jpg" alt="image" />
+                                                    </div>
+                                                    <!--<h5>Vantage</h5>-->
+                                                    <!--<a href="#">place order</a>-->
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-xs-6 col-sm-4 col-md-6">
+
+                                                <div class="top-company">
+                                                    <div class="image">
+                                                        <img src="/fit_website/static/src/img/brands/l2.png" alt="image" />
+                                                    </div>
+                                                    <!--<h5>Greenchilli</h5>-->
+                                                    <!--<a href="#">place order</a>-->
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-xs-6 col-sm-4 col-md-6" style="clear: both;">
+
+                                                <div class="top-company">
+                                                    <div class="image">
+                                                        <img src="/fit_website/static/src/img/brands/l3.jpg" alt="image" />
+                                                    </div>
+                                                    <!--<h5>Bengal Spice</h5>-->
+                                                    <!--<a href="#">place order</a>-->
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-xs-6 col-sm-4 col-md-6">
+
+                                                <div class="top-company">
+                                                    <div class="image">
+                                                        <img src="/fit_website/static/src/img/brands/l4.jpg" alt="image" />
+                                                    </div>
+                                                    <!--<h5>Magna Tandoori</h5>-->
+                                                    <!--<a href="#">place order</a>-->
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-xs-6 col-sm-4 col-md-6" style="clear: both;">
+
+                                                <div class="top-company">
+                                                    <div class="image">
+                                                        <img src="/fit_website/static/src/img/brands/l5.jpg" alt="image" />
+                                                    </div>
+                                                    <!--<h5>New Bengla</h5>-->
+                                                    <!--<a href="#">place order</a>-->
+                                                </div>
+
+                                            </div>
+                                            <div class="col-xs-6 col-sm-4 col-md-6">
+
+                                                <div class="top-company">
+                                                    <div class="image">
+                                                        <img src="/fit_website/static/src/img/brands/Boulestin.png" alt="image" />
+                                                    </div>
+                                                    <!--<h5>New Bengla</h5>-->
+                                                    <!--<a href="#">place order</a>-->
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- start banner section -->
+                            <div class="bt-block-home-parallax pt-80 pb-80" style="background-image: url(/fit_website/static/src/img/home2.jpg);">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="lookbook-product">
+                                                <h2>Great restaurants for your clients are just a click away! Explore our restaurants – we are sure you will love them.</h2>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end banner section -->
+
+                            <div class="container pt-80 pb-80">
+                                <div class="row">
+                                    <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+                                        <div class="section-title">
+                                            <h3>TESTIMONIALS</h3>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row gap-40">
+                                  <div class="oe_structure">
+                                          <div id="myQuoteCarousel" class="carousel quotecarousel slide mb0" data-snippet-id="slider">
+                                              <ol class="carousel-indicators mb0">
+                                                  <li data-slide-to="0" class="active" data-target="#myQuoteCarousel"></li>
+                                                  <li data-slide-to="1" data-target="#myQuoteCarousel" class=""></li>
+                                                  <li data-slide-to="2" data-target="#myQuoteCarousel" class=""></li>
+                                                  <li data-slide-to="3" data-target="#myQuoteCarousel" class=""></li>
+                                                  <li data-slide-to="4" data-target="#myQuoteCarousel" class=""></li>
+                                                  <li data-slide-to="5" data-target="#myQuoteCarousel" class=""></li>
+                                              </ol>
+
+                                              <div class="carousel-inner">
+                                                  <div class="item text_only active">
+                                                      <div class="container">
+                                                          <div class="content">
+                                                              <div class="row">
+                                                                  <blockquote class="mt48 mb16 col-md-12">
+                                                                      <p><em>“FIT for Purpose is the ideal online platform for travel professionals to assist in offering clients a memorable add-on for their trip to London.
+                                                                          The tool offers a wide range of restaurants including all styles and cuisines, from typical English pubs, to high-end restaurants.
+                                                                          The handling of the website is easy and fast so that a booking is quickly made and administrated.
+                                                                          A big advantage is the individual adaptability of each booking – options range from meal types and menu choices over date and time adjustments and special dietary requirements.
+                                                                          All bookings made can be easily monitored via a booking overview and where necessary amendments can be done easily which only takes seconds. Additionally the website also offers the possibility to monitor payments and download detailed invoices.
+                                                                          Altogether, we can highly recommend a co-operation with FIT for Purpose to anyone who wishes to add value to their London products!”</em></p>
+                                                                      <small><span style="">Hotels &amp; More</span></small></blockquote>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+
+                                                  <div class="item text_only">
+                                                      <div class="container">
+                                                          <div class="content">
+                                                              <div class="row">
+                                                                  <blockquote class="mt48 mb16 col-md-12">
+                                                                      <p><em>"FIT for Purpose an ideal booking portal for us. Variety of popular restaurants you can choose from, without any hassle. It is also very easy system to navigate."</em></p>
+                                                                      <small><span style="">Veltra</span></small></blockquote>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+
+                                                  <div class="item text_only">
+                                                      <div class="container">
+                                                          <div class="content">
+                                                              <div class="row">
+                                                                  <blockquote class="mt48 mb16 col-md-12">
+                                                                      <p><em>“I find FIT for Purpose a great tool, as it allows you to look for restaurants by city, area, name, cuisine type even by budget. Just choose what you need and the results are in front of you in a few seconds. It is the quickest way to offer and book just the right kind of restaurant for our clients. I’ve been using it on and off since the tool became available and find it really saves loads of time and worries”</em></p>
+                                                                      <small><span style="">AC Tours</span></small></blockquote>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+
+                                                  <div class="item text_only">
+                                                      <div class="container">
+                                                          <div class="content">
+                                                              <div class="row">
+                                                                  <blockquote class="mt48 mb16 col-md-12">
+                                                                      <p><em>"I believe FIT for Purpose (FFP) has played a great role in bridging as a platform to quote or book online various types of restaurants for our clients.
+                                                                          FFP's huge database of restaurants has provided further evidence of just how far the company has progressed in recent times - a perfect blend for local market requirements and well worth.
+                                                                          I have found &amp;nbsp;the FFP experience something more than an opportunity to enjoy an excellent meals for our clients with wider choices.
+                                                                          Look forward to see more and more restaurants in its database and I wish all the best for its future endeavours."</em></p>
+                                                                      <small><span style="">Jalpak International</span></small></blockquote>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+
+                                                  <div class="item text_only">
+                                                      <div class="container">
+                                                          <div class="content">
+                                                              <div class="row">
+                                                                  <blockquote class="mt48 mb16 col-md-12">
+                                                                      <p><em>"FIT for Purpose is a unique tool for us as a DMC. It allow us to access to a range of venues and menus to view and use without having to contact venues directly where often we are unable to get hold anyone who can help us with prices and menu samples.
+                                                                          Being able to issue vouchers for smaller parties gives us a competitive edge and allows us to offer our overseas clients a service we found difficult to do before.
+                                                                          The service is easy to use as the booking and payment process is quick and uncomplicated making the whole experience less laborious and therefore allowing us to work faster and more efficiently. Perfect !"</em></p>
+                                                                      <small><span style="">Scancoming UK</span></small></blockquote>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+
+                                                  <div class="item text_only">
+                                                      <div class="container">
+                                                          <div class="content">
+                                                              <div class="row">
+                                                                  <blockquote class="mt48 mb16 col-md-12">
+                                                                      <p><em>"When we were introduced to FIT for Purpose by Capital Centric felt a little apprehensive of using the&amp;nbsp;
+                                                                          system as we’ve never been confident about making bookings for our clients on line. &amp;nbsp;
+                                                                          We had a specific request for a restaurant so took the bull by the horns and went for it and I couldn’t
+                                                                          believe how easy and simple it was… then I was concerned as I had to amend numbers a few weeks before the reservation date but once again it was simple..&amp;nbsp;
+                                                                          Printed the invoice off eventually, had a few problems with this but this was actually down to my computer !"</em></p>
+                                                                      <small><span style="">SJ International</span></small></blockquote>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </xpath>
+        </template>
+
+        
+        
+<!--    ==============================================================          
+                               Video Template          
+        ==============================================================   -->
+        
+        <template id="video_template" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="fit_website.capitalcentric_layout">
+                <t t-set="ref_content">
+                    <t t-set="head">
+                        <script type="text/javascript" src="/fit_website/static/src/js/signup.js"/>
+                        <link rel='stylesheet' href='/fit_website/static/src/css/operator_login.css'/>
+                        <style>
+                            #wrapwrap
+                            {
+                                height: 100%;
+                                margin: 0 auto -180px;
+                            }
+                        </style>
+                    </t>
+                    <div id="bookinglayout" style="padding-bottom:180px;">
+                        <t t-call="fit_website.logo"/>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <div id="Sign_up">
+                            <h2> Watch our video to see how ‘FIT For Purpose’ can help your business today! </h2>
+                        </div>
+                        <br></br>
+                        <div style="width:640px;height:360px;margin:0 auto;">
+                            <iframe tye="text/html" width="100%" height="360" class="youtube-player" src="https://www.youtube.com/embed/3FQSsEWKs40?rel=0" frameborder="0" allowfullscreen="">
+                            </iframe>
+                        </div>
+                        <p id="operator_spacing"/>
+                        <div id="submit_reset">
+                            <a href="/" id="home_button" class="button button_operator text-center"> Home </a>
+                        </div>
+                        <p id="operator_spacing"/>
+                    </div>
+                </t>
+                <!--<t t-set="ref_content1">
+                    <div id="push" style="height:180px;"></div>
+                </t>-->
+            </t>
+            <!--<div style="height:180px;">
+                <t t-call="fit_website.footersection"/>
+                <t t-call="fit_website.copyrightsection"/>
+            </div>-->
+        </template>
+        
+    </data>
+</openerp>

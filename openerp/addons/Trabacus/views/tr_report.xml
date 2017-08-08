@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+
+ 
+      <!-- Pentaho Report :
+
+        <report
+            id="pos_users_product_re"
+            string="User's Product"
+            model="account.bank.statement"
+            name="pos.user.product"
+            auto="False"
+            multi="True"
+            rml="point_of_sale/report/pos_users_product.rml"
+        />
+        
+        <report auto="False" id="report_account_receipt" model="account.receipt" name="account.receipt"
+            rml="tr_receipt.rml" header  = "False" 
+           
+            pentaho_filename = "tr_receipt.prpt" string="Account Receipt"
+            usage="default"/>
+        -->
+    </data>
+</openerp>

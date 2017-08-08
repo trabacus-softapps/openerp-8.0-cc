@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <openerp>
+	<data>
+
+<!-- 	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~				
+								Object permission
+ 		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->
+		<record id="cc_object_admin" model="res.groups">
+		    <field name="name">Capital Centric/Objects-Admin</field>	
+		    <field name="comment">ALL permissions given for all the objects</field>		   
+		</record> 
+			
+		<record id="cc_object_user" model="res.groups">
+		    <field name="name">Capital Centric/Objects-User</field>
+		    <field name="comment">All permissions (excluding delete) given for Almost all the objects....
+			Also given only READ permission for those object which are exclusively created by separate groups(namely, Access Product, Access Sale)]</field>		   
+		</record> 
+	
+			
+<!-- 	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~	 			
+								USER GROUPS
+ 		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->
+						
+		<record id="cc_admin" model="res.groups">
+		    <field name="name">Capital Centric/Capital Centric Administrator</field>
+		    <field name="comment">The Admin would be provided access to all features of the system including all the configurations.</field>			   
+		</record> 
+		
+		<record id="cc_bo" model="res.groups">
+		    <field name="name">Capital Centric/Capital Centric Back Office</field>
+		    <field name="comment">The BO user would be provided access to all features of the system except the configuration and the administration aspects. 
+		    which include adding/deleting users, granting/revoking access etc.</field>
+		</record>
+		
+		<record id="cc_client" model="res.groups">
+		    <field name="name">Capital Centric/Client</field>
+		    <field name="comment">Tour Operator, Trade or Corporate Entities..
+		    The Client user would be provided limited access to raise enquiries and track the bookings and would also be able to edit his contact information..</field>
+		</record>
+		
+		<record id="cc_venues" model="res.groups">
+		    <field name="name">Capital Centric/Venues</field>
+		    <field name="comment">Restaurants / Suppliers
+		    The Venues would also be provided limited access to the system. 
+		    They would be able to add/edit their venue details and make changes/addition to the menu.</field>
+		</record>       
+	
+	</data>
+</openerp>

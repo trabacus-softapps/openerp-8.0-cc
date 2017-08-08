@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <!--	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       		            BSP - Reconcilation (Reading Xls File In OPENERP)   
+  		        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~	-->
+        
+        <record id="tr_bsp_reconcilation" model="ir.ui.view">
+            <field name="name">tr.bsp.reconcilation</field>
+            <field name="model">tr.bsp.reconcilation</field>
+            <field name="arch" type="xml">
+                <form string="BSP Reconcilation"  version="7.0">
+                    
+                    <group name="action" col="4" colspan="2" >
+                        <field name="start_dt" />
+                        <field name="end_dt"/>
+                    </group>
+                    <group>
+                        <field name="bsp_xlsdata" string="Select The File"/>   
+                    </group>                
+                    <footer>
+                        <button name="import_bsp_data" string="Continue" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>    
+
+        <record id="action_tr_bsp_reconcilation_menu" model="ir.actions.act_window"> 
+            <field name="name">BSP Reconcilation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tr.bsp.reconcilation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="tr_bsp_reconcilation"/>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem name="BSP Reconcilation" parent="menu_trabacus_invoice_refunds" action="action_tr_bsp_reconcilation_menu" id="menu_tr_bsp_reconcilation" sequence="100"/>
+        
+    </data>
+</openerp>

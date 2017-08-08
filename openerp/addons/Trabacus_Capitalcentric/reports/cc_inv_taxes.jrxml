@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cc_inv_taxes" language="groovy" pageWidth="153" pageHeight="802" columnWidth="153" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<queryString language="xPath">
+		<![CDATA[/data/record]]>
+	</queryString>
+	<field name="Amount-amount" class="java.lang.Float">
+		<fieldDescription><![CDATA[Invoice_Lines-invoice_line/Taxes-invoice_line_tax_id/Amount-amount]]></fieldDescription>
+	</field>
+	<field name="Tax_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Invoice_Lines-invoice_line/Taxes-invoice_line_tax_id/id]]></fieldDescription>
+	</field>
+	<field name="Tax_Name-name" class="java.lang.String">
+		<fieldDescription><![CDATA[Invoice_Lines-invoice_line/Taxes-invoice_line_tax_id/Tax_Name-name]]></fieldDescription>
+	</field>
+	<field name="Subtotal-price_subtotal" class="java.lang.Float">
+		<fieldDescription><![CDATA[Invoice_Lines-invoice_line/Subtotal-price_subtotal]]></fieldDescription>
+	</field>
+	<field name="Symbol-symbol" class="java.lang.String">
+		<fieldDescription><![CDATA[User-User/Company-company_id/Currency-currency_id/Symbol-symbol]]></fieldDescription>
+	</field>
+	<sortField name="Tax_id"/>
+	<variable name="Tot_tax" class="java.lang.Double" resetType="Group" resetGroup="Tax_id" calculation="Sum">
+		<variableExpression><![CDATA[($F{Subtotal-price_subtotal} * $F{Amount-amount})]]></variableExpression>
+	</variable>
+	<group name="Tax_id">
+		<groupExpression><![CDATA[$F{Tax_id}]]></groupExpression>
+		<groupFooter>
+			<band height="15">
+				<textField isBlankWhenNull="true">
+					<reportElement x="1" y="0" width="93" height="15"/>
+					<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="3">
+						<pen lineWidth="0.0"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{Tax_Name-name} == null ? ""
+: ($F{Tax_Name-name} + " @  "
+   + ($F{Amount-amount} == null ? 0 :
+   new DecimalFormat("0.00").format($F{Amount-amount} * 100) )
+   + "% ")]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.00">
+					<reportElement x="99" y="0" width="55" height="15"/>
+					<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="5">
+						<pen lineWidth="0.0"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Float"><![CDATA[$V{Tot_tax} == null ? 0 : $V{Tot_tax}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="94" y="0" width="5" height="15"/>
+					<box topPadding="1" leftPadding="0" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+					</textElement>
+					<text><![CDATA[:  ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="99" y="0" width="10" height="15"/>
+					<box topPadding="1" leftPadding="0" bottomPadding="1" rightPadding="0">
+						<pen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<topPen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<leftPen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<bottomPen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<rightPen lineWidth="0.0" lineColor="#9E9E9E"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{Symbol-symbol}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+</jasperReport>

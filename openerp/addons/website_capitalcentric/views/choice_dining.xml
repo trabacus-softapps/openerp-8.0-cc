@@ -1,0 +1,544 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+<!--    ==============================================================          
+                       Choice Dining HomePage             
+        ==============================================================   -->    
+        <template id="choicedining_banner">
+            <t t-call="website_capitalcentric.capitalcentric_layout">
+                <t t-set="ref_content2">
+                    <div id="header_div">
+                        <div class="container">
+                            <t t-call="website_capitalcentric.logo"/>
+                            <t t-call="website_capitalcentric.welcome_operator"/>
+                            <t t-if="uid and user.id != uid.id">
+                                <p style="clear:both;"/>
+                            </t>
+                            <nav id="nav-main" style="clear:both;">
+                                <ul>
+                                    <li><a class="active" href="/capital_centric/choice_dining">Home</a></li>
+                                    <li><a t-att-class="'active' if path == 'standard' else ''" href="/choice_dinning/groups/standard">Standard</a></li>
+                                    <li><a t-att-class="'active' if path == 'premium' else ''" href="/choice_dinning/groups/premium">Premium</a></li>
+                                    <li><a href="/capital_centric/fit/grid_view">FIT</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </t>
+                <t t-set="ref_content"> 
+                    <t t-set="head"> 
+                        <link rel="stylesheet" href="/website_capitalcentric/static/src/css/search.css"/> 
+                        <link rel="stylesheet" href="/website_capitalcentric/static/src/css/payments.css"/> 
+                        <script type="text/javascript" src="/website_capitalcentric/static/src/js/payments.js"/> 
+                        <style> 
+                            #wrapwrap { height: 100%; margin: 0 auto -40px; } 
+                            <!--#choicedining_link
+                            {
+                                 display:none;
+                            }-->
+                        </style> 
+                    </t> 
+                    <div id="bookinglayout"> 
+<!--                        <t t-call="website_capitalcentric.logo"/> -->
+                        <!--<div style="float:left;margin-left:2%;" id="" class="">
+                            <a title="" href="/capital_centric/fit/grid_view"><img src="/website_capitalcentric/static/src/img/fit.png" alt="Choice Dining Img" title="" id="img_logo" height="100"/></a>
+                        </div> -->
+<!--                        <t t-call="website_capitalcentric.welcome_operator"/> -->
+                    </div> 
+                    <t t-set="ref_content1"> 
+                        <div class="oe_structure" style="clear:both;">
+                            <section class="mt16 mb0" data-snippet-id="big-picture" style="">
+                                <div class="container" style="&#10; /* margin: 0 auto; */&#10; /* text-align: center; */&#10;">
+                                    <div class="row" style="&#10; margin: 0 auto;&#10;">
+                                        <div class="col-md-12 col-md-offset-0 mb0" style="&#10; padding: 0;&#10; max-height: 768px;&#10;">
+                                            <img class="img img-responsive" src="/website/image?field=datas&amp;model=ir.attachment&amp;id=4889&amp;max_height=768&amp;max_width=1024" style="margin: 0 auto;width: 100%;max-height: 470px;"/>
+                                            <!--<a class="flex-caption" href="/choice_dinning/groups/standard" style="&#10;    left: 0;&#10;">Click to view our Standard menus</a> 
+                                            <a class="flex-caption" href="/choice_dinning/groups/premium">Click to view our Premium menus</a>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            
+                            <section class="mt16 mb16" data-snippet-id="text-block">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12 text-center mt16 mb32">
+                                            <h2 style="color:black;" class="text-muted">One place for all your group dining needs</h2>
+                                        </div>
+                                        <div class="col-md-12 mb16 mt16 hidden">
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div><!-- <br/> <br/> <div> <h2> <a href="/choice_dinning/groups/standard" class="btn choice_btn" style="">Button1</a> <a href="/page/website.contactus" class="btn choice_btn" style="margin-left:3%">Button2</a> </h2> </div> </div>-->
+                        <br/> 
+                        <div id="push" style="height:40px;"/> 
+                    </t> 
+                </t> 
+            </t> 
+            <div style="height:40px;"> 
+                <t t-call="website_capitalcentric.copyrightsection"/> 
+            </div>             
+        </template>
+        
+        
+        <!--   Template for Content Of the Pop Up      -->
+        <template id="choice_dining_details">
+            <div class="replace_div" style="display:inline-block;width:100%;">
+                <t t-if="not hotel">
+                    <t t-call="website_capitalcentric.enquiry_template"/>
+                </t>
+                <t t-if="hotel">
+                    <div class="col-lg-4 image-gallery">
+                        <h4 class="text-center">
+                            <strong style="color:#a61c00;"><i><t t-esc="hotel.name"/></i></strong>                            
+                            <input name="db_id" t-att-value="hotel.id" class="hidden"/>
+                        </h4>
+                        <div class="w_mask">
+                            <ul class='w_images'>
+                                <t t-set='img_range' t-value="6"/>
+                                <t t-foreach="range(1,img_range)" t-as="img_count">
+                                    <t t-if="img_count == 1">
+                                        <t t-set="if_image" t-value="hotel.image1"/>
+                                    </t>
+                                    <t t-if="img_count == 2">
+                                        <t t-set="if_image" t-value="hotel.image2"/>
+                                    </t>
+                                    <t t-if="img_count == 3">
+                                        <t t-set="if_image" t-value="hotel.image3"/>
+                                    </t>
+                                    <t t-if="img_count == 4">
+                                        <t t-set="if_image" t-value="hotel.image4"/>
+                                    </t>
+                                    <t t-if="img_count == 5">
+                                        <t t-set="if_image" t-value="hotel.image5"/>
+                                    </t>
+                                    <t t-if="if_image">
+                                        <li>
+                                            <img id="" class="img-responsivee img-w-rounded" t-att-src="'/website/image?model=cc.group.details&amp;field=image'+str(img_count)+'&amp;id='+str(hotel.id)+''"/>
+                                        </li>
+                                    </t>
+                                </t>
+                            </ul>
+                            <div id="w_triggers" style="">  
+                                <ul class="w_triggers">
+                                    <t t-set='img_range' t-value="6"/>
+                                    <t t-foreach="range(1,img_range)" t-as="img_count">
+                                        <t t-if="img_count == 1">
+                                            <t t-set="if_image" t-value="hotel.image1"/>
+                                        </t>
+                                        <t t-if="img_count == 2">
+                                            <t t-set="if_image" t-value="hotel.image2"/>
+                                        </t>
+                                        <t t-if="img_count == 3">
+                                            <t t-set="if_image" t-value="hotel.image3"/>
+                                        </t>
+                                        <t t-if="img_count == 4">
+                                            <t t-set="if_image" t-value="hotel.image4"/>
+                                        </t>
+                                        <t t-if="img_count == 5">
+                                            <t t-set="if_image" t-value="hotel.image5"/>
+                                        </t>
+                                        <t t-if="if_image">
+                                            <li>
+                                                <img id="" class="img-thumbnail thumbnail_img" t-att-src="'/website/image?model=cc.group.details&amp;field=image'+str(img_count)+'&amp;id='+str(hotel.id)+''"/>
+                                            </li>
+                                        </t>
+                                    </t>    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <t t-call="website_capitalcentric.enquiry_template"/>
+                    <p style="clear:both;margin:0"></p><br/>
+                    <!--<t t-if="hotel.description">
+                        <div class="col-lg-12">
+                            <h5 style=""><strong>Description:</strong></h5>
+                            <div style="font-size:9pt;">
+                                <textarea id="grps_desc" disabled="disabled"><t t-esc="hotel.description"/></textarea>
+                            </div>
+                        </div>
+                        <br style="clear:both;"/>
+                    </t>-->
+                    <t t-if="(hotel.heading_1 and hotel.desc_1) or (hotel.heading_2 and hotel.desc_2) or (hotel.heading_3 and hotel.desc_3) or (hotel.description)">
+                        <div class="col-lg-12 clk_enqry">
+                            <div role="tabpanel">
+                                <!-- Nav tabs -->
+                                <t t-set="active_div" t-value="0"/>
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <t t-if="hotel.description">
+                                        <li role="presentation" t-att-class="'active' if active_div == 0 else ''"><a href="#main_desc" aria-controls="main_desc" role="tab" data-toggle="tab">Description</a></li>
+                                        <t t-set="active_div" t-value="1"/>
+                                    </t>
+                                    <t t-if="hotel.heading_1 and hotel.desc_1">
+                                        <li role="presentation" t-att-class="'active' if active_div == 0 else ''"><a t-att-href="'#'+hotel.heading_1.replace(' ','-')" t-att-aria-controls="hotel.heading_1.replace(' ','-')" role="tab" data-toggle="tab"><t t-esc="hotel.heading_1"/></a></li>
+                                        <t t-set="active_div" t-value="1"/>
+                                    </t>
+                                    <t t-if="hotel.heading_2 and hotel.desc_2">
+                                        <li role="presentation" t-att-class="'active' if active_div == 0 else ''"><a t-att-href="'#'+hotel.heading_2.replace(' ','-')" t-att-aria-controls="hotel.heading_2.replace(' ','-')" role="tab" data-toggle="tab"><t t-esc="hotel.heading_2"/></a></li>
+                                        <t t-set="active_div" t-value="1"/>
+                                    </t>
+                                    <t t-if="hotel.heading_3 and hotel.desc_3">
+                                        <li role="presentation" t-att-class="'active' if active_div == 0 else ''"><a t-att-href="'#'+hotel.heading_3.replace(' ','-')" t-att-aria-controls="hotel.heading_3.replace(' ','-')" role="tab" data-toggle="tab"><t t-esc="hotel.heading_3"/></a></li>
+                                        <t t-set="active_div" t-value="1"/>
+                                    </t>
+                                   <!-- <t t-if="hotel.heading_4 and hotel.desc_4">
+                                        <li role="presentation"><a t-att-href="'#'+hotel.heading_4.replace(' ','-')" t-att-aria-controls="hotel.heading_4.replace(' ','-')" role="tab" data-toggle="tab"><t t-esc="hotel.heading_4"/></a></li>
+                                    </t>-->
+                                </ul>
+                                
+                                <!-- Tab panes -->
+                                <t t-set="active_div" t-value="0"/>
+                                <div class="tab-content">
+                                    <t t-if="hotel.description">
+                                        <div role="tabpanel" t-att-class="'tab-pane fade in active' if active_div == 0 else 'tab-pane fade in'" id="main_desc">
+                                            <pre><t t-esc="hotel.description"/></pre>
+                                            <t t-set="active_div" t-value="1"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="hotel.heading_1 and hotel.desc_1">
+                                        <div role="tabpanel" t-att-class="'tab-pane fade in active' if active_div == 0 else 'tab-pane fade in'" t-att-id="hotel.heading_1.replace(' ','-')">
+                                            <pre><t t-esc="hotel.desc_1"/></pre>
+                                            <t t-set="active_div" t-value="1"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="hotel.heading_2 and hotel.desc_2">
+                                        <div role="tabpanel" t-att-class="'tab-pane fade in active' if active_div == 0 else 'tab-pane fade in'" t-att-id="hotel.heading_2.replace(' ','-')">
+                                            <pre><t t-esc="hotel.desc_2"/></pre>
+                                            <t t-set="active_div" t-value="1"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="hotel.heading_3 and hotel.desc_3">
+                                        <div role="tabpanel" t-att-class="'tab-pane fade in active' if active_div == 0 else 'tab-pane fade in'" t-att-id="hotel.heading_3.replace(' ','-')">
+                                            <pre><t t-esc="hotel.desc_3"/></pre>
+                                            <t t-set="active_div" t-value="1"/>
+                                        </div>
+                                    </t>
+                                    <!--<t t-if="hotel.heading_4 and hotel.desc_4">
+                                        <div role="tabpanel" class="tab-pane" t-att-id="hotel.heading_4.replace(' ','-')">
+                                            <pre><t t-esc="hotel.desc_4"/></pre>
+                                        </div>
+                                    </t>-->
+                                </div>
+                            </div>
+                        </div>
+                        <br style="clear:both;"/>
+                    </t>
+                </t>
+            </div>
+        </template>
+        
+        
+        
+        <!--        Standard and VIP Menus Templates        -->
+        <template id="groups_menu">
+            <t t-call="website_capitalcentric.capitalcentric_layout">
+                <t t-set="ref_content2">
+                    <div id="header_div">
+                        <div class="container">
+                            <t t-call="website_capitalcentric.logo"/>
+                            <!--<div style="float:left;margin-left:2%;" id="" class="">
+                                <a href="/capital_centric/fit/grid_view"><img src="/website_capitalcentric/static/src/img/fit.png" alt="Choice Dining Img" title="" id="img_logo" height="100"/></a>
+                            </div>-->
+                            <!--<t t-if="email_sent">
+                                <p class="alert alert-danger" id="" style="width:50%;text-align:center;display:inline;float: left;margin-left: 5%;margin-top: 10px;font-size: 10pt;">
+                                    <button type="button" class="close" aria-label="Close" style="font-size: 17px;" onclick="close_alert(this)"><span aria-hidden="true">x</span></button>
+                                    <span id="alert_text">Thanks for your enquiry. We will get back to you shortly with the availability details.</span>
+                                </p>
+                            </t>-->
+                            <t t-call="website_capitalcentric.welcome_operator"/>
+                            <t t-if="uid and user.id != uid.id">
+                                <p style="clear:both;"/>
+                            </t>
+                            <nav id="nav-main" style="clear:both;">
+                                <ul>
+                                    <li><a href="/capital_centric/choice_dining">Home</a></li>
+                                    <li><a t-att-class="'active' if path == 'standard' else ''" href="/choice_dinning/groups/standard">Standard</a></li>
+                                    <li><a t-att-class="'active' if path == 'premium' else ''" href="/choice_dinning/groups/premium">Premium</a></li>
+                                    <li><a href="/capital_centric/fit/grid_view">FIT</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <p></p>
+                </t>
+                <t t-set="ref_content">  
+                    <t t-set="head">                       
+                        <link rel='stylesheet' href='/website_capitalcentric/static/src/css/search.css'/>
+                        <link rel='stylesheet' href='/website_capitalcentric/static/src/css/result.css'/>
+                        <link rel='stylesheet' href='/website_capitalcentric/static/src/css/payments.css'/>
+                        <link rel="stylesheet" type="text/css" href="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/jquery.multiselect.css"/>
+                        <link rel="stylesheet" type="text/css" href="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/jquery.multiselect.filter.css"/>
+                        <link rel="stylesheet" type="text/css" href="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/demos/assets/prettify.css" />
+                        <script type="text/javascript" src="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/src/jquery.multiselect.js"/>
+                        <script type="text/javascript" src="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/src/jquery.multiselect.filter.js"/>
+                        <script type="text/javascript" src="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/demos/assets/prettify.js"/>
+<!--                        <script type="text/javascript" src="/website_capitalcentric/static/src/lib/jquery.expander.js"/>-->
+                        <script type='text/javascript' src='/website_capitalcentric/static/src/js/payments.js'/>
+                        <script type='text/javascript' src='/web/static/lib/jquery.ui.timepicker/js/jquery-ui-timepicker-addon.js'/>
+<!--                        <script type="text/javascript" src="/website_capitalcentric/static/src/lib/readmore.js"/>-->
+                        <script type="text/javascript" src="/website_capitalcentric/static/src/lib/readmore.min.js"/>
+                        <style>
+                            #wrapwrap
+                            {
+                                height: 100%;
+                                margin: 0 auto -40px;
+                            }
+                           <!-- #choicedining_link
+                            {
+                                display:none;
+                            }-->
+                        </style>
+                    </t>
+                   
+                    <!--    Modal For Enquiry    -->
+                    <div id="login_fader"/>
+                    <div class="modal-dialog" id="choice_dining_enquiry_modal" style="background-color:transparent;">
+                        <div class="modal-content">
+                            <form action="/post-enquiry" method="get">
+                                <div class="modal-header col-lg-12" style="padding:15px;">
+                                    <button type="button" class="close" aria-label="Close" onclick="close_dialog()"><span aria-hidden="true">x</span></button>
+                                    <h3 class="modal-title">Enquiry</h3>
+                                </div>
+                                <div class="modal-body" style="padding:15px;">
+                                    <input name="path" t-att-value="path" class="hidden"/>
+                                    <t t-call="website_capitalcentric.choice_dining_details"/>
+                                </div>
+                                <div class="modal-footer col-lg-12" style="margin-top:0;padding:15px;">
+                                    <button type="submit" class="btn choice_btns">Submit</button> 
+<!--                                    <button type="button" class="btn btn-default" onclick="close_dialog()">Close</button>-->
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div id="bookinglayout">
+                        <p></p>
+                        <t t-if="email_sent">
+                            <!--<div class="text-center" id=>-->
+                           <p></p>
+                            <div class="error_inline line" id="save_prompt">Thanks for your enquiry. We will get back to you shortly with the availability details.</div>
+                            <!--                        </div>-->
+                            
+                        </t>
+                        <span class="" style="color:#c00000;font-size:10pt;"><b>Here you will find a selection of National restaurants for your group bookings. Send a simple enquiry to request availability and let our team do the work for you. As a Partnership 'approved supplier' there is also the benefit of ease of payment via your social bank accounts. Don’t see anything you like? ​<a style="color:#ad4bc2;cursor:pointer;" onclick="choice_dining_func('send_request')">Then please click here to send your request</a>.</b>
+                            <br/>
+                            <br/>
+                        </span>
+                        <div class="col-lg-3" style="padding-left:0;">
+                            <div id="refine_search" style="width:100%;">
+                                <div id="titleblock"> <span id="refine_text"><strong>Refine  your  search</strong></span> </div>
+                                <br></br>
+                                <form id="refine_form" t-attf-action="/choice_dinning/groups/#{path}" method="Post">
+                                    <table style="width:100%;" id="sidebar_search">
+                                        <tr>
+                                            <td>
+                                                <label> Restaurant Name </label>
+                                                <input name="rest_name" class="input-control" t-att-value="'rest_name' in post and post['rest_name'] or ''"/>
+                                                <p></p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <table style="width:100%">
+                                                    <tr>
+                                                        <td style="width:50%;">
+                                                            <label> Min Price </label>
+                                                            <input name="min_p" class="input-control" t-att-value="'min_p' in post and post['min_p'] or ''"/>
+                                                            <p></p>
+                                                        </td>
+                                                        <td style="">-</td>
+                                                        <td style="width:50%;">
+                                                            <label> Max Price </label>
+                                                            <input name="max_p" class="input-control" t-att-value="'max_p' in post and post['max_p'] or ''"/>
+                                                            <p></p>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <t t-if="categories">
+                                            <tr>
+                                                <td>
+                                                    <label> Categories </label>
+                                                    <select name="" id="category" class="input-control" title="Select a Category" multiple="multiple" onchange='textarea_for_categ(this)'>
+                                                        <t t-foreach="categories or []" t-as="category">
+                                                            <option t-att-value="category.id" t-att-selected="category.id in selc_categ"><t t-esc="category.name"/></option>
+                                                        </t>
+                                                    </select>
+                                                    <textarea class="hidden" name="category_selected" id="category_ids"><t t-esc="'category_selected' in post and post['category_selected'] or ''"/></textarea>
+                                                    <p></p>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr>
+                                            <td class="text-center">
+                                                <input class="hidden" name="sort_by" id="sort_by" t-att-value="'sort_by' in post and post['sort_by']"/>
+                                                <button style="display:inline-block;" type="submit" id="searchbutton" class="btn choice_btns"> Search </button>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                                <button style="display:inline-block;" type="button" id="resetbutton" class="btn choice_btns" onclick="reload_page(this.value)" t-att-value="path"> Reset </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </form> 
+                                <br></br>
+                            </div>
+                        </div>
+                        <div class="col-lg-9" style="padding-right:0px;">
+                            <div id="titleblock" style="display:table;color:white;" class=""> 
+                                <strong style="display:table-cell;vertical-align:middle;font-size:10pt;"><span id="refine_text" style="padding-left:0;"> Displaying <t t-esc="len(cd_groups)"/> <t t-if ="len(cd_groups) == 1"> result for your search </t> <t t-if ="len(cd_groups) == 0 or len(cd_groups) > 1"> results for your search </t></span></strong>
+                            </div>
+                            <p></p>
+                            <div id="sortby">
+                                <select id="slct_sort" class="input-control input_val" style="padding: 2px;">
+                                    <option>Sort By..</option>
+                                    <option value="l_h" t-att-selected="post.get('sort_by','') == 'l_h'"> Lowest - Highest(Price) </option>
+                                    <option value="h_l" t-att-selected="post.get('sort_by','') == 'h_l'"> Highest - Lowest(Price) </option>
+                                </select>    
+                            </div>
+                            <p style="clear:both;"></p>
+                            <t t-if ="len(cd_groups) == 0">
+                                <p class="alert alert-danger text_span" style="width:100%;text-align:center;">
+                                    No results found for your search
+                                </p>
+                            </t>
+                            <table style="width:100%" id="search_result">
+                                <t t-foreach="cd_groups or []" t-as="cdg">
+                                    <t t-set="operator" t-value="user.partner_id"/>
+                                    <t t-if="user.role == 'client_mng'">
+                                        <t t-set="operator" t-value="user.partner_id.parent_id"/>
+                                    </t>
+                                    <tr class="individualrecord">
+                                        <td style="display:block;">
+                                            <div>
+                                                <div class="div_top">
+                                                    <div class="col-lg-7" style="padding:0;">
+                                                        <h4 class="h4_name" style="">
+                                                            <strong><t t-esc="cdg.name"/></strong>
+                                                        </h4>
+                                                        <div style="margin-top:0.5%;font-size:8pt;"><i class="fa fa-location-arrow price_color" style="padding-right:0.5%"></i><t t-esc="cdg.location or '-'"/></div>
+                                                    </div>    
+                                                    <div class="col-lg-5 text-right price_color" style="padding:0;">
+                                                        <h5>
+                                                            <t t-if="cdg.st_price != cdg.ed_price">
+                                                                <span class="" style="font-weight:bold;" t-field="cdg.st_price" t-field-options='{"widget": "monetary", "display_currency": "cdg.currency_id"}'/>
+                                                                to
+                                                                <span style="font-weight:bold;" t-field="cdg.ed_price" t-field-options='{"widget": "monetary", "display_currency": "cdg.currency_id"}'/>
+                                                            </t>
+                                                            <t t-if="cdg.st_price == cdg.ed_price">
+                                                                <span style="font-weight:bold;" t-field="cdg.st_price" t-field-options='{"widget": "monetary","display_currency": "cdg.currency_id"}'/>
+                                                            </t> 
+                                                        </h5>
+                                                    </div>
+                                                    <p style="clear:both;margin:0px;"/>
+                                                </div>
+                                                <div class="div_bottom" style="clear:both;">
+                                                    <div class="col-lg-3" style="padding:0;">
+                                                        <img id="" class="tr_image" t-att-src="'/website/image?model=cc.group.details&amp;field=image1&amp;id='+str(cdg.id)+''" title=""/>
+                                                    </div>
+                                                    <div class="col-lg-7" style="font-size:9pt;">
+                                                        <div class="desc" t-field="cdg.description"></div>
+                                                    </div>
+                                                    <div class="col-lg-2 text-right" style="padding:0px;height:140px;display:table;">
+                                                        <div style="display:table-cell;vertical-align:middle;">
+                                                            <button class="btn choice_btns" onclick="choice_dining_func(this)" t-att-id="cdg.id"> Enquiry </button>
+                                                        </div>
+                                                    </div>
+                                                    <p style="clear:both;margin:0px;"/>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="hidden">
+                                            <t t-if="cdg.st_price != cdg.ed_price">
+                                                <t t-esc="cdg.st_price"/>
+                                            </t>
+                                            <t t-if="cdg.st_price == cdg.ed_price">
+                                                <t t-esc="cdg.st_price"/>
+                                            </t>
+                                        </td>
+                                        <td class="hidden">
+                                            <t t-esc="cdg.name"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+                        </div>
+                        <p style="clear:both;"/>
+                    </div>
+                    <t t-set="ref_content1">
+                        <div id="push" style="height:40px;"></div>
+                    </t> 
+                </t>
+            </t>
+            <div style="height:40px;">
+                <t t-call="website_capitalcentric.copyrightsection"/>
+            </div>  
+        </template>
+        
+        <template id="enquiry_template">
+            <div t-att-class="'col-lg-8 enquiry_details_form' if hotel else 'col-lg-12 enquiry_details_form'">
+                <div class="col-lg-12">
+                    <h5 style=""><strong>Enquiry Details:</strong></h5>
+                    <hr style="margin:10px 0px"/>
+                </div>
+                <div class="col-md-2">
+                    <select class="input-control" name="title" style="padding: 6px;padding-left: 0px;padding-right: 0px;">
+                        <option value="">Title</option>
+                        <t t-foreach="title_ids or []" t-as="title">
+                            <option t-att-value="title.shortcut"><t t-esc="title.shortcut"/></option>
+                        </t>
+                    </select>
+                </div>
+                <div class="col-md-5" style="padding:0;">
+                    <input class="input-control" name="first_name" required="required" placeholder="First Name"/><p></p>
+                </div>
+                <div class="col-md-5">
+                    <input class="input-control" name="sec_name" placeholder="Surname"/><p></p>
+                </div>
+                <div class="col-md-2">
+                    <input class="input-control" style="padding-left:5%;" name="covers" placeholder="Covers"/>
+                </div>
+                <div class="col-md-3" style="padding-left: 0;">
+                    <input class="datepicker input-control" id="" name="preferred_date" placeholder="Date"/><p></p>
+                </div>
+                <div class="col-md-2" style="padding:0;">
+                    <input class="timepicker input-control" style="padding-left:5%;" name="preferred_time" placeholder="Time"/><p></p>
+                </div>
+                <div class="col-md-5">
+                    <input class="input-control" name='phone' placeholder="Phone No."/><p></p>
+                </div>
+                <div class="col-md-12" style="">
+                    <input type="email" class="input-control" style="padding-left:0.5%;" name="email" placeholder="Email Address"/><p></p>
+                </div> 
+                <div class="col-md-9" style="padding-right:0;">
+                    <input class="input-control" style="padding-left:0.5%;" name="cust_ref" placeholder="Group Reference"/><p></p>
+                    <p></p>
+                </div>
+                <div class="col-md-3">
+                    <select class="input-control" name='dining_room' style="padding: 6px;padding-left: 0px;padding-right: 0px;">
+                        <option value="no">Private Rooms</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                    <p></p>
+                </div> 
+                <t t-if="not hotel">
+                    <div class="col-lg-12" style="clear:both">
+                        <input class="input-control" style="padding-left:0.5%;" name="pref_venue" placeholder="Prefered Venue"/><p></p>
+                    </div>
+                </t>
+                <div class="col-md-12">
+                    <textarea class="input-control" name='special_request' style="height:75px;padding-left: 0.5%;" placeholder="Special Request"/>
+                    <p></p>
+                </div>
+                
+                <!--<div class="col-lg-12 text-right" style="clear: both;">
+                                <button type="submit" class="btn choice_btns">Submit</button>
+                            </div>-->
+            </div>
+            
+        </template>
+        
+        
+    </data>
+</openerp>

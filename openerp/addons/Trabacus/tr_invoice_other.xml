@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        
+<!--	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+       			Invoice: Activity 
+  		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^	
+--> 
+
+	  <record id="view_invoice_activity_tree" model="ir.ui.view">
+            <field name="name">view.invoice.activity.tree</field>
+            <field name="model">tr.invoice.activity</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Activity">
+                	<field name="tpartner_id"/>
+                	<field name="name"/>
+                    <field name="basicother"/>
+                    <field name="taxes"/>
+                	<field name="total"/>
+                	<field name="currency_id"/>
+                    <button name="print_voucher"  type="object" icon="gtk-jump-to" help="Print Voucher"/>
+                </tree>
+            </field>
+        </record>
+        
+    	<record id="view_invoice_activity_form" model="ir.ui.view">
+    		<field name="name">view.invoice.activity.form</field>
+    		<field name="model">tr.invoice.activity</field>
+    		<field name="type">form</field>
+    		<field name="arch" type="xml">
+    			<form string="Activity" version="8.0">
+    				<group col="6" colspan="3">   
+    					<field name="tpartner_id" context="{'search_default_supplier':1,'default_supplier':1,'default_customer':0}"/> 
+    					<field name="product_id" on_change="onchange_product(product_id)" context="{'default_travel_type':context.get('travel_type')}"/> 
+    					<field name="name"/>
+    					<field name="currency_id"/>
+    					<field name="act_date"/>
+    					<field name="pick_up"/>
+    					<field name="drop_at"/>
+    					<field name="account_id" invisible="1"/>
+    				</group>
+    				<group col="1" colspan="1">
+    						<field name="details"/>
+    				</group>
+    				<notebook>
+    					<page string="Adult">
+    						<group col="6" colspan="3">
+    							<field name="no_adult"	 		   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 		
+    							<field name="a_basic" 	 		   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+    							<field name="a_tptax"/>
+    							<field name="a_tac_perc" 		   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 	
+    							<field name="a_tac" 	 		   on_change="onchange_paxtotal(inv_type, 'adult', 'amt', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>	
+    							<field name="a_markup_perc" 	   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+    							<field name="a_markup" 			   on_change="onchange_paxtotal(inv_type, 'adult', 'amt', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+    							<field name="a_tds_perc" 		   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 	
+    							<field name="a_tds"  			   on_change="onchange_paxtotal(inv_type, 'adult', 'amt', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+    							<field name="a_discount" 		   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+    							<field name="a_tds1_perc"		   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+    							<field name="a_tds1" 			   on_change="onchange_paxtotal(inv_type, 'adult', 'amt', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+    							<field name="a_servicechrg_perc"   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 
+    							<field name="a_servicechrg" 	   on_change="onchange_paxtotal(inv_type, 'adult', 'amt', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids, True)" class="trab_maroon_css"/>
+    							<field name="a_cancel_markup" 	   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+    							<field name="a_cancel_charges" 	   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+    							<field name="a_cancel_service" 	   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>                    				
+    							<field name="a_subtotal" class="trab_boldc_css"/>
+    						</group>
+    					</page>
+    					<page string="Child">
+    						<group col="6" colspan="3">
+    							<field name="no_child"	 		   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 		
+    							<field name="c_basic" 	 		   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+    							<field name="c_tptax"/>
+    							<field name="c_tac_perc" 		   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 	
+    							<field name="c_tac" 	 		   on_change="onchange_paxtotal(inv_type, 'child', 'amt', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>	
+    							<field name="c_markup_perc" 	   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+    							<field name="c_markup" 			   on_change="onchange_paxtotal(inv_type, 'child', 'amt', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+    							<field name="c_tds_perc" 		   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 	
+    							<field name="c_tds"  			   on_change="onchange_paxtotal(inv_type, 'child', 'amt', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+    							<field name="c_discount" 		   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+    							<field name="c_tds1_perc"		   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+    							<field name="c_tds1" 			   on_change="onchange_paxtotal(inv_type, 'child', 'amt', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+    							<field name="c_servicechrg_perc"   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 
+    							<field name="c_servicechrg" 	   on_change="onchange_paxtotal(inv_type, 'child', 'amt', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids, True)" class="trab_maroon_css"/>
+    							<field name="c_cancel_markup" 	   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>                    				
+    							<field name="c_cancel_charges" 	   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+    							<field name="c_cancel_service"     on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/> 				
+    							<field name="c_subtotal" class="trab_boldc_css"/>
+    						</group>
+    					</page>
+    					<page string="Infant">
+    						<group col="6" colspan="3">
+    							<field name="no_infant"	 		   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 		
+    							<field name="i_basic" 	 		   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+    							<field name="i_tptax"/>
+    							<field name="i_tac_perc" 		   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 	
+    							<field name="i_tac" 	 		   on_change="onchange_paxtotal(inv_type, 'infant', 'amt', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>	
+    							<field name="i_markup_perc" 	   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+    							<field name="i_markup" 			   on_change="onchange_paxtotal(inv_type, 'infant', 'amt', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+    							<field name="i_tds_perc" 		   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 	
+    							<field name="i_tds"  			   on_change="onchange_paxtotal(inv_type, 'infant', 'amt', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+    							<field name="i_discount" 		   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+    							<field name="i_tds1_perc"		   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+    							<field name="i_tds1" 			   on_change="onchange_paxtotal(inv_type, 'infant', 'amt', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+    							<field name="i_servicechrg_perc"   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 
+    							<field name="i_servicechrg" 	   on_change="onchange_paxtotal(inv_type, 'infant', 'amt', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids, True)" class="trab_maroon_css"/>
+    							<field name="i_cancel_markup" 	   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+    							<field name="i_cancel_charges" 	   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+    							<field name="i_cancel_service"     on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/> 				
+    							<field name="i_subtotal" class="trab_boldc_css"/>
+    						</group>
+    					</page>
+    				</notebook>
+    				<group col="8" colspan="4"> 
+    					<u><separator string="T.P.Taxes"/></u>
+    					<newline/>
+    					<field name="tptax_basic" 							        on_change="onchange_ACT_total(inv_type, no_adult, a_basic, a_tac, a_markup, a_tds,  a_discount, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service
+									    																				  , no_child, c_basic, c_tac, c_markup, c_tds,  c_discount, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service
+									    						                                                          , no_infant, i_basic, i_tac, i_markup, i_tds,  i_discount, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+    					
+    					<field name="tptax_tac" 								    on_change="onchange_ACT_total(inv_type, no_adult, a_basic, a_tac, a_markup, a_tds,  a_discount, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service
+									    						                                                          , no_child, c_basic, c_tac, c_markup, c_tds,  c_discount, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service
+									    						                                                          , no_infant, i_basic, i_tac, i_markup, i_tds,  i_discount, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+    					
+    					<field name="tptax_tds" 								    on_change="onchange_ACT_total(inv_type, no_adult, a_basic, a_tac, a_markup, a_tds,  a_discount, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service
+									    																				  , no_child, c_basic, c_tac, c_markup, c_tds,  c_discount, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service
+									    																				  , no_infant, i_basic, i_tac, i_markup, i_tds,  i_discount, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+						<newline/>			    						
+    					<field name="tptax_ids" colspan="4" widget="many2many_tags" on_change="onchange_ACT_total(inv_type, no_adult, a_basic, a_tac, a_markup, a_tds,  a_discount, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service
+									    																				  , no_child, c_basic, c_tac, c_markup, c_tds,  c_discount, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service
+									    																				  , no_infant, i_basic, i_tac, i_markup, i_tds,  i_discount, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+    				</group>
+    				<group col="8" colspan="4">
+    					<newline/>
+    					<separator string="Taxes"/>
+    					<newline/>
+    					<field name="tax_basic" 	  class="trab_maroon_css"/>
+    					<field name="tax_mark" 		  class="trab_maroon_css"/>
+    					<field name="tax_tac" 		  class="trab_maroon_css"/>
+    					<field name="tax_tds"   	  class="trab_maroon_css"/>
+    					<field name="tax_tds1" 		  class="trab_maroon_css"/>
+    					<field name="tax_tptax" 	  class="trab_maroon_css"/>
+    					<field name="tax_servicechrg" class="trab_maroon_css"/>
+    					<field name="inv_type" invisible="1"/>
+    					<field name="tax_ids" colspan="4" widget="many2many_tags" class="trab_maroon_css"/>
+    				</group>
+    			</form>
+    		</field>
+    	</record> 
+        
+        
+<!--	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+       			Invoice: Addon
+  		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^	
+-->         
+
+		<record id="view_invoice_addon_tree" model="ir.ui.view">
+            <field name="name">view.invoice.addon.tree</field>
+            <field name="model">tr.invoice.addon</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Addon">
+                	<field name="tpartner_id"/>
+                	<field name="name"/>
+                    <field name="basicother"/>
+                    <field name="taxes"/>
+                    <field name="total"/>
+                    <field name="currency_id"/>
+                    <button name="print_voucher" type="object" icon="gtk-jump-to" help="Print Voucher"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_invoice_addon_form" model="ir.ui.view">
+            <field name="name">view.invoice.addon.form</field>
+            <field name="model">tr.invoice.addon</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Addon" version="8.0">
+                    <group col="6" colspan="3">   
+                        <field name="tpartner_id" context="{'search_default_supplier':1,'default_supplier':1,'default_customer':0}"/> 
+                    	<field name="product_id" on_change="onchange_product(product_id)" context="{'default_travel_type':context.get('travel_type')}"/> 
+                    	<field name="name"/>
+                    	<field name="currency_id"/>
+                    	<field name="ao_date"/>
+                    	<field name="pick_up"/>
+    					<field name="drop_at"/>
+                    	<field name="account_id" invisible="1"/> 
+                    </group>
+                    <group col="1" colspan="1">
+    						<field name="details"/>
+    				</group>
+                    	<notebook>
+                    		<page string="Adult">
+                    			<group col="6" colspan="3">
+                    				<field name="no_adult"	 		   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 		
+                    				<field name="a_basic" 	 		   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                    				<field name="a_tptax"/>
+                    				<field name="a_tac_perc" 		   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 	
+                    				<field name="a_tac" 	 		   on_change="onchange_paxtotal(inv_type, 'adult', 'amt', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>	
+                    				<field name="a_markup_perc" 	   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                    				<field name="a_markup" 			   on_change="onchange_paxtotal(inv_type, 'adult', 'amt', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+                    				<field name="a_tds_perc" 		   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 	
+                    				<field name="a_tds"  			   on_change="onchange_paxtotal(inv_type, 'adult', 'amt', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+                    				<field name="a_discount" 		   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                    				<field name="a_tds1_perc"		   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                    				<field name="a_tds1" 			   on_change="onchange_paxtotal(inv_type, 'adult', 'amt', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+                    				<field name="a_servicechrg_perc"   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 
+                    				<field name="a_servicechrg" 	   on_change="onchange_paxtotal(inv_type, 'adult', 'amt', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids, True)" class="trab_maroon_css"/>
+                    				<field name="a_cancel_markup" 	   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+                    				<field name="a_cancel_charges" 	   on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+                    				<field name="a_cancel_service"     on_change="onchange_paxtotal(inv_type, 'adult', 'all', no_adult, a_basic, a_tac_perc, a_tac, a_markup_perc, a_markup, a_tds_perc, a_tds,  a_discount, a_tds1_perc, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/> 				
+                    				<field name="a_subtotal" class="trab_boldc_css"/>
+                       			</group>
+                    		</page>
+                    		<page string="Child">
+                    			<group col="6" colspan="3">
+                    				<field name="no_child"	 		   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 		
+                    				<field name="c_basic" 	 		   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                    				<field name="c_tptax"/>
+                    				<field name="c_tac_perc" 		   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 	
+                    				<field name="c_tac" 	 		   on_change="onchange_paxtotal(inv_type, 'child', 'amt', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>	
+                    				<field name="c_markup_perc" 	   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                    				<field name="c_markup" 			   on_change="onchange_paxtotal(inv_type, 'child', 'amt', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+                    				<field name="c_tds_perc" 		   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 	
+                    				<field name="c_tds"  			   on_change="onchange_paxtotal(inv_type, 'child', 'amt', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+                    				<field name="c_discount" 		   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                    				<field name="c_tds1_perc"		   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                    				<field name="c_tds1" 			   on_change="onchange_paxtotal(inv_type, 'child', 'amt', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>			
+                    				<field name="c_servicechrg_perc"   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 
+                    				<field name="c_servicechrg" 	   on_change="onchange_paxtotal(inv_type, 'child', 'amt', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids, True)" class="trab_maroon_css"/>
+                    				<field name="c_cancel_markup" 	   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+                    				<field name="c_cancel_charges" 	   on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+                    				<field name="c_cancel_service"     on_change="onchange_paxtotal(inv_type, 'child', 'all', no_child, c_basic, c_tac_perc, c_tac, c_markup_perc, c_markup, c_tds_perc, c_tds,  c_discount, c_tds1_perc, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>			
+                    				<field name="c_subtotal" class="trab_boldc_css"/>
+                           		</group>
+                    		</page>
+                    		<page string="Infant">
+                    			<group col="6" colspan="3">
+                    				<field name="no_infant"	 	   	   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 		
+                    				<field name="i_basic" 	 	   	   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                    				<field name="i_tptax"/>
+                    				<field name="i_tac_perc"		   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 	
+                    				<field name="i_tac" 	 		   on_change="onchange_paxtotal(inv_type, 'infant', 'amt', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>	
+                    				<field name="i_markup_perc" 	   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                    				<field name="i_markup" 			   on_change="onchange_paxtotal(inv_type, 'infant', 'amt', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+                    				<field name="i_tds_perc" 		   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 	
+                    				<field name="i_tds"  			   on_change="onchange_paxtotal(inv_type, 'infant', 'amt', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>
+                    				<field name="i_discount" 		   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                    				<field name="i_tds1_perc"		   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                    				<field name="i_tds1" 			   on_change="onchange_paxtotal(inv_type, 'infant', 'amt', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" class="trab_maroon_css"/>			
+                    				<field name="i_servicechrg_perc"   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/> 
+                    				<field name="i_servicechrg" 	   on_change="onchange_paxtotal(inv_type, 'infant', 'amt', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids, True)" class="trab_maroon_css"/>
+                    				<field name="i_cancel_markup" 	   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+                    				<field name="i_cancel_charges" 	   on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+                    				<field name="i_cancel_service"     on_change="onchange_paxtotal(inv_type, 'infant', 'all', no_infant, i_basic, i_tac_perc, i_tac, i_markup_perc, i_markup, i_tds_perc, i_tds,  i_discount, i_tds1_perc, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>				
+                    				<field name="i_subtotal" class="trab_boldc_css"/>
+                           		</group>
+                    		</page>
+                    	</notebook>
+                    	<u><separator string="T.P.Taxes"/></u>
+                    <group col="8" colspan="4"> 
+                    	<field name="tptax_basic" 									on_change="onchange_ADDON_total(inv_type, no_adult, a_basic, a_tac, a_markup, a_tds,  a_discount, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service
+									    																				  , no_child, c_basic, c_tac, c_markup, c_tds,  c_discount, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service
+									    						                                                          , no_infant, i_basic, i_tac, i_markup, i_tds,  i_discount, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                    	
+                    	<field name="tptax_tac" 									on_change="onchange_ADDON_total(inv_type, no_adult, a_basic, a_tac, a_markup, a_tds,  a_discount, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service
+									    																				  , no_child, c_basic, c_tac, c_markup, c_tds,  c_discount, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service
+									    						                                                          , no_infant, i_basic, i_tac, i_markup, i_tds,  i_discount, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+								                    	
+                    	<field name="tptax_tds" 									on_change="onchange_ADDON_total(inv_type, no_adult, a_basic, a_tac, a_markup, a_tds,  a_discount, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service
+									    																				  , no_child, c_basic, c_tac, c_markup, c_tds,  c_discount, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service
+									    						                                                          , no_infant, i_basic, i_tac, i_markup, i_tds,  i_discount, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+						<newline/>
+                    	<field name="tptax_ids" colspan="4" widget="many2many_tags" on_change="onchange_ADDON_total(inv_type, no_adult, a_basic, a_tac, a_markup, a_tds,  a_discount, a_tds1, a_servicechrg_perc, a_servicechrg, a_cancel_markup, a_cancel_charges, a_cancel_service
+									    																				  , no_child, c_basic, c_tac, c_markup, c_tds,  c_discount, c_tds1, c_servicechrg_perc, c_servicechrg, c_cancel_markup, c_cancel_charges, c_cancel_service
+									    						                                                          , no_infant, i_basic, i_tac, i_markup, i_tds,  i_discount, i_tds1, i_servicechrg_perc, i_servicechrg, i_cancel_markup, i_cancel_charges, i_cancel_service, tptax_basic, tptax_tac, tptax_tds, tptax_ids)"/>
+                    </group>
+                    <u><separator string="Taxes"/></u>
+                    <group col="8" colspan="4">
+                    	<field name="tax_basic" 	  class="trab_maroon_css"/>
+                    	<field name="tax_mark" 		  class="trab_maroon_css"/>
+                    	<field name="tax_tac" 		  class="trab_maroon_css"/>
+                    	<field name="tax_tds" 		  class="trab_maroon_css"/>
+                    	<field name="tax_tds1"  	  class="trab_maroon_css"/>
+                    	<field name="tax_tptax" 	  class="trab_maroon_css"/>
+                    	<field name="tax_servicechrg" class="trab_maroon_css"/>
+                    	<field name="inv_type" invisible="1"/>
+                    	<field name="tax_ids" colspan="4" widget="many2many_tags" class="trab_maroon_css"/>
+                    </group>
+				</form>
+            </field>
+        </record> 
+        
+        
+    </data>
+</openerp>

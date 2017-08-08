@@ -1,0 +1,749 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+        <menuitem name="Contacts" id="menu_trabacus_contacts" sequence="1" groups="base.group_user"/>
+
+        <menuitem id="menu_tr_partner" name="Contacts" parent="menu_trabacus_contacts" sequence="0"/>
+        
+<!--	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+        	Inherited: Partner
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  --> 
+        <record id="view_tr_task_partner_info_form" model="ir.ui.view">
+            <field name="name">res.partner.task.buttons</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="project.view_task_partner_info_form"/>
+            <field name="priority" eval="50"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@string='Tasks']" position="attributes">
+                    <attribute name = "invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="tr_res_partner_view_buttons" model="ir.ui.view">
+            <field name="name">res.partner.view.buttons</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="sale.res_partner_view_buttons" />
+            <field name="priority" eval="20"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@string='Quotations and Sales']" position="attributes">
+                    <attribute name = "invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="tr_partner_view_buttons">
+            <field name="name">tr.partner.view.buttons</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.partner_view_buttons" />
+            <field name="priority" eval="20"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@string='Invoices']" position="attributes">
+                    <attribute name = "invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@string='Journal Items']" position="attributes">
+                    <attribute name = "invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@string='Contracts']" position="attributes">
+                    <attribute name = "invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_tr_partners_form_crm1" model="ir.ui.view">
+            <field name="name">view.tr.res.partner.form.crm.inherited1</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="crm.view_partners_form_crm1"/>
+            <field eval="18" name="priority"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@string='Opportunities']" position="attributes">
+                    <attribute name = "invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@string='Meetings']" position="attributes">
+                    <attribute name = "invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@string='Calls']" position="attributes">
+                    <attribute name = "invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_partners_form_tr" model="ir.ui.view">
+            <field name="name">view.res.partner.form.tr.inherited</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field eval="18" name="priority"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name = "group_id" placeholder = "Group..." domain="[('company_id', '=', company_id), ('customer', '=', context.get('customer')), ('supplier', '=', context.get('supplier'))]"/> 
+                </xpath>
+                <field name="ref" position="replace"/>
+                <field name="function" position="replace"/>
+                
+                <field name="country_id" position="replace"/>
+                <xpath expr="//div[@class='address_format']" position="replace">
+                    <div class="address_format">
+                        <field name="zip" placeholder="ZIP" style="width: 49%%" attrs="{'readonly': [('use_parent_address','=',True)]}"/>
+                        <field name="country_id" placeholder="Country" options='{"no_open": True}' style="width: 49%%"/>
+                        <field name="state_id" class="oe_no_button" placeholder="State" style="width: 49%%" options='{"no_open": True}' domain="[('country_id', '=', country_id)]" attrs="{'readonly': [('use_parent_address','=',True)]}"/>
+                        <field name="city_id" placeholder="City" style="width: 49%%" attrs="{'readonly': [('use_parent_address','=',True)]}" domain="[('state_id', '=', state_id)]"/>                        
+                    </div>
+                </xpath>
+                 
+                <xpath expr="//notebook/page/field[@name='child_ids']/form/sheet/group[2]/div[2]/field[@name='country_id']" position="replace"/>
+                <xpath expr="//notebook/page/field[@name='child_ids']/form/sheet/group[2]/div[2]/div[@class='address_format']" position="replace">
+                    <div class="address_format">
+                        <field name="zip" placeholder="ZIP" style="width: 49%%" attrs="{'readonly': [('use_parent_address','=',True)]}"/>
+                        <field name="country_id" placeholder="Country" options='{"no_open": True}' style="width: 49%%"/>
+                        <field name="state_id" class="oe_no_button" placeholder="State" style="width: 49%%" options='{"no_open": True}' domain="[('country_id', '=', country_id)]" attrs="{'readonly': [('use_parent_address','=',True)]}"/>
+                        <field name="city_id" placeholder="City" style="width: 49%%" attrs="{'readonly': [('use_parent_address','=',True)]}" domain="[('state_id', '=', state_id)]"/>                        
+                    </div>
+                </xpath>
+                
+                <field name="parent_id" position="before">
+                    <div attrs="{'invisible': [('customer', '=', False)]}">
+                    <label for="ref" string="Customer ID"/>
+                        <field name="ref" readonly="1" attrs="{'invisible': [('customer', '=', False)]}"  class="oe_inline trab_inc_width" style="width:100%%"/>
+                    </div>
+                </field>
+                
+                
+                <xpath expr="//field[@name='child_ids']" position="attributes">
+                    <attribute name="context">{'default_parent_id': active_id, 'default_street': street, 'default_street2': street2, 'default_city_id': city_id, 'default_state_id': state_id, 'default_zip': zip, 'default_country_id': country_id, 'default_supplier': supplier, 'default_customer': customer}</attribute>
+                </xpath>
+                
+                 <xpath expr="//form[@string='Contact']/sheet" position="inside">
+                    <field name="customer" invisible="1"/>                        
+                    <notebook>
+                        <page string="Passport Info" attrs="{'invisible': [('customer', '=', False)]}">
+                        
+                        <group name="passport" col="6" colspan="2">
+                            <field name="passport_no"/>
+                            <field name="nation"/>
+                            <field name="place_issue"/>
+                            <field name="valid_from"/>
+                            <field name="valid_till"/>
+                            <field name="dob"/>
+                        </group>
+                        <separator string="Misc Info"/>
+                        <group name="miscinfo" col="6" colspan="2">
+                            <field name="anniversary"/>
+                            <field name="meal_pref"/>
+                        </group>
+                        <field name="remarks" placeholder="Add Customer Remarks..."/>
+                    </page>
+                    
+                        <page string="Frequent Flyer" attrs="{'invisible': [('customer', '=', False)]}">
+                        <field colspan="4" mode="tree" name="flyer_ids" nolabel="1"
+                            widget="one2many_list">
+                            <tree string="Frequent Flyer" editable="top">
+                                <field name="name"/>
+                                <field name="airline_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                    </notebook>
+                </xpath>
+
+                <page string="Internal Notes" position="replace">
+                    <page string="Market Segment" attrs="{'invisible': [('customer', '=', False)]}">
+                        <group name="segment" col="6" colspan="2">
+                            <field name="industry"/>
+                            <field name="credit_rating"/>
+                            <field name="function" string="Designation"/>
+                        </group>
+                    </page>
+
+                    <page string="Statement" attrs="{'invisible': [('customer', '=', False)]}">
+                        <field colspan="4" mode="tree" name="stmt_ids" nolabel="1"
+                            widget="one2many_list">
+                            <tree string="Statement" editable="top">
+                                <field name="name"/>
+                                <field name="cycle_start"/>
+                                <field name="cs_period"/>
+                                <field name="cycle_end"/>
+                                <field name="ce_period"/>
+                                <field name="stmt_day"/>
+                                <field name="day_period"/>
+                                <field name="cutoff"/>
+                                <field name="co_period"/>
+                                <field name="credit_days"/>
+                            </tree>
+                        </field>
+                    </page></page>
+
+                
+
+                <page string="Accounting" position="after">
+                    <page string="History">
+                        <group name="customer" attrs="{'invisible': [('customer', '=', False)]}">
+                            <group colspan="4">
+                                <label for="lead_ids"/>
+                                <field colspan="4" mode="tree" name="lead_ids" readonly="1"
+                                    nolabel="1" widget="one2many_list"/>
+                            </group>
+                            <group colspan="4">
+                                <label for="sale_ids"/>
+                                <field colspan="4" mode="tree" name="sale_ids" readonly="1"
+                                    nolabel="1" widget="one2many_list"/>
+                            </group>
+                            <group colspan="4">
+                                <label for="invoice_ids"/>
+                                <field colspan="4" mode="tree" name="invoice_ids" readonly="1"
+                                    nolabel="1" widget="one2many_list"/>
+                            </group>
+                            <group colspan="4">
+                                <label for="credit_ids"/>
+                                <field colspan="4" mode="tree" name="credit_ids" readonly="1"
+                                    nolabel="1" widget="one2many_list"/>
+                            </group>
+                            <group colspan="4">
+                                <label for="receipt_ids"/>
+                                <field colspan="4" mode="tree" name="receipt_ids" readonly="1"
+                                    nolabel="1" widget="one2many_list"/>
+                            </group>
+                        </group>
+                        <group name="tpartner" attrs="{'invisible': [('customer', '=', True)]}">
+                            <group colspan="4">
+                                <label for="purchase_ids"/>
+                                <field colspan="4" mode="tree" name="purchase_ids" readonly="1"
+                                    nolabel="1" widget="one2many_list"/>
+                            </group>
+                            <group colspan="4">
+                                <label for="sinvoice_ids"/>
+                                <field colspan="4" mode="tree" name="sinvoice_ids" readonly="1"
+                                    nolabel="1" widget="one2many_list"/>
+                            </group>
+                            <group colspan="4">
+                                <label for="debit_ids"/>
+                                <field colspan="4" mode="tree" name="debit_ids" readonly="1"
+                                    nolabel="1" widget="one2many_list"/>
+                            </group>
+                            <group colspan="4">
+                                <label for="payment_ids"/>
+                                <field colspan="4" mode="tree" name="payment_ids" readonly="1"
+                                    nolabel="1" widget="one2many_list"/>
+                            </group>
+                        </group>
+                    </page>
+                </page>
+
+
+                <page string="Sales &amp; Purchases" position="before">
+                    <page string="Information" attrs="{'invisible': [('supplier', '=', False)]}">
+                        <group name="taxdetails">
+                            <group>
+                                <field name="tpartner_type" />
+                                    <!-- attrs="{'required': [('customer', '=', False)]}" --> 
+                                <field name="pan_no"/>
+                                <field name="dest_ids" widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <field name="tax_no"/>
+                                <field name="sec"/>
+                            </group>
+                        </group>
+                    </page>
+                </page>
+
+                <xpath expr="//notebook[last()]" position="inside">
+                    <page string="Other Details">
+                        <field name="comment"/>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+
+<!--	^^^^^^^^^^^^^^^^^^^^^^^^ 
+        	Customer
+        ^^^^^^^^^^^^^^^^^^^^^^^^  -->
+
+        <record id="action_customer_trab" model="ir.actions.act_window">
+            <field name="name">Customers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{"default_customer":1, "customer":1}</field>
+            <field name="domain">[('customer','=',1)]</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"> Click to add a contact in your address book. </p>
+                <p> OpenERP helps you easily track all activities related to a customer;
+                    discussions, history of business opportunities, documents, etc. </p>
+            </field>
+        </record>
+        <record id="action_customer_trab_kanban" model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="act_window_id" ref="action_customer_trab"/>
+        </record>
+        <record id="action_customer_trab_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="base.view_partner_form"/>
+            <field name="act_window_id" ref="action_customer_trab"/>
+        </record>
+        <record id="action_customer_trab_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="base.view_partner_tree"/>
+            <field name="act_window_id" ref="action_customer_trab"/>
+        </record>
+        <menuitem action="action_customer_trab" id="menu_customer_form_tr" parent="menu_tr_partner"
+            name="Customers" sequence="1"/>
+
+
+<!--	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+        	Travel Partner
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  -->
+
+        <menuitem id="menu_tr_travelpartner" parent="menu_trabacus_contacts" name="Travel Partner"
+            sequence="2" groups="base.group_no_one"/>
+
+
+<!--	............................. 
+        	Travel Partner: DMC
+        .............................  -->
+
+        <record id="action_tpartner_dmc" model="ir.actions.act_window">
+            <field name="name">Travel Partner: DMC</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{"default_supplier":1, "supplier":1, "default_customer":0,
+                "default_tpartner_type":'tp_dmc'}</field>
+            <field name="domain">[('supplier','=',1),('tpartner_type','=','tp_dmc')]</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"> Click to add a contact in your address book. </p>
+                <p> OpenERP helps you easily track all activities related to a customer;
+                    discussions, history of business opportunities, documents, etc. </p>
+            </field>
+        </record>
+        <record id="action_tpartner_dmc_kanban" model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="act_window_id" ref="action_tpartner_dmc"/>
+        </record>
+        <record id="action_tpartner_dmc_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="base.view_partner_form"/>
+            <field name="act_window_id" ref="action_tpartner_dmc"/>
+        </record>
+        <record id="action_tpartner_dmc_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="base.view_partner_tree"/>
+            <field name="act_window_id" ref="action_tpartner_dmc"/>
+        </record>
+
+        <menuitem action="action_tpartner_dmc" id="menu_action_tpartner_dmc"
+            parent="menu_tr_travelpartner" name="DMC" sequence="1" groups="base.group_no_one"/>
+
+<!--	............................. 
+        	Travel Partner: Hotel
+        .............................  -->
+
+        <record id="action_tpartner_hotel" model="ir.actions.act_window">
+            <field name="name">Travel Partner: Hotel</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{"default_supplier":1, "supplier":1, "default_customer":0,
+                "default_tpartner_type":'tp_hotel'}</field>
+            <field name="domain">[('supplier','=',1),('tpartner_type','=','tp_hotel')]</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"> Click to add a contact in your address book. </p>
+                <p> OpenERP helps you easily track all activities related to a customer;
+                    discussions, history of business opportunities, documents, etc. </p>
+            </field>
+        </record>
+        <record id="action_tpartner_hotel_kanban" model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="act_window_id" ref="action_tpartner_hotel"/>
+        </record>
+        <record id="action_tpartner_hotel_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="base.view_partner_form"/>
+            <field name="act_window_id" ref="action_tpartner_hotel"/>
+        </record>
+        <record id="action_tpartner_hotel_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="base.view_partner_tree"/>
+            <field name="act_window_id" ref="action_tpartner_hotel"/>
+        </record>
+
+        <menuitem action="action_tpartner_hotel" id="menu_action_tpartner_hotel"
+            parent="menu_tr_travelpartner" name="Hotel" sequence="2" groups="base.group_no_one"/>
+
+<!--	............................... 
+        	Travel Partner: Transfers
+        ...............................  -->
+
+        <record id="action_tpartner_car" model="ir.actions.act_window">
+            <field name="name">Travel Partner: Transfers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{"default_supplier":1, "supplier":1, "default_customer":0,
+                "default_tpartner_type":'tp_car'}</field>
+            <field name="domain">[('supplier','=',1),('tpartner_type','=','tp_car')]</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"> Click to add a contact in your address book. </p>
+                <p> OpenERP helps you easily track all activities related to a customer;
+                    discussions, history of business opportunities, documents, etc. </p>
+            </field>
+        </record>
+        <record id="action_tpartner_car_kanban" model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="act_window_id" ref="action_tpartner_car"/>
+        </record>
+        <record id="action_tpartner_car_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="base.view_partner_form"/>
+            <field name="act_window_id" ref="action_tpartner_car"/>
+        </record>
+        <record id="action_tpartner_car_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="base.view_partner_tree"/>
+            <field name="act_window_id" ref="action_tpartner_car"/>
+        </record>
+
+        <menuitem action="action_tpartner_car" id="menu_action_tpartner_car"
+            parent="menu_tr_travelpartner" name="Transfers" sequence="3" groups="base.group_no_one"/>
+
+<!--	............................. 
+        	Travel Partner: Visa
+        .............................  -->
+
+        <record id="action_tpartner_visa" model="ir.actions.act_window">
+            <field name="name">Travel Partner: Visa</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{"default_supplier":1, "supplier":1, "default_customer":0,
+                "default_tpartner_type":'tp_visa'}</field>
+            <field name="domain">[('supplier','=',1),('tpartner_type','=','tp_visa')]</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"> Click to add a contact in your address book. </p>
+                <p> OpenERP helps you easily track all activities related to a customer;
+                    discussions, history of business opportunities, documents, etc. </p>
+            </field>
+        </record>
+        <record id="action_tpartner_visa_kanban" model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="act_window_id" ref="action_tpartner_visa"/>
+        </record>
+        <record id="action_tpartner_visa_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="base.view_partner_form"/>
+            <field name="act_window_id" ref="action_tpartner_visa"/>
+        </record>
+        <record id="action_tpartner_visa_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="base.view_partner_tree"/>
+            <field name="act_window_id" ref="action_tpartner_visa"/>
+        </record>
+
+        <menuitem action="action_tpartner_visa" id="menu_action_tpartner_visa"
+            parent="menu_tr_travelpartner" name="Visa" sequence="4" groups="base.group_no_one"/>
+
+<!--	............................. 
+        	Travel Partner: Insurance
+        .............................  -->
+
+        <record id="action_tpartner_ins" model="ir.actions.act_window">
+            <field name="name">Travel Partner: Insurance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{"default_supplier":1, "supplier":1, "default_customer":0,
+                "default_tpartner_type":'tp_ins'}</field>
+            <field name="domain">[('supplier','=',1),('tpartner_type','=','tp_ins')]</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"> Click to add a contact in your address book. </p>
+                <p> OpenERP helps you easily track all activities related to a customer;
+                    discussions, history of business opportunities, documents, etc. </p>
+            </field>
+        </record>
+        <record id="action_tpartner_ins_kanban" model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="act_window_id" ref="action_tpartner_ins"/>
+        </record>
+        <record id="action_tpartner_ins_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="base.view_partner_form"/>
+            <field name="act_window_id" ref="action_tpartner_ins"/>
+        </record>
+        <record id="action_tpartner_ins_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="base.view_partner_tree"/>
+            <field name="act_window_id" ref="action_tpartner_ins"/>
+        </record>
+
+        <menuitem action="action_tpartner_ins" id="menu_action_tpartner_ins"
+            parent="menu_tr_travelpartner" name="Insurance" sequence="5" groups="base.group_no_one"/>
+
+
+<!--	............................. 
+        	Travel Partner: Air Ticket
+        .............................  -->
+
+        <record id="action_tpartner_airticket" model="ir.actions.act_window">
+            <field name="name">Travel Partner: Air Ticket</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{"default_supplier":1, "supplier":1, "default_customer":0,
+                "default_tpartner_type":'tp_airticket'}</field>
+            <field name="domain">[('supplier','=',1),('tpartner_type','=','tp_airticket')]</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"> Click to add a contact in your address book. </p>
+                <p> OpenERP helps you easily track all activities related to a customer;
+                    discussions, history of business opportunities, documents, etc. </p>
+            </field>
+        </record>
+        <record id="action_tpartner_airticket_kanban" model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="act_window_id" ref="action_tpartner_airticket"/>
+        </record>
+        <record id="action_tpartner_airticket_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="base.view_partner_form"/>
+            <field name="act_window_id" ref="action_tpartner_airticket"/>
+        </record>
+        <record id="action_tpartner_airticket_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="base.view_partner_tree"/>
+            <field name="act_window_id" ref="action_tpartner_airticket"/>
+        </record>
+
+        <menuitem action="action_tpartner_airticket" id="menu_action_tpartner_airticket"
+            parent="menu_tr_travelpartner" name="Air Ticket" sequence="6" groups="base.group_no_one"/>
+
+        <!--	............................. 
+        	Travel Partner: Cruise
+        .............................  -->
+
+        <record id="action_tpartner_cruise" model="ir.actions.act_window">
+            <field name="name">Travel Partner: Cruise</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{"default_supplier":1, "supplier":1, "default_customer":0,
+                "default_tpartner_type":'tp_cruise'}</field>
+            <field name="domain">[('supplier','=',1),('tpartner_type','=','tp_cruise')]</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"> Click to add a contact in your address book. </p>
+                <p> OpenERP helps you easily track all activities related to a customer;
+                    discussions, history of business opportunities, documents, etc. </p>
+            </field>
+        </record>
+        <record id="action_tpartner_cruise_kanban" model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="act_window_id" ref="action_tpartner_cruise"/>
+        </record>
+        <record id="action_tpartner_cruise_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="base.view_partner_form"/>
+            <field name="act_window_id" ref="action_tpartner_cruise"/>
+        </record>
+        <record id="action_tpartner_cruise_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="base.view_partner_tree"/>
+            <field name="act_window_id" ref="action_tpartner_cruise"/>
+        </record>
+
+        <menuitem action="action_tpartner_cruise" id="menu_action_tpartner_cruise"
+            parent="menu_tr_travelpartner" name="Cruise" sequence="7" groups="base.group_no_one"/>
+
+        <!--	............................. 
+        	Travel Partner: Railway
+        .............................  -->
+
+        <record id="action_tpartner_rail" model="ir.actions.act_window">
+            <field name="name">Travel Partner: Railway</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{"default_supplier":1, "supplier":1, "default_customer":0,
+                "default_tpartner_type":'tp_rail'}</field>
+            <field name="domain">[('supplier','=',1),('tpartner_type','=','tp_rail')]</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"> Click to add a contact in your address book. </p>
+                <p> OpenERP helps you easily track all activities related to a customer;
+                    discussions, history of business opportunities, documents, etc. </p>
+            </field>
+        </record>
+        <record id="action_tpartner_rail_kanban" model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="act_window_id" ref="action_tpartner_rail"/>
+        </record>
+        <record id="action_tpartner_rail_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="base.view_partner_form"/>
+            <field name="act_window_id" ref="action_tpartner_rail"/>
+        </record>
+        <record id="action_tpartner_rail_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="base.view_partner_tree"/>
+            <field name="act_window_id" ref="action_tpartner_rail"/>
+        </record>
+
+        <menuitem action="action_tpartner_rail" id="menu_action_tpartner_rail"
+            parent="menu_tr_travelpartner" name="Railway" sequence="8" groups="base.group_no_one"/>
+
+        <!--	............................. 
+        	Travel Partner: Others
+        .............................  -->
+
+        <record id="action_tpartner_other" model="ir.actions.act_window">
+            <field name="name">Travel Partner: Other</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{"default_supplier":1, "supplier":1, "default_customer":0,
+                "default_tpartner_type":'tp_other'}</field>
+            <field name="domain">[('supplier','=',1),('tpartner_type','=','tp_other')]</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"> Click to add a contact in your address book. </p>
+                <p> OpenERP helps you easily track all activities related to a customer;
+                    discussions, history of business opportunities, documents, etc. </p>
+            </field>
+        </record>
+        <record id="action_tpartner_other_kanban" model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="act_window_id" ref="action_tpartner_other"/>
+        </record>
+        <record id="action_tpartner_other_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="base.view_partner_form"/>
+            <field name="act_window_id" ref="action_tpartner_other"/>
+        </record>
+        <record id="action_tpartner_other_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="base.view_partner_tree"/>
+            <field name="act_window_id" ref="action_tpartner_other"/>
+        </record>
+
+        <menuitem action="action_tpartner_other" id="menu_action_tpartner_other"
+            parent="menu_tr_travelpartner" name="Other" sequence="9" groups="base.group_no_one"/>
+
+        <!--	............................. 
+        	Travel Partner: ALL
+        .............................   -->
+        <record id="action_tpartner_all" model="ir.actions.act_window">
+            <field name="name">Travel Partner</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{"default_supplier":1, "supplier":1, "default_customer":0}</field>
+            <field name="domain">[('supplier','=',1)]</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"> Click to add a contact in your address book. </p>
+                <p> OpenERP helps you easily track all activities related to a customer;
+                    discussions, history of business opportunities, documents, etc. </p>
+            </field>
+        </record>
+        <record id="action_tpartner_all_kanban" model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="act_window_id" ref="action_tpartner_all"/>
+        </record>
+        <record id="action_tpartner_all_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="base.view_partner_form"/>
+            <field name="act_window_id" ref="action_tpartner_all"/>
+        </record>
+        <record id="action_tpartner_all_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="base.view_partner_tree"/>
+            <field name="act_window_id" ref="action_tpartner_all"/>
+        </record>
+
+        <menuitem action="action_tpartner_all" id="menu_action_tpartner_all"
+            parent="menu_tr_partner" name="Travel Partners" sequence="2"/>
+
+
+<!--	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+        	Inherited: Partner Bank
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  -->
+
+        <record id="view_partner_bank_form_tr" model="ir.ui.view">
+            <field name="name">view_partner_bank_form.inherited</field>
+            <field name="model">res.partner.bank</field>
+            <field name="inherit_id" ref="base.view_partner_bank_form"/>
+            <field eval="1" name="priority"/>
+            <field name="arch" type="xml">
+                <field name="bank_name" position="after">
+                    <field name="branch"/>
+                    <field name="ifsc_code"/>
+                    <field name="swift_address"/>
+                </field>
+            </field>
+        </record>
+
+
+
+    </data>
+</openerp>

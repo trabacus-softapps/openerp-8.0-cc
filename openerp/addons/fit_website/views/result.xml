@@ -1,0 +1,1963 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!--    ==============================================================
+                                    Calendar Template
+                ==============================================================   -->
+
+        <template id="single_record" page="True" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="fit_website.capitalcentric_layout">
+                <t t-set="ref_content">
+                    <div class="main-wrapper scrollspy-container">
+                        <!-- start hero-header -->
+                        <div class="breadcrumb-wrapper">
+                            <div class="container">
+                                <ol class="breadcrumb-list booking-step">
+                                    <li>
+                                        <a href="/">Home</a>
+                                    </li>
+                                    <li>
+                                        <t t-if="not lead_browse">
+                                            <a href="javascript:history.back()">Search Results</a>
+                                        </t>
+                                        <t t-if="lead_browse">
+                                            <a href="/capital_centric/operator/bookings">My Bookings</a>
+                                        </t>
+                                    </li>
+                                    <li>
+                                        <span>
+                                            <t t-esc="partner_id.name"/>
+                                        </span>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                        <t t-if="amend_error">
+                            <div class="section sm">
+                                <div class="cfo-area">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="contact-details thankyou text-center clearfix">
+                                                    <span>
+                                                        <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                                                    </span>
+                                                    <h2>Amendments are possible only before 36 hours of the booking date/time</h2>
+                                                    <div class="font-icon-list col-md-2 col-sm-3 col-xs-6 col-xs-6">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        <!-- end hero-header -->
+                        <t t-if="not amend_error">
+                            <div class="section sm">
+                            <input name="post" class="hidden" t-att-value="json.dumps(post)"/>
+                            <!--<t t-if="partner_id.parent_res_id">
+                                <input name="venu_id" class="hidden" t-att-value="partner_id.parent_res_id.id"/>
+                            </t>
+                            <t t-if="not partner_id.parent_res_id">-->
+                                <input name="venu_id" class="hidden" t-att-value="partner_id.id"/>
+                            <!--</t>-->
+                            <input id="type_change" name="type_change" class="hidden" value="no"/>
+                            <!-- Content Start -->
+                            <!-- Start order-online-->
+                            <div id="order-online">
+                                <div class="container">
+                                    <div class="admin-section-title">
+                                        <h2>
+                                            <t t-if="lead_browse">Amend your booking for </t> <t t-esc="partner_id.name"/>
+                                        </h2>
+                                    </div>
+                                    <!-- Nested Row Starts -->
+                                    <div class="row">
+                                        <!-- Mainarea Starts -->
+                                        <div class="col-md-8 col-xs-12">
+                                            <t t-if="lead_browse">
+                                                <button data-toggle="collapse" data-target="#change_date" class="btn btn-toggle btn-refine collapsed">Change Booking Date</button>
+                                                <div id="change_date" class="collapse col-sm-12 col-md-12" style="padding-left: 0px;background: rgb(255, 255, 255);">
+                                                <input class="hidden" id="res_lead_id" t-att-value="lead_browse.id"
+                                                   name="lead"/>
+                                                    <t t-if="lead_browse.info_ids[0].restaurant_id.parent_res_id">
+                                                        <input class="hidden" id="booking_res" t-att-value="lead_browse.info_ids[0].restaurant_id.parent_res_id.id"
+                                                        name="restaurant"/>
+                                                    </t>
+                                                    <t t-if="not lead_browse.info_ids[0].restaurant_id.parent_res_id">
+                                                        <input class="hidden" id="booking_res" t-att-value="lead_browse.info_ids[0].restaurant_id.id"
+                                                        name="restaurant"/>
+                                                    </t>
+                                                <div class="col-sm-6 col-md-3" style="padding-left: 0px;">
+                                                    <div class="form-group">
+                                                        <label>Booking Date</label>
+                                                        <!--datetime.strptime(lead_browse.conv_dob,'mmm-dd-yyyy').strftime('%Y-%m-%d')-->
+                                                        <input id="booking_date" name="booking_date" type="text"
+                                                               class="form-control datepicker"
+                                                               t-att-value="post.get('resv_date')"
+                                                               />
+                                                    </div>
+                                                </div>
+                                                <div id="type_div" class="col-sm-6 col-md-3" style="padding-left: 0px;">
+                                                    <div class="form-group">
+                                                        <label>Type</label>
+                                                        <select name="booking_type" class="form-control" t-att-disabled="'disabled' if lead_browse and lead_browse.stage_id.name == 'Paid' else ''"
+                                                                id="booking_type" onchange="type_onchange($(this))">
+                                                            <option value="break_fast"
+                                                                    t-att-selected="'selected' if lead_browse.lead_res_type == 'break_fast' or post.get('type') == 'break_fast' else ''">
+                                                                Breakfast
+                                                            </option>
+                                                            <option value="lunch"
+                                                                    t-att-selected="'selected' if lead_browse.lead_res_type == 'lunch' or post.get('type') == 'lunch' else ''">
+                                                                Lunch
+                                                            </option>
+                                                            <option value="dinner"
+                                                                    t-att-selected="'selected' if lead_browse.lead_res_type == 'dinner' or post.get('type') == 'dinner' else ''">
+                                                                Dinner
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!--<div class="col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Restaurant</label>
+                                                        <select name="booking_res" class="form-control" id="booking_res"
+                                                                onchange="onchange_restaurants($(this))">
+                                                            <option t-att-value="post.get('restaurant_id') if post.get('frm_whch') == 'amend' else lead_browse.info_ids[0].restaurant_id.id">
+                                                                <t t-if="post.get('frm_whch') == 'amend'">
+                                                                    <t t-esc="post.get('res_name').replace('-',' ')"/>
+                                                                </t>
+                                                                <t t-if="post.get('frm_whch') != 'amend'">
+                                                                    <t t-esc="lead_browse.info_ids[0].restaurant_id.name"/>
+                                                                </t>
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>-->
+                                                <div id="time_div" class="col-sm-6 col-md-3" style="padding-left: 0px;">
+                                                    <div class="form-group">
+                                                        <label>Time</label>
+                                                        <select id="booking_time" name="booking_time"
+                                                                class="form-control"
+                                                                onchange="onchange_time_slots($(this))">
+                                                            <t t-foreach="avltimes" t-as="at">
+                                                                <option t-att-selected="'selected' if lead_browse.conv_tob == at else ''" t-att-value="at">
+                                                                    <t t-esc="at"/>
+                                                                </option>
+                                                            </t>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!--<div class="col-sm-6 col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="price-wrapper visible-lg visible-md visible-sm visible-xs"
+                                                               style="visibility:hidden;">TEST
+                                                        </label>
+                                                        <a href="" id="amend_res_btn" class="btn btn-primary hidden">
+                                                            PROCEED
+                                                        </a>
+                                                    </div>
+                                                </div>-->
+                                            </div>
+                                                <br/>
+                                                <span style="font-size:9pt;font-style:italic;color:#c00000">
+                                                    Note: The menus/drinks with the INCLUDED tag are that of your original booking. You use the + and - icons to change the quantity. If you wish to change the date of booking, please use the CHANGE BOOKING DATE option above.
+                                                </span>
+                                            </t>
+                                            <h4 id="no_timeslot" style="display:none;">Sorry, No time found for selected Date and Type. Please change the type.</h4>
+                                            <!-- Menu Tabs Starts -->
+                                            <div class="menu-tabs-wrap">
+                                                <!-- Menu Tabs List Starts -->
+                                                <ul class="nav nav-tabs nav-menu-tabs text-center-xs">
+                                                    <li class="active">
+                                                        <a href="#menu" data-toggle="tab">Menu</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#drinks" data-toggle="tab">Drinks/Extras</a>
+                                                    </li>
+                                                    <t t-if="not lead_browse">
+                                                        <li>
+                                                            <a href="#gallery" data-toggle="tab">Gallery</a>
+                                                        </li>
+                                                        <t t-if="partner_id.descp_venue">
+                                                            <li>
+                                                                <a href="#reviews" data-toggle="tab">About</a>
+                                                            </li>
+                                                        </t>
+                                                        <li>
+                                                            <a href="#reachus" data-toggle="tab">Contact Us</a>
+                                                        </li>
+                                                    </t>
+                                                    <t t-if="lead_browse">
+                                                        <li class="">
+                                                            <a href="#booking_details" data-toggle="tab">Booking Details</a>
+                                                        </li>
+                                                    </t>
+                                                </ul>
+                                                <!-- Menu Tabs List Ends -->
+                                                <!-- Menu Tabs Content Starts -->
+                                                <div class="tab-content">
+                                                    <!-- Tab #1 Starts -->
+                                                    <div id="menu" class="tab-pane active">
+                                                        <!-- Tab #1 Nested Row Starts -->
+                                                        <div class="row">
+                                                            <!-- Right Column Starts -->
+                                                            <div class="col-sm-12 col-xs-12">
+                                                                <!-- Order Menu Tab Pane Starts -->
+                                                                <div class="order-menu-tab-pane text-center-xs">
+                                                                    <div class="spacer"></div>
+                                                                    <div id="menu_list">
+                                                                        <t t-if="partner_id.parent_res_id">
+                                                                            <t t-set="menu_ids" t-value="partner_id.parent_res_id.fit_menu_ids"/>
+                                                                        </t>
+                                                                        <t t-if="not partner_id.parent_res_id">
+                                                                            <t t-set="menu_ids" t-value="partner_id.fit_menu_ids"/>
+                                                                        </t>
+                                                                        <t t-foreach="menu_ids" t-as="menu">
+                                                                            <t t-if="menu_price and menu_price.get(menu.id,0) > 0 ">
+                                                                                <div class="order-menu-item clearfix">
+                                                                                    <div class="pull-left col-sm-9">
+                                                                                        <t t-if="not lead_browse">
+                                                                                            <h4 class="menu-name"
+                                                                                            t-att-data-id="menu.id"
+                                                                                            t-att-data-food-type="menu.food_type">
+                                                                                                <t t-esc="menu.name"/>
+                                                                                                <t t-if="menu.course">(
+                                                                                                    <t t-esc="menu.course"/>
+                                                                                                    course )
+                                                                                                    <t t-if="menu.include_srvchrg == 'yes'">
+                                                                                                        <i class="fa fa-check-square-o" title="Service Charge Included" aria-hidden="true" style="padding-left: 5px;"></i>
+                                                                                                    </t>
+                                                                                                </t>
+                                                                                            </h4>
+                                                                                        </t>
+                                                                                        <t t-if="lead_browse">
+                                                                                            <h4 class="menu-name"
+                                                                                            t-att-data-id="menu.id"
+                                                                                            t-att-data-food-type="menu.food_type">
+                                                                                                <t t-esc="menu.name"/>
+                                                                                                <t t-if="menu.course">(
+                                                                                                    <t t-esc="menu.course"/>
+                                                                                                    course )
+                                                                                                    <t t-if="menu.include_srvchrg == 'yes'">
+                                                                                                        <i class="fa fa-check-square-o" title="Service Charge Included" aria-hidden="true" style="padding-left: 5px;"></i>
+                                                                                                    </t>
+                                                                                                </t>
+                                                                                            </h4>
+                                                                                            <t t-foreach="lead_browse.info_ids[0].menu_dt_ids"
+                                                                                            t-as="m">
+                                                                                                <t t-if="menu.id == m.menu_id.id">
+                                                                                                    <span class="label label-success" style="line-height: 2;">INCLUDED</span>
+                                                                                                 </t>
+                                                                                            </t>
+                                                                                        </t>
+                                                                                    </div>
+                                                                                    <div class="pull-right">
+                                                                                        <a class="btn btn-primary animation add_menu" t-att-style="'pointer-events: none;' if lead_browse and lead_browse.stage_id.name == 'Paid' else ''"
+                                                                                           onclick="add_menu($(this))">
+                                                                                            <span class="price-new"
+                                                                                                  t-att-data-price="menu_price.get(menu.id,0)"
+                                                                                                  t-att-data-to-mu="to_markup and to_markup.get(menu.id,0)"
+                                                                                                  t-att-data-symbol="symbol"
+                                                                                                  t-att-data-no-covers="partner_id.max_covers">
+                                                                                                <t t-esc="symbol"/>
+                                                                                                <t t-esc="'%.2f' %menu_price.get(menu.id,0)"/>
+                                                                                            </span>
+                                                                                            <i t-att-class="'hidden' if lead_browse and lead_browse.stage_id.name == 'Paid' else 'fa fa-plus-circle'"></i>
+                                                                                        </a>
+                                                                                    </div>
+                                                                                    <div class="panel-group bootstarp-accordion pull-left col-sm-12"
+                                                                                         id="faq-accordion" role="tablist"
+                                                                                         aria-multiselectable="true">
+                                                                                        <div class="panel">
+                                                                                            <div class="panel-heading"
+                                                                                                 role="tab">
+                                                                                                <a role="button"
+                                                                                                   data-toggle="collapse"
+                                                                                                   data-parent="#faq-accordion"
+                                                                                                   t-att-href="'#faq-accordion-one-'+str(menu.id)"
+                                                                                                   aria-expanded="true"
+                                                                                                   aria-controls="faq-accordion-one-1">
+                                                                                                    Click here to see the
+                                                                                                    menu
+                                                                                                </a>
+                                                                                            </div>
+                                                                                            <div t-att-id="'faq-accordion-one-'+str(menu.id)"
+                                                                                                 class="panel-collapse collapse"
+                                                                                                 role="tabpanel">
+                                                                                                <div class="panel-body">
+                                                                                                    <div class="faq-thread">
+                                                                                                        <textarea
+                                                                                                                disabled="disabled"
+                                                                                                                style="width: 100%;height: 50%;resize: none;background: white;border: none;overflow: auto;">
+                                                                                                            <t t-esc="menu.description"/>
+                                                                                                        </textarea>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </t>
+                                                                    </t>
+                                                                    </div>
+                                                                    <!-- Order Menu List #1 Ends -->
+                                                                    <!-- Spacer Starts -->
+                                                                    <div class="spacer big"></div>
+                                                                    <!-- Spacer Ends -->
+                                                                </div>
+                                                            </div>
+                                                            <!-- Right Column Ends -->
+                                                        </div>
+                                                        <!-- Tab #1 Nested Row Ends -->
+                                                    </div>
+                                                    <!-- Tab #1 Ends -->
+                                                    <!-- Tab #2 Starts -->
+                                                    <div id="drinks" class="tab-pane">
+                                                        <!-- Tab #1 Nested Row Starts -->
+                                                        <div class="row">
+                                                            <!-- Right Column Starts -->
+                                                            <div class="col-sm-12 col-xs-12">
+                                                                <!-- Order Menu Tab Pane Starts -->
+                                                                <div class="order-menu-tab-pane text-center-xs">
+                                                                    <div class="spacer"></div>
+                                                                    <div id="drink_list">
+                                                                        <t t-if="partner_id.parent_res_id">
+                                                                            <t t-set="drink_ids" t-value="partner_id.parent_res_id.drink_ids"/>
+                                                                        </t>
+                                                                        <t t-if="not partner_id.parent_res_id">
+                                                                            <t t-set="drink_ids" t-value="partner_id.drink_ids"/>
+                                                                        </t>
+                                                                        <t t-foreach="drink_ids" t-as="drink">
+                                                                            <t t-if="menu_price and menu_price.get(drink.id,0) > 0 ">
+                                                                                <div class="order-menu-item clearfix">
+                                                                                    <div class="pull-left col-sm-9">
+                                                                                        <t t-if="not lead_browse">
+                                                                                            <h4 class="menu-name"
+                                                                                            t-att-data-id="drink.id"
+                                                                                            t-att-data-food-type="drink.food_type">
+                                                                                            <t t-esc="drink.name"/>(Size/Qty:<t t-esc="drink.drink_size"/>)
+                                                                                            <t t-if="drink.include_srvchrg == 'yes'">
+                                                                                                <i class="fa fa-check-square-o" title="Service Charge Included" aria-hidden="true" style="padding-left: 5px;"></i>
+                                                                                            </t>
+                                                                                        </h4>
+                                                                                        </t>
+                                                                                        <t t-if="lead_browse">
+                                                                                            <h4 class="menu-name"
+                                                                                            t-att-data-id="drink.id"
+                                                                                            t-att-data-food-type="drink.food_type">
+                                                                                                <t t-esc="drink.name"/>
+                                                                                                <t t-if="drink.include_srvchrg == 'yes'">
+                                                                                                    <i class="fa fa-check-square-o" title="Service Charge Included" aria-hidden="true" style="padding-left: 5px;"></i>
+                                                                                                </t>
+                                                                                            </h4>
+                                                                                            <t t-foreach="lead_browse.info_ids[0].menu_dt_ids"
+                                                                                            t-as="m">
+                                                                                                <t t-if="drink.id == m.menu_id.id">
+                                                                                                    <span class="label label-success" style="line-height: 2;">INCLUDED</span>
+                                                                                                 </t>
+                                                                                            </t>
+                                                                                        </t>
+                                                                                    </div>
+                                                                                    <div class="pull-right">
+                                                                                        <a class="btn btn-primary animation add_menu" t-att-style="'pointer-events: none;' if lead_browse and lead_browse.stage_id.name == 'Paid' else ''"
+                                                                                           onclick="add_menu($(this))">
+                                                                                            <span class="price-new"
+                                                                                                  t-att-data-to-mu="to_markup and to_markup.get(drink.id,0)"
+                                                                                                  t-att-data-price="menu_price.get(drink.id,0)"
+                                                                                                  t-att-data-symbol="symbol">
+                                                                                                <t t-esc="symbol"/>
+                                                                                                <t t-esc="'%.2f' %menu_price.get(drink.id,0)"/>
+                                                                                            </span>
+                                                                                            <i t-att-class="'hidden' if lead_browse and lead_browse.stage_id.name == 'Paid' else 'fa fa-plus-circle'"></i>
+                                                                                        </a>
+                                                                                    </div>
+                                                                                    <div class="panel-group bootstarp-accordion pull-left col-sm-12"
+                                                                                         id="faq-accordion" role="tablist"
+                                                                                         aria-multiselectable="true">
+                                                                                        <div class="panel">
+                                                                                            <div class="panel-heading"
+                                                                                                 role="tab">
+                                                                                                <a role="button"
+                                                                                                   data-toggle="collapse"
+                                                                                                   data-parent="#faq-accordion"
+                                                                                                   t-att-href="'#faq-accordion-one-'+str(drink.id)"
+                                                                                                   aria-expanded="true"
+                                                                                                   aria-controls="faq-accordion-one-1">
+                                                                                                    Click here to see the
+                                                                                                    details
+                                                                                                </a>
+                                                                                            </div>
+                                                                                            <div t-att-id="'faq-accordion-one-'+str(drink.id)"
+                                                                                                 class="panel-collapse collapse"
+                                                                                                 role="tabpanel">
+                                                                                                <div class="panel-body">
+                                                                                                    <div class="faq-thread">
+                                                                                                        <textarea
+                                                                                                                disabled="disabled"
+                                                                                                                style="width: 100%;height: 50%;resize: none;background: white;border: none;overflow: auto;">
+                                                                                                            <t t-esc="drink.description"/>
+                                                                                                        </textarea>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </t>
+                                                                        </t>
+                                                                    </div>
+                                                                    <!-- Order Menu List #1 Ends -->
+                                                                    <!-- Spacer Starts -->
+                                                                    <div class="spacer big"></div>
+                                                                    <!-- Spacer Ends -->
+                                                                </div>
+                                                            </div>
+                                                            <!-- Right Column Ends -->
+                                                        </div>
+                                                        <!-- Tab #1 Nested Row Ends -->
+                                                    </div>
+                                                    <!-- Tab #2 Ends -->
+                                                    <!-- Tab #3 Starts -->
+                                                    <div id="gallery" class="tab-pane">
+                                                        <!-- Image Gallery Starts -->
+                                                        <ul class="row list-unstyled gallery-grid">
+                                                            <!-- Gallery Image #1 Starts -->
+                                                            <t t-if="partner_id.image">
+                                                            <li class="col-sm-4 col-xs-6">
+                                                                <div class="hover-content">
+                                                                    <img t-att-src="'/website/image?model=res.partner&amp;field=image&amp;id='+str(partner_id.id)" alt="Gallery Image" class="img-responsive img-center-sm img-center-xs" style="height: 191px;"/>
+                                                                    <!--<div class="overlay animation">
+                                                                        <a href="images/portfolio/portfolio01.png" class="btn btn-link zoom"><i class="fa fa-search-plus"></i></a>
+                                                                    </div>-->
+                                                                </div>
+                                                            </li>
+                                                            </t>
+                                                            <!-- Gallery Image #1 Ends -->
+                                                            <!-- Gallery Image #2 Starts -->
+                                                            <t t-if="partner_id.cc_image1">
+                                                                <li class="col-sm-4 col-xs-6">
+                                                                    <div class="hover-content">
+                                                                        <img t-att-src="'/website/image?model=res.partner&amp;field=cc_image1&amp;id='+str(partner_id.id)" alt="Gallery Image" class="img-responsive img-center-sm img-center-xs" style="height: 191px;"/>
+                                                                        <!--<div class="overlay animation">
+                                                                            <a href="images/portfolio/portfolio02.png" class="btn btn-link zoom"><i class="fa fa-search-plus"></i></a>
+                                                                        </div>-->
+                                                                    </div>
+                                                                </li>
+                                                            </t>
+                                                            <!-- Gallery Image #2 Ends -->
+                                                            <!-- Gallery Image #3 Starts -->
+                                                            <t t-if="partner_id.cc_image2">
+                                                                <li class="col-sm-4 col-xs-6">
+                                                                    <div class="hover-content">
+                                                                        <img t-att-src="'/website/image?model=res.partner&amp;field=cc_image2&amp;id='+str(partner_id.id)" alt="Gallery Image" class="img-responsive img-center-sm img-center-xs" style="height: 191px;"/>
+                                                                        <!--<div class="overlay animation">
+                                                                            <a href="images/portfolio/portfolio03.png" class="btn btn-link zoom"><i class="fa fa-search-plus"></i></a>
+                                                                        </div>-->
+                                                                    </div>
+                                                                </li>
+                                                            </t>
+                                                            <!-- Gallery Image #3 Ends -->
+                                                            <!-- Gallery Image #4 Starts -->
+                                                            <t t-if="partner_id.cc_image3">
+                                                                <li class="col-sm-4 col-xs-6">
+                                                                    <div class="hover-content">
+                                                                        <img t-att-src="'/website/image?model=res.partner&amp;field=cc_image3&amp;id='+str(partner_id.id)" alt="Gallery Image" class="img-responsive img-center-sm img-center-xs" style="height: 191px;"/>
+                                                                        <!--<div class="overlay animation">
+                                                                            <a href="images/portfolio/portfolio04.png" class="btn btn-link zoom"><i class="fa fa-search-plus"></i></a>
+                                                                        </div>-->
+                                                                    </div>
+                                                                </li>
+                                                            </t>
+                                                            <!-- Gallery Image #4 Ends -->
+                                                            <!-- Gallery Image #5 Starts -->
+                                                            <t t-if="partner_id.cc_image4">
+                                                                <li class="col-sm-4 col-xs-6">
+                                                                    <div class="hover-content">
+                                                                        <img t-att-src="'/website/image?model=res.partner&amp;field=cc_image4&amp;id='+str(partner_id.id)" alt="Gallery Image" class="img-responsive img-center-sm img-center-xs" style="height: 191px;"/>
+                                                                        <!--<div class="overlay animation">
+                                                                            <a href="images/portfolio/portfolio05.png" class="btn btn-link zoom"><i class="fa fa-search-plus"></i></a>
+                                                                        </div>-->
+                                                                    </div>
+                                                                </li>
+                                                            </t>
+                                                            <!-- Gallery Image #5 Ends -->
+                                                        </ul>
+                                                        <!-- Image Gallery Ends -->
+                                                    </div>
+                                                    <!-- Tab #3 Ends -->
+                                                    <!-- Tab #4 Starts -->
+                                                    <div id="reviews" class="tab-pane"
+                                                            >
+                                                        <!-- Tab #4 Nested Row Starts -->
+                                                        <div class="row">
+                                                            <div class="col-sm-12 col-xs-12">
+                                                                <div class="reviews-box">
+                                                                    <div class="review-list">
+                                                                        <div class="review-list-content">
+                                                                            <p>
+                                                                                <t t-esc="partner_id.descp_venue or 'N/A'"/>
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Tab #4 Nested Row Ends -->
+                                                    </div>
+                                                    <!-- Tab #4 Ends -->
+                                                    <!-- Tab #5 Starts ends -->
+                                                    <div id="reachus" class="tab-pane">
+                                                        <!-- Tab #5 Nested Row Starts -->
+                                                        <div class="row">
+                                                            <!-- Right Column Starts -->
+                                                            <div class="col-sm-8 col-xs-12">
+                                                                <!-- Reach Us Tab Pane Starts -->
+                                                                <div class="reachus-tab-pane">
+                                                                    <!-- Map Starts -->
+                                                                    <t t-if="partner_id.latitude and partner_id.longitude">
+                                                                        <iframe  width="600"  height="450"  frameborder="0" style="border:0"  t-att-src="'https://www.google.com/maps/embed/v1/place?key=AIzaSyDtdEROj6AKidcaPO3WhSxh6CQ1qT9HMqs&amp;q='+str(partner_id.latitude)+','+str(partner_id.longitude)"/>
+                                                                    </t>
+                                                                    <!--<div class="map"><img src="https://maps.googleapis.com/maps/api/staticmap?center=-15.800513,-47.91378&amp;zoom=7&amp;size=200x200&amp;sensor=false"/></div>-->
+                                                                    <!-- Map Ends -->
+                                                                    <!-- Address Block Starts -->
+                                                                    <div class="address-block" style="margin-top: 15px;">
+                                                                        <h5>
+                                                                            <i class="fa fa-tag"></i>
+                                                                            Address
+                                                                        </h5>
+                                                                        <ul class="list-unstyled">
+                                                                            <li>
+                                                                                <t t-esc="partner_id.street"/>
+                                                                            </li>
+                                                                            <li>
+                                                                                <t t-esc="partner_id.state_id.name"/>
+                                                                            </li>
+                                                                            <li>
+                                                                                <t t-esc="partner_id.city"/>
+                                                                                <t t-esc="partner_id.zip"/>
+                                                                            </li>
+                                                                        </ul>
+                                                                        <t t-if="partner_id.rest_directions">
+                                                                        <h5><i class="fa fa-tag"></i>Directions to
+                                                                            Restaurant
+                                                                        </h5>
+                                                                        <ul class="list-unstyled">
+                                                                            <li>
+                                                                                <t t-esc="partner_id.rest_directions"/>
+                                                                            </li>
+                                                                        </ul></t>
+                                                                        <t t-if="partner_id.dress_code">
+                                                                        <h5>
+                                                                            <i class="fa fa-tag"></i>
+                                                                            Dress Code
+                                                                        </h5>
+                                                                        <ul class="list-unstyled">
+                                                                            <li>
+                                                                                <t t-esc="partner_id.dress_code"/>
+                                                                            </li>
+                                                                        </ul></t>
+                                                                        <t t-if="partner_id.parking">
+                                                                        <h5>
+                                                                            <i class="fa fa-tag"></i>
+                                                                            Parking
+                                                                        </h5>
+                                                                        <ul class="list-unstyled">
+                                                                            <li>
+                                                                                <t t-esc="partner_id.parking"/>
+                                                                            </li>
+                                                                        </ul></t>
+                                                                        <t t-if="partner_id.payment_opt">
+                                                                        <h5>
+                                                                            <i class="fa fa-tag"></i>
+                                                                            Payment Option
+                                                                        </h5>
+                                                                        <ul class="list-unstyled">
+                                                                            <li>
+                                                                                <t t-esc="partner_id.payment_opt"/>
+                                                                            </li>
+                                                                        </ul></t>
+                                                                        <h5>
+                                                                            <i class="fa fa-cutlery"></i>
+                                                                            Dining Style
+                                                                        </h5>
+                                                                        <ul class="list-unstyled">
+                                                                            <li>
+                                                                                <t t-esc="dining_names"/>
+                                                                            </li>
+                                                                        </ul>
+                                                                        <h5>
+                                                                            <i class="fa fa-glass"></i>
+                                                                            Cuisine
+                                                                        </h5>
+                                                                        <ul class="list-unstyled">
+                                                                            <li>
+                                                                                <t t-esc="cuisine_names"/>
+                                                                            </li>
+                                                                        </ul>
+                                                                        <t t-if="partner_id.phone or partner_id.parent_id.phone">
+                                                                            <h5>
+                                                                                <i class="fa fa-phone"></i>
+                                                                                Phone Numbers
+                                                                            </h5>
+                                                                            <ul class="list-unstyled">
+                                                                                <li>
+                                                                                    <t t-esc="partner_id.phone or partner_id.parent_id.phone"/>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </t>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- Reach Us Tab Pane Ends -->
+                                                            </div>
+                                                            <!-- Right Column Ends -->
+                                                        </div>
+                                                        <!-- Tab #5 Nested Row Ends -->
+                                                    </div>
+                                                    <t t-if="lead_browse">
+                                                        <div id="booking_details" class="tab-pane">
+                                                            <div id="order-process">
+                                                               <div class="order-process-left-side">
+                                                                    <div class="order-information">
+                                                                        <div class="col-md-12">
+                                                                            <ul class="list-unstyled info-list">
+                                                                                <li>
+                                                                                    <label for="collection">
+                                                                                        Tour Operator Reference :
+                                                                                    </label>
+                                                                                    <span class="text_span"><t
+                                                                                            t-esc="lead_browse.cust_ref"/>
+                                                                                    </span>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <label for="collection">Name :
+                                                                                    </label>
+                                                                                    <span class="text_span"
+                                                                                          t-esc="lead_browse.title.name"/>
+                                                                                    <span class="text_span"
+                                                                                          t-esc="lead_browse.partner_name"/>
+                                                                                    <span class="text_span"
+                                                                                          t-esc="lead_browse.contact_name"/>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <label for="collection">Mobile :
+                                                                                    </label>
+                                                                                    <span class="text_span"
+                                                                                          t-esc="lead_browse.mobile"/>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <label for="collection">Email :
+                                                                                    </label>
+                                                                                    <span class="text_span"
+                                                                                          t-esc="lead_browse.email_from"/>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <label for="collection">Special Dietary Requirements :
+                                                                                    </label>
+                                                                                    <span class="text_span"
+                                                                                          t-esc="lead_browse.description"/>
+                                                                                </li>
+                                                                                <!--<li>
+                                                                                    <label for="collection">Time :</label>
+                                                                                    <span class="text_span" t-esc="info.lead_id.conv_tob"/>
+                                                                                </li>-->
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                               </div>
+                                                            </div>
+                                                        </div>
+                                                    </t>
+                                                    <!-- Tab #5 Ends -->
+                                                </div>
+                                                <!-- Menu Tabs Content Ends -->
+                                            </div>
+                                            <!-- Menu Tabs Ends -->
+                                        </div>
+                                        <!-- Mainarea Ends -->
+                                        <!-- Sidearea Starts -->
+                                        <div class="col-md-4 col-xs-12">
+                                            <!-- Spacer Starts -->
+                                            <div class="spacer-1 medium hidden-lg hidden-md"></div>
+                                            <!-- Spacer Ends -->
+                                            <!-- Your Order Starts -->
+                                            <div class="side-block-order border-radius-4">
+                                                <h5 id="available_msg" class="text-center hidden" style="">Seats are not available for the selected time.</h5>
+                                                <!-- Heading Starts -->
+                                                <h5 class="text-center">
+                                                    <i class="fa fa-shopping-basket"></i>
+                                                    Your Orders
+                                                </h5>
+                                                <!-- Heading Ends -->
+                                                <!-- Order Content Starts -->
+                                                <div class="side-block-order-content">
+                                                    <!-- Order Item List Starts -->
+                                                    <ul class="list-unstyled order-item-list" id="your_orders">
+                                                        <h6 t-att-class="'text-center' if not lead_browse else 'hidden'">Please select the menus to proceed.</h6>
+                                                        <t t-if="lead_browse and not post.get('frm_whch') == 'amend'">
+                                                            <t t-foreach="lead_browse.info_ids[0].menu_dt_ids"
+                                                               t-as="menu">
+                                                                <li class="clearfix" t-att-data-id="menu.menu_id.id"
+                                                                    t-att-data-food-type="'meal' if menu.food_type == 'meal' else 'drink'"
+                                                                    t-att-id="'menu_'+str(menu.menu_id.id)"
+                                                                    t-att-data-mtable-id="menutbl_dict and menutbl_dict.get(menu.menu_id.id)">
+                                                                    <div class="pull-left" style="margin-top:6px;">
+                                                                        <div class="update-product">
+                                                                            <a title="Minus a product"
+                                                                               class="minus-prod"
+                                                                               onclick="add_menu($(this))">
+                                                                                <i t-att-class="'hidden' if lead_browse and lead_browse.stage_id.name == 'Paid' else 'fa fa-minus-circle'"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="cart-product-name pull-left">
+                                                                        <t t-esc="menu.menu_id.name"/>
+                                                                    </div>
+                                                                    <div style="margin-left:20px;"
+                                                                         class="cart-product-sign pull-left text-spl-color">
+                                                                        <b>X</b>
+                                                                    </div>
+                                                                    <div style="margin-left:20px;"
+                                                                         class="cart-product-qty pull-left text-spl-color">
+                                                                        <t t-esc="menu.no_of_covers"/>
+                                                                    </div>
+                                                                    <div class="cart-product-price pull-right text-spl-color"
+                                                                         t-att-data-symbol="user.company_id.currency_id.symbol"
+                                                                         t-att-data-price="'%.2f' % float(menu.top_menu_price)"
+                                                                         t-att-data-tot-price="'%.2f' % float(menu.top_menu_price)">
+                                                                        <t t-esc="user.company_id.currency_id.symbol"/>
+                                                                        <t t-esc="'%.2f' % float(menu.top_tot_top_price)"/>
+                                                                    </div>
+                                                                    <div class="cart-product-remove"
+                                                                         style="margin-top:5px;">
+                                                                        <a title="Remove a product" class="remove-prod"
+                                                                           onclick="add_menu($(this))">
+                                                                            <i t-att-class="'hidden' if lead_browse and lead_browse.stage_id.name == 'Paid' else 'fa fa-trash'"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </li>
+                                                            </t>
+
+                                                        </t>
+                                                    </ul>
+                                                    <!-- Order Item List Ends -->
+                                                    <!-- Order Item Total Starts -->
+                                                    <dl class="dl-horizontal order-item-total">
+                                                        <dt class="text-light">Menus Total :</dt>
+                                                        <dd class="text-spl-color text-right menu-total">
+                                                            <t t-esc="symbol"/>
+                                                            <t t-set="menu_total" t-value="0"/>
+                                                            <t t-set="count" t-value="0"/>
+                                                            <t t-if="lead_browse">
+                                                                <t t-foreach="lead_browse.info_ids[0].menu_dt_ids"
+                                                               t-as="menu">
+                                                                    <t t-if="menu.food_type == 'meal'">
+                                                                        <t t-set="menu_total" t-value="menu_total + menu.top_tot_top_price"/>
+                                                                    </t>
+                                                                    <t t-set="count" t-value="count+1"/>
+                                                                    <t t-if="len(lead_browse.info_ids[0].menu_dt_ids) == count">
+                                                                            <t t-esc="'%.2f' % float(menu_total)"/>
+                                                                    </t>
+                                                                </t>
+                                                            </t>
+                                                            <t t-if="not lead_browse">0.00</t>
+                                                        </dd>
+                                                        <dt class="text-light">Drinks / Extras Total :</dt>
+                                                        <dd class="text-spl-color text-right drink-total">
+                                                            <t t-esc="symbol"/>
+                                                            <t t-set="drink_total" t-value="0"/>
+                                                            <t t-set="count" t-value="0"/>
+                                                            <t t-if="lead_browse">
+                                                                <t t-foreach="lead_browse.info_ids[0].menu_dt_ids"
+                                                               t-as="menu">
+                                                                    <t t-if="menu.food_type == 'drink'">
+                                                                        <t t-set="drink_total" t-value="drink_total + menu.top_tot_top_price"/>
+                                                                    </t>
+                                                                    <t t-set="count" t-value="count+1"/>
+                                                                    <t t-if="len(lead_browse.info_ids[0].menu_dt_ids) == count">
+                                                                            <t t-esc="'%.2f' % float(drink_total)"/>
+                                                                    </t>
+                                                                </t>
+                                                            </t>
+                                                            <t t-if="not lead_browse">0.00</t>
+                                                        </dd>
+                                                        <hr/>
+                                                        <dt class="text-bold">Total Amount :</dt>
+                                                        <dd class="text-bold text-spl-color text-right amt-total">
+                                                            <t t-esc="symbol"/>
+                                                            <t t-set="total" t-value="0"/>
+                                                            <t t-set="count" t-value="0"/>
+                                                            <t t-if="lead_browse">
+                                                                <t t-foreach="lead_browse.info_ids[0].menu_dt_ids"
+                                                               t-as="menu">
+                                                                    <t t-set="total" t-value="total + menu.top_tot_top_price"/>
+                                                                    <t t-set="count" t-value="count+1"/>
+                                                                    <t t-if="len(lead_browse.info_ids[0].menu_dt_ids) == count">
+                                                                            <t t-esc="'%.2f' % float(total)"/>
+                                                                    </t>
+                                                                </t>
+                                                            </t>
+                                                        </dd>
+                                                    </dl>
+                                                    <t t-if="lead_browse">
+                                                        <span style="font-size:9pt;font-style:italic;color:#c00000">
+                                                            Note: Your changes will be saved on clicking the button below. You will be taken to the next page to review Booking Details and complete the amendment process.
+                                                        </span>
+                                                    </t>
+                                                    <!-- Order Item Total Ends -->
+                                                    <div class="cfo-checkoutarea" style="margin-top: 5px;">
+                                                        <button type="submit" id="a" name="a"
+                                                                class="btn btn-primary btn-block custom-checkout"
+                                                                onclick="time_selected($(this))">
+                                                            <t t-if="not lead_browse">Proceed to Checkout</t>
+                                                            <t t-if="lead_browse">SAVE CHANGES AND PROCEED</t>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <!-- Order Content Ends -->
+                                            </div>
+                                            <!-- Your Order Ends -->
+                                        </div>
+                                        <!-- Sidearea Ends -->
+                                    </div>
+                                    <!-- Nested Row Ends -->
+                                </div>
+                                <!--.container-->
+                            </div>
+                            <!--#order-online-->
+                            <!--end order-online-->
+                            <!-- Content End -->
+
+                            <!-- start mobile footer nav -->
+                            <nav class="navbar navbar-default navbar-fixed-bottom visible-xs visible-sm mobile-cart-nav">
+                                <div class="mobile-cart-inner-content">
+                                    <div class="row">
+                                        <div class="col-md-4 col-xs-4">
+                                            <div class="mobile-cart-item">
+                                                <a id="mobileCartToggle" href="#">
+                                                    <i class="fa fa-shopping-basket"></i>
+                                                    <span id="cart-item">10</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-xs-4">
+                                            <div class="mobile-total-amount">Total:
+                                                <span id="total-cart-amount">50</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-xs-4">
+                                            <a href="#" class="btn mobile-btn-checkout">Checkout</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nav>
+                            <!-- end mobile footer nav -->
+                        </div>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <!--        PopOver Content for Availability -->
+        <template id="popover_content">
+            <table style="width:100%">
+                <tbody style="font-size: 9pt;">
+                    <tr style="border-bottom: 1px solid #CACACA;">
+                        <th>Time</th>
+                        <th style="text-align: right;">Availability(Guests)</th>
+                    </tr>
+                    <tr t-foreach="times_list or []" t-as="time">
+                        <td>
+                            <t t-esc="time"/>
+                        </td>
+                        <td style="text-align:right;">
+                            <t t-esc="avlblty_dict.get(time,0)"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </template>
+
+        <template id="events_table">
+            <div id="events_div">
+                <div t-if="user.is_group" style="font-weight:bold;font-size:12pt;padding-bottom:2%;" class="main_color">
+                    Menus
+                </div>
+                <div id="events_table_div" style="overflow-y:auto;height:200px;">
+                    <table style="width:100%" id="events_table">
+                        <t t-foreach="event_menus" t-as="menu">
+                            <tr class="alternative_record" id='menu_serial'>
+                                <td id="db_id" class="test" style="display:none;">
+                                    <t t-esc="menu.id"/>
+                                </td>
+                                <td class="descp">
+                                    <p></p>
+                                    <span class="menu_name" style="font-size:11pt;">
+                                        <t t-esc="menu.menu_id.name"/>
+                                    </span>
+                                    <span class="menu_desc" style="display:none;">
+                                        <t t-esc="menu.menu_id.description"/>
+                                    </span>
+                                    <p></p>
+                                    <a class="menu_descp main_color" style="cursor:pointer;"
+                                       onclick="javascript:menu_popup(this)">Click here to see the menu
+                                    </a>
+                                    <p></p>
+                                </td>
+                                <td class="price">
+                                    <p class="text_span_9">Per Person</p>
+                                    <p class="spacing"></p>
+                                    <t t-set="total" t-value="menu.menu_id.to_price + menu.to_mu"/>
+                                    <span style="color:#C00000;font-size:12pt;">
+                                        <t t-esc="menu.menu_id.partner_id.company_id.currency_id.symbol"/>
+                                        <span id="single_price" t-esc="'%.2f' % total"></span>
+                                    </span>
+                                </td>
+                                <td class="select_guest">
+                                    <p class="text_span_9">Guests</p>
+                                    <p class="guestspacing"></p>
+                                    <select id="menu" name="eguest" class="form-control guest"
+                                            onchange="javascript:change_guest(this)" style="color:black;">
+                                        <t t-foreach="range(0,max_covers+1)" t-as="cover">
+                                            <option t-att-selected="int(menu.guest) == cover">
+                                                <t t-esc="cover"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </td>
+                                <td class="total_price">
+                                    <p class="text_span_9">Total</p>
+                                    <p class="spacing"></p>
+                                    <span style="color:#C00000;font-size:12pt;">
+                                        <t t-esc="menu.menu_id.partner_id.company_id.currency_id.symbol"/>
+                                        <span id="total_price">0.00</span>
+                                    </span>
+                                </td>
+                                <td t-if="menu.menu_id.kids_menu">
+                                    <img id="" class="" src="/fit_website/static/src/img/kidsmenu.png"
+                                         alt="Kids Menu Icon" style="height:22px;" title="Kids Menu"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </table>
+                </div>
+                <div t-if="user.is_group" style="height:56px;width:100%" id="menu_total_drink_div">
+                    <table style="width:100%;">
+                        <tr>
+                            <td class="" style="width:55%;"/>
+                            <td class="" style="width:30%;padding-top:3%;padding-bottom:3%;text-align:right;">
+                                <span style="font-size:11pt;font-weight:bold;">Menus Total</span>
+                            </td>
+                            <td class="" style="width:15%;padding-top:3%;padding-bottom:3%;text-align:center;">
+                                <span style="color:#C00000;font-size:11pt;font-weight:bold;">
+                                    <div id="menu_gtotal_div">
+                                        <t t-esc="user.partner_id.company_id.currency_id.symbol"/>
+                                        <span style="" id="" class="grand_total_value">0.00</span>
+                                    </div>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </template>
+
+        <template id="request_sent">
+            <p class="alert alert-danger" id="no_availability" style="width:100%;text-align:center;margin-bottom:1.5%;">
+                <span>Your request has been sent</span>
+            </p>
+        </template>
+
+        <template id="select_guest">
+            <p class="alert alert-danger" id="no_guest" style="width:100%;text-align:center;margin-bottom:1.5%;">
+                <span>Please select number of guests to proceed</span>
+            </p>
+        </template>
+
+        <template id="grand_total_div">
+            <div id="grand_total_table" style="clear:both;margin-top:2%;">
+                <table id="" style="width:100%;">
+                    <tr id="grand_total_tr">
+                        <td class="descp">
+                            <t t-if="path == 'events'">
+                                <div style="display:inline-block;margin-top:1%;">
+                                    <span style="font-size:9pt;font-style:italic;color:#c00000">
+                                        Note : Please Select Booking Date and Booking Time
+                                    </span>
+                                    <p></p>
+                                    <label class="text_span">Booking Date :</label>&amp;nbsp;&amp;nbsp;
+                                    <select name="" id="e_date"
+                                            style="padding:1.5px;display:inline-block;width:110px;height:24px;"
+                                            class="form-control" title="" onchange="onchange_meal_date(this)">
+                                        <option value="">Select Date</option>
+                                        <t t-foreach="event_dates" t-as="edates">
+                                            <option t-att-selected=" len(event_dates)== 1 and edates[0] ">
+                                                <t t-esc="edates"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                    &amp;nbsp;&amp;nbsp;
+                                    <label class="text_span">Booking Time :</label>&amp;nbsp;&amp;nbsp;
+                                    <select name="" id="e_time"
+                                            style="padding:1.5px;display:inline-block;width:110px;height:24px;"
+                                            class="form-control" title="">
+                                        <option value="">Select Time</option>
+                                    </select>
+                                    &amp;nbsp;&amp;nbsp;
+                                    <p></p>
+                                </div>
+                                &amp;nbsp;&amp;nbsp;
+                            </t>
+                            <t t-if="user.is_group">
+                                <div style="display:inline-block;margin-top:1%;">
+                                    <span style="font-size:9pt;font-style:italic;color:#c00000">
+                                        Note : Please Select Booking Date and Booking Time
+                                    </span>
+                                    <p></p>
+                                    <label class="text_span">Booking Date :</label>&amp;nbsp;&amp;nbsp;
+                                    <input name="" id="e_date"
+                                           style="padding:1.5px;display:inline-block;width:110px;height:24px;"
+                                           class="datepicker form-control " title=""
+                                           onchange="onchange_meal_date(this)"/>
+
+                                    <label class="text_span">Booking Time :</label>&amp;nbsp;&amp;nbsp;
+                                    <select name="" id="e_time"
+                                            style="padding:1.5px;display:inline-block;width:110px;height:24px;"
+                                            class="form-control" title="">
+                                        <option value="">Select Time</option>
+                                    </select>
+                                    &amp;nbsp;&amp;nbsp;
+                                    <p></p>
+                                </div>
+                                &amp;nbsp;&amp;nbsp;
+                            </t>
+                            <button id="" class="button continue_button">Continue</button>
+                        </td>
+
+                        <td class="" style="text-align:right;padding-right:2%;width:30%;">
+                            <span style="font-size:12pt;font-weight:bold;">Grand Total</span>
+                        </td>
+                        <td class="total_price">
+                            <span style="color:#C00000;font-size:12pt;font-weight:bold;">
+                                <div id="main_gtotal">
+                                    <t t-esc="symbol"/>
+                                    <span id="" class="main_gtotal_value">0.00</span>
+                                </div>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <p style="clear:both;"></p>
+            <div id="select_time_div" style="text-align:center;border:1px solid #CCC;">
+                <table style="width:100%;">
+                    <tr>
+                        <td id="select_time">
+
+                        </td>
+                        <td style="vertical-align:bottom;">
+                            <span class="select_time_div_close"
+                                  style="cursor:pointer;font-weight:bold;font-size:10pt;color:#c00000;">X
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <p></p>
+        </template>
+
+
+        <!--    Drinks Table Template   -->
+        <template id="drinks_table_template">
+            <div id="drinks_div">
+                <div id="drink_heading" t-if="user.is_group" style="font-weight:bold;font-size:12pt;padding-bottom:2%;"
+                     class="main_color">Drinks
+                </div>
+                <div id="drinks_table_div">
+                    <table id="drinks_table" style="width:100%">
+                        <t t-if="drinks">
+                            <t t-set="wcolor"
+                               t-value="user.partner_id.wbsite_color or user.partner_id.parent_id and user.partner_id.parent_id.wbsite_color or ''"/>
+                            <t t-foreach="drinks" t-as="drink">
+                                <t t-if="drink.menu_id.active">
+                                    <tr id="menu_serial" class=""
+                                        t-att-style="drink.to_mu > 0 and user.role != 'client_cust' and user.is_wlabeling and 'border-bottom:1px solid #CCC;border-left:5px solid '+str(wcolor)+';'  or drink.to_mu > 0 and user.role != 'client_cust' and 'border-bottom:1px solid #CCC;border-left:5px solid #793487;' or 'border-bottom:1px solid #CCC;'">
+                                        <td id="db_id" class="test" style="display:none;">
+                                            <t t-esc="drink.id"/>
+                                        </td>
+                                        <td class="" style="width:40%;">
+                                            <p/>
+                                            <span class="menu_name">
+                                                <t t-esc="drink.menu_id.name"/>
+                                            </span>
+                                            <span class="menu_desc" style="display:none;">
+                                                <t t-esc="drink.menu_id.description"/>
+                                            </span>
+                                            <p></p>
+                                            <a class="menu_descp main_color" style="cursor:pointer;"
+                                               onclick="javascript:menu_popup(this)">Click here to see the details
+                                            </a>
+                                            <p></p>
+                                        </td>
+                                        <td class="" style="width:15%;text-align:center;">
+                                            <t t-set="Price"
+                                               t-value="drink.pp_person + drink.ffp_mu + drink.service_charge + drink.to_mu"/>
+                                            <p class="text_span_9">Per Person</p>
+                                            <p class="spacing"></p>
+                                            <span style="color:#C00000;font-size:12pt;">
+                                                <t t-esc="drink.menu_id.partner_id.company_id.currency_id.symbol"/>
+                                                <span id="single_price" t-esc="'%.2f' %Price"/>
+                                            </span>
+                                        </td>
+                                        <td class="" style="text-align:center;width:15%;">
+                                            <p class="text_span_9" style="text-align:center;">Size</p>
+                                            <p class="spacing"></p>
+                                            <span style="color:#C00000;font-size:12pt;">
+                                                <t t-esc="drink.menu_id.drink_size or '-'"/>
+                                            </span>
+                                        </td>
+                                        <td class=""
+                                            style="text-align:center;width:15%;padding-left:1%;padding-right:1%;">
+                                            <p class="text_span_9" style="text-align:center;">Quantity</p>
+                                            <p class="guestspacing"></p>
+                                            <select id="menu" name="quantity" class="form-control quantity"
+                                                    style="width:60px;height:20px;text-align:left;color:black;"
+                                                    onchange="javascript:change_guest(this)">
+                                                <t t-foreach="range(0,(drink.menu_id.partner_id.max_covers + 1))"
+                                                   t-as="i">
+                                                    <option t-att-selected="int(drink.guest) == i">
+                                                        <t t-esc="i"/>
+                                                    </option>
+                                                </t>
+                                            </select>
+                                        </td>
+                                        <td class="" style="width:15%;text-align:center;">
+                                            <p class="text_span_9">Total</p>
+                                            <p class="spacing"></p>
+                                            <span style="color:#C00000;font-size:12pt;">
+                                                <t t-esc="drink.menu_id.partner_id.company_id.currency_id.symbol"/>
+                                                <span id="total_price_drinks">0.00</span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </t>
+                    </table>
+                </div>
+                <div t-if="user.is_group" style="width:100%;" id="grand_total_drink_div">
+                    <table style="width:100%">
+                        <tr>
+                            <td class="" style="width:55%;"/>
+                            <td class="" style="width:30%;padding-top:3%;padding-bottom:3%;text-align:right;">
+                                <span style="font-size:11pt;font-weight:bold;">Drinks Total</span>
+                            </td>
+                            <td class="" style="width:15%;padding-top:3%;padding-bottom:3%;text-align:center;">
+                                <span style="color:#C00000;font-size:11pt;font-weight:bold;">
+                                    <div id="drink_gtotal_div">
+                                        <t t-esc="user.partner_id.company_id.currency_id.symbol"/>
+                                        <span id="" class="drinks_grand_total_value">0.00</span>
+                                    </div>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </template>
+
+
+        <!--    ==============================================================
+                             Booking Completion Page
+                ==============================================================   -->
+
+        <template id="booking_completion" page="True" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="fit_website.capitalcentric_layout">
+                <t t-set="ref_content">
+                    <style>
+                        input[type='checkbox']
+                        {
+                        opacity: inherit;
+                        display: block;
+                        }
+                    </style>
+                    <div id="bookinglayout">
+                        <span class="error_inline line" id="save_prompt_markup"/>
+                        <!--<br></br>
+                        <div>
+                            <span style="font-size:9pt;font-style:italic;color:#c00000">
+                                Note: Using this menu, you can add your markup amount to menus of various restaurants. This amount will be added to the price and displayed to your booking staff, so that they can quote this (final) price to the customers. Please note that this amount will be reduced on the booking completion page and you pay only the purchase amount to FIT FOR PURPOSE.
+                            </span>
+                        </div>
+                        <br/>-->
+                        <input class="hidden" id="check_value"/>
+                        <!-- Added for checking on 'click' of save if the 'Covers Allocated' Input field is having number or not -->
+                        <input t-att-value="user.partner_id.id" id="partner_id" class="hidden"/>
+                        <t t-set="partner" t-value="user.partner_id"/>
+                        <t t-if="user.role in ('client_user','client_mng')">
+                            <t t-set="partner" t-value="user.partner_id and user.partner_id.parent_id or False"/>
+                        </t>
+                        <!-- start Main Wrapper -->
+                        <div class="main-wrapper">
+                            <!-- start breadcrumb -->
+                            <div class="breadcrumb-wrapper">
+
+                                <div class="container">
+
+                                    <ol class="breadcrumb-list booking-step">
+                                        <li>
+                                            <a href="/">Home</a>
+                                        </li>
+                                        <li>
+                                            <span>My Cart</span>
+                                        </li>
+                                    </ol>
+
+                                </div>
+
+                            </div>
+                            <!-- end breadcrumb -->
+
+                            <div class="section sm">
+                                <!-- Content Start -->
+                                <!-- Start order-online-->
+                                <div id="order-process">
+                                    <t t-if="len(info_list) == 0 ">
+                                        <div class="error-page-wrapper">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+                                                        <h3>Your cart is empty</h3>
+                                                        <a id="go_back_button" class="btn btn-primary" href="/">Continue
+                                                            Booking
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                    <t t-if="len(info_list) > 0 ">
+                                        <div class="container">
+                                            <div class="GridLex-gap-15-wrappper">
+                                                <div class="GridLex-grid-noGutter-equalHeight">
+
+                                                        <div class="GridLex-col-3_sm-4_xs-12">
+                                                            <div class="admin-sidebar">
+                                                                <t t-call="fit_website.welcome_operator"/>
+                                                                <t t-if="not user.is_wlabeling">
+                                                                    <div class="admin-user-action text-center">
+                                                                        <a href="/capital_centric/operator/my_cart/?empty_cart=yes"
+                                                                           style=""
+                                                                           class="btn btn-primary btn-sm btn-inverse empty_cart">
+                                                                            Empty Cart
+                                                                        </a>
+                                                                    <!--<a href="#" class="btn btn-primary btn-sm">Edit</a>
+                                                                    <a href="#" class="btn btn-primary btn-sm btn-inverse">Deactivate</a>-->
+                                                                </div>
+                                                                    <t t-call="fit_website.operator_buttons"/>
+                                                                </t>
+                                                            </div>
+                                                        </div>
+                                                    <div class="GridLex-col-9_sm-8_xs-12">
+                                                        <div class="order-inner-content">
+                                                            <t t-set="count1" t-value="1"/>
+                                                            <t t-set="count2" t-value="0"/>
+                                                            <t t-foreach="info_list" t-as="info">
+                                                                <t t-if="info.lead_id.website_session_id == session_id and user.is_wlabeling">
+                                                                    <t t-set="count1" t-value="0"/>
+                                                                    <t t-set="count2" t-value="1"/>
+                                                                </t>
+                                                                <t t-if="count1 == 1 or count2 == 1">
+                                                                    <t t-if="info_id and int(info_id) == info.id">
+                                                                            <p></p>
+                                                                            <div id="alert_div" style="text-align:center;color:#c00000;font-size:10pt;background-color:#e6e0ec;padding:5px;">
+                                                                                <span style="">Sorry, there is no availability for <t t-esc="info.restaurant_id.name"/> on </span><span t-field="info.lead_id.conv_dob"></span><span> at <t t-esc="info.lead_id.conv_tob"/>. Please remove the record from the cart to proceed.</span>
+                                                                            </div>
+                                                                            <p></p>
+                                                                    </t>
+                                                                    <div style="margin-bottom:15px;border-bottom: 1px solid #efefef;"
+                                                                         class="row">
+                                                                        <div class="col-md-12">
+                                                                            <div class="order-process-left-side">
+                                                                                <div class="order-information row">
+                                                                                    <div class="col-md-6">
+                                                                                        <h4 class="section-title pb-10"
+                                                                                            style="">
+                                                                                            <span id="first_line"
+                                                                                                  class="hotelcolor">
+                                                                                                <t t-esc="user.is_group and 'Request ' or 'Complete '"/>
+                                                                                                booking for
+                                                                                            </span>
+                                                                                            <span style="margin-left:0;"
+                                                                                                  id="second_line"
+                                                                                                  class="hotelcolor">
+                                                                                                <t t-esc="info.restaurant_id.name"/>
+                                                                                            </span>(# <t t-esc="info.lead_id.lead_no"/>)
+                                                                                        </h4>
+                                                                                        <ul class="list-unstyled info-list">
+                                                                                            <li>
+                                                                                                <label for="collection">
+                                                                                                    Address :
+                                                                                                </label>
+                                                                                                <span class="text_span"><t
+                                                                                                        t-esc="info.restaurant_id.street"/>
+                                                                                                    ,
+                                                                                                </span>
+                                                                                                <span class="text_span">
+                                                                                                    <t t-esc="info.restaurant_id.city"/>
+                                                                                                </span>
+                                                                                                <span class="text_span">,
+                                                                                                    <t t-esc="info.restaurant_id.zip"/>
+                                                                                                </span>
+                                                                                            </li>
+                                                                                            <!--<li>
+                                                                                                <label for="collection">Dining Style :</label>
+                                                                                                <t t-set="count" t-value="0"/>
+                                                                                                <t t-foreach="info.restaurant_id.dining_style_ids" t-as="dining">
+                                                                                                    <t t-set="count" t-value="count+1"/>
+                                                                                                 <span class="hidden counting">,<t t-esc="count"/></span>
+                                                                                                    <span class="text_span"><t t-esc="dining.name"/></span>
+                                                                                                    <t t-if="count &lt; len(info.restaurant_id.dining_style_ids)">
+                                                                                                        <span class="text_span">,</span>
+                                                                                                    </t>
+                                                                                                </t>
+                                                                                            </li>
+                                                                                            <li>
+                                                                                                <label for="collection">Cuisine :</label>
+                                                                                                <t t-set="count" t-value="0"/>
+                                                                                                <t t-foreach="info.restaurant_id.cuisine_ids" t-as="cuisine">
+                                                                                                    <t t-set="count" t-value="count+1"/>
+                                                                                                    <span class="text_span"><t t-esc="cuisine.name"/></span>
+                                                                                                    <t t-if="count &lt; len(info.restaurant_id.cuisine_ids)">
+                                                                                                        <span class="text_span">,</span>
+                                                                                                    </t>
+                                                                                                </t>
+                                                                                            </li>-->
+                                                                                            <li>
+                                                                                                <label for="collection">Date
+                                                                                                    &amp; Time:
+                                                                                                </label>
+                                                                                                <span class="text_span"
+                                                                                                      t-field="info.lead_id.conv_dob"/>
+                                                                                                <span class="text_span"
+                                                                                                      t-esc="info.lead_id.conv_tob"/>
+                                                                                            </li>
+                                                                                            <!--<li>
+                                                                                                <label for="collection">Time :</label>
+                                                                                                <span class="text_span" t-esc="info.lead_id.conv_tob"/>
+                                                                                            </li>-->
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <a style="margin-bottom: 10px;"
+                                                                                           class="btn btn-primary btn-sm btn-inverse empty_cart remove_from_cart"
+                                                                                           title="Remove from Cart">Remove
+                                                                                            from Cart
+                                                                                        </a>
+                                                                                        <table id="booking_menu_table"
+                                                                                               class="table table-striped">
+                                                                                            <tr style="">
+                                                                                                <td style="width:5%;"></td>
+                                                                                                <td style="font-size:10pt;font-weight:bold;width:35%;"
+                                                                                                    class="singleblock_text menu_booking_name">
+                                                                                                    Menu
+                                                                                                </td>
+                                                                                                <td style="width:10%;font-size:10pt;font-weight:bold"
+                                                                                                    class="singleblock_number menu_booking_guests">
+                                                                                                    Guest(s)
+                                                                                                </td>
+                                                                                                <td style="width:10%;font-size:10pt;font-weight:bold"
+                                                                                                    class="singleblock_number menu_booking_nett_rate">
+                                                                                                    Sub Total
+                                                                                                </td>
+                                                                                                <td style="width:10%;font-size:10pt;font-weight:bold"
+                                                                                                    class="singleblock_number menu_booking_vat">
+                                                                                                    VAT
+                                                                                                </td>
+                                                                                                <td style="width:10%;font-size:10pt;font-weight:bold"
+                                                                                                    class="singleblock_number menu_booking_vat">
+                                                                                                    Total
+                                                                                                </td>
+                                                                                                <!--                                                              <td style="width:5%;font-size:10pt;font-weight:bold" class="singleblock_number menu_booking_vat"></td>-->
+                                                                                            </tr>
+                                                                                            <t t-foreach="info.menu_dt_ids"
+                                                                                               t-as="menus">
+                                                                                                <t t-if="not user.is_wlabeling">
+                                                                                                    <tr id="">
+                                                                                                        <t t-if="menus.food_type == 'meal'">
+                                                                                                            <t t-set="tax_amt"
+                                                                                                               t-value="(menus.top_menu_price - ((menus.top_menu_price / (100 + 20.00)) * 100)) * menus.no_of_covers"/>
+                                                                                                            <t t-set="unit_price"
+                                                                                                               t-value="((menus.top_service_charge + menus.top_markup) + ((menus.top_menu_price  / (100 + 20.00)) * 100)) * menus.no_of_covers"/>
+                                                                                                        </t>
+                                                                                                        <t t-if="menus.food_type == 'drink'">
+                                                                                                            <t t-set="tax_amt"
+                                                                                                               t-value="(menus.top_drinks_price - ((menus.top_drinks_price / (100 + 20.00)) * 100)) * menus.no_of_covers"/>
+                                                                                                            <t t-set="unit_price"
+                                                                                                               t-value="((menus.top_service_charge + menus.top_markup) +((menus.top_drinks_price / (100 + 20.00)) * 100)) * menus.no_of_covers"/>
+                                                                                                        </t>
+                                                                                                        <t t-set="tosc_mu"
+                                                                                                           t-value="round((menus.top_service_charge *(menus.top_markup/menus.top_tot_top_price)),1)"/>
+                                                                                                        <t t-if="menus.no_of_covers > 0">
+                                                                                                            <td style="font-size:10pt;display:none;">
+                                                                                                                <input id="db_id"
+                                                                                                                       t-att-value="menus.id"
+                                                                                                                       style=""/>
+                                                                                                            </td>
+                                                                                                            <td style="width:5%" class="text-center"><t t-if="menus.top_markup > 0"><i style="font-size:0.8em;cursor: pointer;" class="main_color toggle-plus fa fa-plus"></i></t></td>
+
+                                                                                                            <td style="font-size:10pt;width:38px;"
+                                                                                                                class="singleblock_text">
+                                                                                                                <t t-esc="menus.menu_id.name"/>
+                                                                                                            </td>
+                                                                                                            <!-- <td style="font-size:10pt;" class="singleblock_number">
+                                                                                                                 <t t-if="menus.food_type == 'meal'">
+                                                                                                                     <t t-set="menu_price" t-value="menus.top_menu_price + menus.top_markup - tosc_mu"/>
+                                                                                                                     <t t-esc="symbol"/><span t-esc="'%.2f' %menu_price"/>
+                                                                                                                 </t>
+                                                                                                                 <t t-if="menus.food_type == 'drink'">
+                                                                                                                     <t t-set="drink_price" t-value="menus.top_drinks_price + menus.top_markup - tosc_mu"/>
+                                                                                                                     <t t-esc="symbol"/><span t-esc="'%.2f' %drink_price"/>
+                                                                                                                 </t>
+                                                                                                             </td>
+                                                                                                             <td style="font-size:10pt;" class="singleblock_number">
+                                                                                                                 <t t-set="srvc_chrg" t-value="menus.top_service_charge + tosc_mu"/>
+                                                                                                                 <t t-esc="symbol"/><span t-esc="'%.2f' %srvc_chrg"/>
+                                                                                                             </td>-->
+                                                                                                            <td style="font-size:10pt;"
+                                                                                                                class="singleblock_number">
+                                                                                                                <t t-esc="menus.no_of_covers"/>
+                                                                                                            </td>
+                                                                                                            <td style="font-size:10pt;"
+                                                                                                                class="singleblock_number">
+                                                                                                                <t t-esc="symbol"/>
+                                                                                                                <t t-esc="'%.2f' %unit_price"/>
+                                                                                                            </td>
+                                                                                                            <td style="font-size:10pt;"
+                                                                                                                class="singleblock_number">
+                                                                                                                <t t-esc="symbol"/>
+                                                                                                                <t t-esc="'%.2f' %tax_amt"/>
+                                                                                                            </td>
+                                                                                                            <td style="font-size:10pt;"
+                                                                                                                class="singleblock_number">
+                                                                                                                <t t-set="tot_price"
+                                                                                                                   t-value="menus.top_tot_top_price + menus.top_markup"/>
+                                                                                                                <t t-esc="symbol"/>
+                                                                                                                <t t-esc="'%.2f' %tot_price"/>
+                                                                                                            </td>
+                                                                                                            <!--<t t-if="menus.menu_id.sc_disc and menus.rp_service_charge > 0">
+                                          <!-\-                                                                      <td class="singleblock_center"><a id="" t-attf-href="/capital_centric/remove_menu/#{menus.id}" title="Service Charge is discretionary. You may choose to remove the same by clicking here" class="bookinginfolink menu_cancel"><span style="font-size:10pt;color:#c00000;font-weight:bold;">X</span></a></td>-\->
+                                                                                                                <td>
+                                                                                                                    <input value="true" class="sc_value hidden"/>
+                                                                                                                </td>
+                                                                                                            </t>-->
+                                                                                                        </t>
+                                                                                                    </tr>
+                                                                                                </t>
+
+                                                                                                <tr id="menu_ids_tr"
+                                                                                                    t-attf-class="#{not user.is_wlabeling and 'hidden' or ''}">
+                                                                                                    <t t-if="menus.food_type == 'meal'">
+                                                                                                        <t t-set="tax_amt"
+                                                                                                           t-value="(menus.top_menu_price - ((menus.top_menu_price / (100 + 20.00)) * 100)) * menus.no_of_covers"/>
+                                                                                                        <t t-set="unit_price"
+                                                                                                           t-value="(menus.top_service_charge + ((menus.top_menu_price / (100 + 20.00)) * 100)) * menus.no_of_covers"/>
+                                                                                                    </t>
+                                                                                                    <t t-if="menus.food_type == 'drink'">
+                                                                                                        <t t-set="tax_amt"
+                                                                                                           t-value="(menus.top_drinks_price - ((menus.top_drinks_price / (100 + 20.00)) * 100)) * menus.no_of_covers"/>
+                                                                                                        <t t-set="unit_price"
+                                                                                                           t-value="(menus.top_service_charge +((menus.top_drinks_price / (100 + 20.00)) * 100)) * menus.no_of_covers"/>
+                                                                                                    </t>
+                                                                                                    <t t-if="menus.no_of_covers > 0">
+                                                                                                        <td style="font-size:10pt;display:none;"
+                                                                                                            id="db_id">
+                                                                                                            <input t-att-value="menus.id"
+                                                                                                                   style=""/>
+                                                                                                        </td>
+                                                                                                        <td style="width:5%"/>
+                                                                                                        <td style="font-size:10pt;width:38px;"
+                                                                                                            class="singleblock_text">
+                                                                                                            <t t-esc="menus.menu_id.name"/>
+                                                                                                        </td>
+                                                                                                        <!--<td style="font-size:10pt;"
+                                                                                                            class="singleblock_number">
+                                                                                                            <t t-if="menus.food_type == 'meal'">
+                                                                                                                <t t-esc="symbol"/>
+                                                                                                                <span t-field="menus.top_menu_price"/>
+                                                                                                            </t>
+                                                                                                            <t t-if="menus.food_type == 'drink'">
+                                                                                                                <t t-esc="symbol"/>
+                                                                                                                <span t-field="menus.top_drinks_price"/>
+                                                                                                            </t>
+                                                                                                        </td>
+                                                                                                        <td style="font-size:10pt;"
+                                                                                                            class="singleblock_number">
+                                                                                                            <t t-esc="symbol"/>
+                                                                                                            <span t-field="menus.top_service_charge"/>
+                                                                                                        </td>-->
+                                                                                                        <td style="font-size:10pt;"
+                                                                                                            class="singleblock_number">
+                                                                                                            <t t-esc="menus.no_of_covers"/>
+                                                                                                        </td>
+                                                                                                        <td style="font-size:10pt;"
+                                                                                                            class="singleblock_number">
+                                                                                                            <t t-esc="symbol"/>
+                                                                                                            <t t-esc="'%.2f' %unit_price"/>
+                                                                                                        </td>
+                                                                                                        <td style="font-size:10pt;"
+                                                                                                            class="singleblock_number">
+                                                                                                            <t t-esc="symbol"/>
+                                                                                                            <t t-esc="'%.2f' %tax_amt"/>
+                                                                                                        </td>
+                                                                                                        <td style="font-size:10pt;"
+                                                                                                            class="singleblock_number">
+                                                                                                            <t t-esc="symbol"/>
+                                                                                                            <t t-esc="'%.2f' %menus.top_tot_top_price"/>
+                                                                                                        </td>
+                                                                                                        <t t-if="menus.menu_id.sc_disc and menus.rp_service_charge > 0">
+                                                                                                            <td>
+                                                                                                                <input value="true"
+                                                                                                                       class="sc_value hidden"/>
+                                                                                                            </td>
+                                                                                                        </t>
+                                                                                                    </t>
+                                                                                                </tr>
+                                                                                            </t>
+                                                                                            <!--<tr id="sc_tr">
+                                                                                                <td colspan="8" style="text-align:right;">
+                                                                                                    <hr id="hr_line" style="margin-top:0;margin-bottom:5px;margin-left:0;float:right;"/>
+                                                                                                    <a class="sc_link" t-attf-href="/capital_centric/remove_menu/#{info.id}" style="font-size:9pt;color:#c00000;cursor:pointer;float:right;" title="Service Charge is discretionary. You may choose to remove the same by clicking here">Remove Service Charge</a>
+                                                                                                </td>
+                                                                                            </tr>-->
+                                                                                        </table>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row order-delivery-address">
+                                                                                    <div class="col-md-12"
+                                                                                         style="padding: 0px;">
+                                                                                        <input class="hidden db_id_info"
+                                                                                               t-att-value="info.id"/>
+                                                                                        <h4 class="section-title pb-10 mb-15"
+                                                                                            style="padding-left: 15px;">
+                                                                                            Booking Details
+                                                                                        </h4>
+                                                                                        <div class="col-sm-6 col-md-4">
+                                                                                            <div class="form-group">
+                                                                                                <label>Booker Name</label>
+                                                                                                <input type="text"
+                                                                                                       name="booker_name"
+                                                                                                       style=""
+                                                                                                       class="form-control guest_input booker_name"
+                                                                                                       id="booker_name"
+                                                                                                       placeholder="Booker Name"
+                                                                                                       t-att-value="info.lead_id.booker_name"/>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <t t-if="not user.is_wlabeling or url == 'www.choicedining.co.uk'">
+                                                                                            <div class="col-sm-6 col-md-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label>
+                                                                                                        <t t-esc="'Partner Number' if url == 'www.choicedining.co.uk' else 'Tour Operator Reference'"/>
+                                                                                                    </label>
+                                                                                                    <input style=""
+                                                                                                           id="cust_ref"
+                                                                                                           class="form-control guest_input cust_ref"
+                                                                                                           type="text"
+                                                                                                           name="cust_ref"
+                                                                                                           placeholder=""
+                                                                                                           t-att-value="info.lead_id.cust_ref or ''"/>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </t>
+                                                                                        <div class="col-sm-6 col-md-4">
+                                                                                            <div class="form-group">
+                                                                                                <label>Notes
+                                                                                                    <i class="fa fa-question-circle"
+                                                                                                       data-toggle="tooltip"
+                                                                                                       title="Please note that the restaurant will do its best to cater to your special dietary requirements. However, these cannot be guaranteed"
+                                                                                                       aria-hidden="true"></i>
+                                                                                                </label>
+                                                                                                <input style="padding-left:0.5%;width:100%"
+                                                                                                       class="form-control guest_input spcl_req"
+                                                                                                       id="spcl_req"
+                                                                                                       type="text"
+                                                                                                       name="spcl_req"
+                                                                                                       placeholder=""
+                                                                                                       t-att-value="info.spcl_req"/>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-6 col-md-4">
+                                                                                            <div class="form-group">
+                                                                                                <label>Enter Guest Details
+                                                                                                </label>
+                                                                                                <select name="title"
+                                                                                                        class="form-control guest_input title"
+                                                                                                        id="title" style="">
+                                                                                                    <option value="">
+                                                                                                        Title..
+                                                                                                    </option>
+                                                                                                    <t t-foreach="title_ids or []"
+                                                                                                       t-as="title">
+                                                                                                        <option t-att-value="title.id"
+                                                                                                                t-att-selected="info.lead_id.title and info.lead_id.title.id == title.id">
+                                                                                                            <t t-esc="title.name"/>
+                                                                                                        </option>
+                                                                                                    </t>
+                                                                                                </select>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-6 col-md-4">
+                                                                                            <div class="form-group">
+                                                                                                <label>First Name</label>
+                                                                                                <input type="text"
+                                                                                                       name="f_name"
+                                                                                                       style=""
+                                                                                                       class="form-control guest_input partner_name"
+                                                                                                       id="partner_name"
+                                                                                                       placeholder="First Name"
+                                                                                                       t-att-value="info.lead_id.partner_name"/>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-6 col-md-4">
+                                                                                            <div class="form-group">
+                                                                                                <label>Second Name</label>
+                                                                                                <input type="text"
+                                                                                                       name="s_name"
+                                                                                                       style=""
+                                                                                                       class="form-control guest_input contact_name"
+                                                                                                       id="contact_name"
+                                                                                                       placeholder="Second Name"
+                                                                                                       t-att-value="info.lead_id.contact_name"/>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-6 col-md-4">
+                                                                                            <div class="form-group">
+                                                                                                <label>Mobile</label>
+                                                                                                <input type="text" style=""
+                                                                                                       class="form-control guest_input mobile"
+                                                                                                       id="mobile"
+                                                                                                       name="mobile"
+                                                                                                       placeholder="Mobile"
+                                                                                                       t-att-value="info.lead_id.mobile"/>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-6 col-md-4">
+                                                                                            <div class="form-group">
+                                                                                                <label>Email</label>
+                                                                                                <input style=""
+                                                                                                       class="form-control guest_input email_from"
+                                                                                                       id="email_from"
+                                                                                                       type="email"
+                                                                                                       name="email"
+                                                                                                       placeholder="Email"
+                                                                                                       t-att-value="info.lead_id.email_from "/>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <ul class="list-unstyled">
+                                                                                            <li>
+                                                                                                <div class="row">
+                                                                                                    <div class="col-md-6 col-xs-6 col-sm-6">
+                                                                                                        <div class="checkbox">
+                                                                                                            <label>
+                                                                                                                <t t-if="not info.lead_id.partner_name">
+                                                                                                                    <input id="terms"
+                                                                                                                           name='terms'
+                                                                                                                           class="guest_input"
+                                                                                                                           type="checkbox"
+                                                                                                                           style="display:inline-block;"/>
+                                                                                                                </t>
+                                                                                                                <t t-if="info.lead_id.partner_name">
+                                                                                                                    <input id="terms"
+                                                                                                                           name="terms"
+                                                                                                                           class="guest_input"
+                                                                                                                           checked="checked"
+                                                                                                                           type="checkbox"
+                                                                                                                           style="display:inline-block;"/>
+                                                                                                                </t>
+                                                                                                                I accept the
+                                                                                                                <a id="tcbutton"
+                                                                                                                   class="main_color"
+                                                                                                                   href="/capital_centric/operator/tc"
+                                                                                                                   target="_blank">
+                                                                                                                    Terms
+                                                                                                                    &amp;
+                                                                                                                    Conditions
+                                                                                                                </a>
+                                                                                                            </label>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-md-6 col-xs-6 col-sm-6">
+                                                                                                        <div class="checkbox">
+                                                                                                            <label>
+                                                                                                                <input name="send_confirmation"
+                                                                                                                       class="guest_input"
+                                                                                                                       id="send_confirmation"
+                                                                                                                       t-att-disabled="user.role=='client_cust' and 'disabled' or None"
+                                                                                                                       t-att-checked="info.lead_id.send_confirmation and 'checked' or None"
+                                                                                                                       type="checkbox"/>
+                                                                                                                Send
+                                                                                                                Confirmation
+                                                                                                                to guest
+                                                                                                            </label>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </li>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </t>
+                                                            </t>
+                                                            <div class="col-md-12" style="padding-left: 0px;">
+                                                                <div class="row">
+                                                                    <form action="/fit_website/guest_details/"
+                                                                          id="guest_details_form" method="Post">
+                                                                        <input name='info_ids' t-att-value="info_ids"
+                                                                               class="hidden"/>
+                                                                        <!--                                                                            <input name='info_id' t-att-value="info.id" class="hidden"/>-->
+                                                                        <input name='from_wch' value="" class="hidden"/>
+                                                                        <input name='type_change' t-att-value="type_change" class="hidden"/>
+                                                                        <input name="total" id="payment_total"
+                                                                               t-att-value="total" class="hidden"/>
+                                                                        <t t-set="operator" t-value="user.partner_id"/>
+                                                                        <t t-if="user.role != 'client'">
+                                                                            <t t-set="operator"
+                                                                               t-value="user.partner_id.parent_id"/>
+                                                                        </t>
+                                                                        <div class="col-md-3 col-xs-6 col-sm-6">
+                                                                            &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                                                            <button type="submit"
+                                                                                    class="btn btn-primary from_wch_button"
+                                                                                    id="continue">
+                                                                                <t t-if="not user.is_group">Make Another
+                                                                                    Booking
+                                                                                </t>
+                                                                                <t t-if="user.is_group">Make Another
+                                                                                    Request
+                                                                                </t>
+                                                                            </button>
+                                                                            &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                                                        </div>
+                                                                        <div class="col-md-3 col-xs-6 col-sm-6">
+                                                                            &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                                                            <button type="button"
+                                                                                    class="btn btn-primary from_wch_button"
+                                                                                    id="complete">
+                                                                                <t t-if="not user.is_group">Complete
+                                                                                    Booking
+                                                                                </t>
+                                                                                <t t-if="user.is_group">Complete
+                                                                                    Request
+                                                                                </t>
+                                                                            </button>
+                                                                            &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                                                        </div>
+                                                                    </form>
+                                                                    <t t-if="operator.payment_type == 'on_purchase'">
+                                                                        <div class="col-md-4"
+                                                                             style="padding-left: 0px;">
+                                                                            <label>Select Payment Type :</label>
+                                                                            <select class="form-control paymentType"
+                                                                                    name="paymentType"
+                                                                                    placeholder="Payment Type"
+                                                                                    onchange="onchange_payment(this)">
+                                                                                <option value="">Select..</option>
+                                                                                <option value="MAES">Maestro</option>
+                                                                                <option value="MSCD">Mastercard Credit
+                                                                                </option>
+                                                                                <option value="DMC">Mastercard Debit
+                                                                                </option>
+                                                                                <option value="VISA">Visa Credit
+                                                                                </option>
+                                                                                <option value="VISD">Visa Debit</option>
+                                                                                <option value="VIED">Visa Electron
+                                                                                </option>
+                                                                            </select>
+                                                                            <p></p>
+                                                                            <span style="font-size:9pt;font-style:italic;color:#c00000;float: right;">
+                                                                                Note: Transaction charge of<t
+                                                                                    t-esc="'%.2f' %operator.debit_charges"/>
+                                                                                % per transaction on Debit Cards and<t
+                                                                                    t-esc="'%.2f' %operator.credit_charges"/>
+                                                                                % on Credit Cards will be applicable.
+                                                                            </span>
+                                                                        </div>
+                                                                    </t>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                    <!--.container-->
+                                </div>
+                                <!--#order-online-->
+                                <!--end order-online-->
+                                <!-- Content End -->
+
+
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+
+        <!--    ==============================================================
+                              Thank You Page from World Pay
+                ==============================================================   -->
+        <!--        Thank You page called from worldpay site changes is done in live -->
+        <template id="thank_you_page" page="True" name="Restaurant Reservations For The Travel Trade">
+            <style>a:hover { text-decoration:underline !important; }</style>
+            <body style="margin:0;">
+                <div id="bookinglayout" style="width:90%;margin:0 auto;">
+                    <t t-set="partner" t-value="user.company_id.partner_id"/>
+                    <t t-set="prim_color" t-value="'#ad4bc2'"/>
+                    <t t-set="sec_color" t-value="'#e6e0ec'"/>
+                    <t t-if="is_wlabel">
+                        <t t-set="partner" t-value="user.partner_id"/>
+                        <t t-set="prim_color" t-value="partner.wbsite_color"/>
+                        <t t-set="sec_color" t-value="partner.submenu_color"/>
+                        <t t-if="user.role != 'client'">
+                            <t t-set="partner" t-value="user.partner_id.parent_id"/>
+                            <t t-set="prim_color" t-value="partner.wbsite_color"/>
+                            <t t-set="sec_color" t-value="partner.submenu_color"/>
+                        </t>
+                    </t>
+                    <a t-attf-href="#{red_url}">
+                        <img style="margin-bottom:1%;" id="img_logo"
+                             t-att-src="img_url + '/website/image?model=res.partner&amp;field=image&amp;id='+str(partner.id)"
+                             height="100" width="150" alt="Logo Capital Centric"/>
+                    </a>
+                    <div t-att-style="'height:32px;background-color:' + prim_color + ';'"/>
+                    <br/>
+                    <br/>
+                    <div id="thank_you"
+                         t-att-style="'background-color:' + sec_color + ';border: 1px solid '+ sec_color +';width:100%;margin:0 auto;color:#c00000;border-radius:5px;text-align:center;min-height:40px;font-size:11pt;font-family:Arial;'">
+                        <t t-if="response == 'for_booking'">
+                            <p>Thank you, your booking has been confirmed.</p>
+                        </t>
+                        <t t-if="response == 'success'">
+                            <p>Thank you, your payment was successful.</p>
+                            <p>WorldPay Transaction ID:
+                                <t t-esc="transId"/>
+                            </p>
+                        </t>
+                        <t t-if="response == 'failure'">
+                            <span>Thank you, your payment has been cancelled.</span>
+                        </t>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div style="float: right;">
+                        <a id="proceed_link"
+                           t-att-style="'text-decoration:none;font-weight:bold;color:' + prim_color + ';font-family:Arial;'"
+                           t-attf-href="#{red_url}">Click here to proceed
+                        </a>
+                        <span>
+                            <b>OR</b>
+                        </span>
+                        <a id="proceed_link"
+                           t-att-style="'text-decoration:none;font-weight:bold;color:' + prim_color + ';font-family:Arial;'"
+                           t-attf-href="#{red2_url}">Click here to print voucher or amend the booking
+                        </a>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                </div>
+                <div style="bottom:0;background-color:black;width:100%;height:40px;font-family:Arial;position:fixed;bottom:0;">
+                    <span style="display:table;font-size:9pt;color:white;padding-top:0.3cm; margin:0 auto;">Copyright ©
+                        2014 Season &amp; Vine Ltd. All Rights Reserved. This site is compatible with IE Version (9.0
+                        &amp; above), Mozilla Firefox and Google Chrome browsers.
+                    </span>
+                </div>
+            </body>
+        </template>
+
+        <!--    ==============================================================
+                                      Thank U Page
+                ==============================================================   -->
+        <!--        this template is called on (monthly,deposite,pav_adv) modes only-->
+        <template id="thnk_u_pg" page="True" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="fit_website.capitalcentric_layout">
+                <t t-set="ref_content">
+                    <div class="main-wrapper scrollspy-container">
+                        <!-- start hero-header -->
+                        <div class="breadcrumb-wrapper">
+                            <div class="container">
+                                <ol class="breadcrumb-list booking-step">
+                                    <li>
+                                        <a href="/">Home</a>
+                                    </li>
+                                    <li>
+                                        <span>Booking Complete</span>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                        <!-- end hero-header -->
+                        <div class="section sm">
+                            <div class="cfo-area">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="contact-details thankyou text-center clearfix">
+                                                <t t-if="response == 'for_booking'">
+                                                    <span>
+                                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                                    </span>
+                                                    <h2>Thank you, your booking has been confirmed.<br/>
+                                                        <t t-if="not user.is_wlabeling">
+                                                            Please go to MY ACCOUNTS -> BOOKINGS to make any amendments or print your voucher.
+                                                        </t>
+                                                    </h2>
+                                                    <div>
+                                                        <a href="/" id="go_back_button" class="btn btn-primary">Continue Shopping</a>
+                                                        <t t-if="not user.is_wlabeling">
+                                                            <a href="/capital_centric/operator/bookings" id="go_back_button" class="btn btn-primary">Go To My Account</a>
+                                                        </t>
+                                                    </div>
+                                                </t>
+                                                <t t-if="response == 'failure'">
+                                                    <span>
+                                                        <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                                                    </span>
+                                                    <h2>Thank you, your payment has been cancelled.</h2>
+                                                    <div>
+                                                        <a href="/" id="go_back_button" class="btn btn-primary">Continue Shopping</a>
+                                                        <t t-if="not user.is_wlabeling">
+                                                            <a href="/capital_centric/operator/bookings" id="go_back_button" class="btn btn-primary">Go To My Account</a>
+                                                        </t>
+                                                    </div>
+                                                </t>
+                                                <div class="font-icon-list col-md-2 col-sm-3 col-xs-6 col-xs-6">
+
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <!-- END OF CONTACT DETAILS SECTION -->
+                                        </div>
+                                        <!-- End of CFO order list -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</openerp>

@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="view_cc_account_vat" model="ir.ui.view"> 
+            <field name="name">view_cc_account_vat</field>
+            <field name="model">cc.account.vat.details</field>
+            <field name="arch" type="xml">
+                <form string="VAT Details" version="7.0">
+                    <group>
+                        <label for="period_id"/>
+                        <div>
+                            <field name="period_id" class="oe_inline"/>
+                            <label string="(If you do not select period it will take all open periods)" class="oe_inline"/>
+                        </div>
+                        <label for="period_to"/>
+                        <div>
+                        <field name="period_to" class="oe_inline"/></div>
+                        <field name="target_move" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button string="Print" name="print_report" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/> 
+                    </footer>
+                </form>
+            </field>
+        </record> 
+        
+        <record id="action_cc_account_vat" model="ir.actions.act_window">
+            <field name="name">VAT Details</field>
+            <field name="res_model">cc.account.vat.details</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="view_id" ref="view_cc_account_vat"/>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem
+            icon="STOCK_INDENT"
+            action="action_cc_account_vat"
+            id="menu_action_cc_account_vat"
+            parent="account.menu_finance_reports"
+            
+            sequence="12"/>
+        
+        
+        <!-- Profit Commission -->
+        <record id="view_cc_profit_rep" model="ir.ui.view"> 
+            <field name="name">view_cc_profit_rep</field>
+            <field name="model">cc.profit.commission</field>
+            <field name="arch" type="xml">
+                <form string="Profit/Commission" version="7.0">
+                    <group col="4" colspan="2">
+                        <field name="date_filter" required="1"/> 
+                        <field name="service_typ" required="1"/>
+                        <field name="start_dt" attrs="{'invisible':[('date_filter','=',False)],'required':[('date_filter','!=',False)]}"/>
+                        <field name="end_dt" attrs="{'invisible':[('date_filter','=',False)],'required':[('date_filter','!=',False)]}"/>
+                        <field name="stage_ids" widget="many2many_tags" />  
+                        <field name='user_ids' widget="many2many_tags" domain="[('role','in',['admin','bo'])]"/>
+                        <field name='salesp_ids' widget="many2many_tags" domain="[('role','=','sp')]"/>
+                        <field name="orderby" required="1"/>
+                        <field name="is_completed"/>
+                        <field name="jasper_output" required="1"/>
+                    </group>
+                    <footer>
+                        <button string="Print" name="print_report" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>                
+            </field>
+        </record> 
+        
+        <record id="action_view_cc_profit_rep" model="ir.actions.act_window">
+            <field name="name">Profit/Commission</field>
+            <field name="res_model">cc.profit.commission</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="view_id" ref="view_cc_profit_rep"/>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem
+            icon="STOCK_INDENT"
+            action="action_view_cc_profit_rep"
+            id="menu_cc_profit_rep"
+            parent="base.next_id_64"            
+            sequence="11"/>
+        
+        <!-- booking details -->
+        <record id="view_cc_enq_det" model="ir.ui.view"> 
+            <field name="name">view_cc_enq_det</field>
+            <field name="model">cc.enquiry.details</field>
+            <field name="arch" type="xml">
+                <form string="Enquiry Details" version="7.0">
+                    <group col="4" colspan="2">
+                        <field name="date_filter"/> 
+                        <field name="service_typ"/>
+                        <field name="start_dt" attrs="{'invisible':[('date_filter','=',False)],'required':[('date_filter','!=',False)]}"/>
+                        <field name="end_dt" attrs="{'invisible':[('date_filter','=',False)],'required':[('date_filter','!=',False)]}"/>
+                        <field name="venue_filter"/>
+                        <field name="customer_id" attrs="{'invisible':[('service_typ','in',['noontea',False])]}" domain="[('partner_type','=','client')]" options="{'limit':500}"/>
+                        <field name="customer" attrs="{'invisible':[('service_typ','in',['venue',False])]}"/> 
+                        <field name="venue_id" domain="[('type','=','default')]" options="{'limit':1000}" attrs="{'invisible':[('venue_filter','in',['group',False])]}"/>
+                        <field name="venue_inv_id" domain="[('type','=','invoice'),('cc_company_id','=',False),('partner_type','=','venue')]" options="{'limit':1000}" attrs="{'invisible':[('venue_filter','in',['restaurant',False])]}"/>                        
+                        <field name="stage_id"/>
+                        <field name="orderby" required="1"/>        
+                        <field name="passen_type"/>
+                        <field name="jasper_output" required="1"/>
+                    </group>
+                    <footer>
+                        <button string="Print" name="print_report" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>                
+            </field>
+        </record>
+        
+        <record id="action_view_cc_enq_det" model="ir.actions.act_window">
+            <field name="name">Enquiry Details</field>
+            <field name="res_model">cc.enquiry.details</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="view_id" ref="view_cc_enq_det"/>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem
+            icon="STOCK_INDENT"
+            action="action_view_cc_enq_det"
+            id="menu_action_view_cc_enq_dett"
+            parent="base.next_id_64"            
+            sequence="12"/>
+    
+        <!-- Invoice Analysis -->
+        <record id="view_cc_inv_analysis" model="ir.ui.view"> 
+            <field name="name">view_cc_inv_analysis</field>
+            <field name="model">cc.invoice.analysis</field>
+            <field name="arch" type="xml">
+                <form string="Invoice Analysis" version="7.0">
+                    <group col="4" colspan="2">
+                        <field name="start_dt" />
+                        <field name="end_dt" />
+                        <field name="inv_typ"/>
+                        <field name="service_typ"/>
+                        <field name="partner_id"/>
+                        <field name="passen_type"/>
+                        <field name="is_draft"/>
+                        <field name="is_open"/>
+                        <field name="is_paid"/>
+                        <field name="is_bookingdt"/>
+                        <field name="jasper_output" required="1"/>
+                    </group>
+                    <footer>
+                        <button string="Print" name="print_report" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>                
+            </field>
+        </record>
+        
+        <record id="action_cc_inv_analysis" model="ir.actions.act_window">
+            <field name="name">Invoice Analysis</field>
+            <field name="res_model">cc.invoice.analysis</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="view_id" ref="view_cc_inv_analysis"/>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem
+            icon="STOCK_INDENT"
+            action="action_cc_inv_analysis"
+            id="menu_cc_inv_analysis"
+            parent="base.next_id_64"            
+            sequence="12"/>
+        
+        <!-- White Label Commission Report -->
+        <record id="view_wlabel_cmm_rpt" model="ir.ui.view"> 
+            <field name="name">view_wlabel_cmm_rpt</field>
+            <field name="model">cc.wlabel.comision.rpt.wiz</field>
+            <field name="arch" type="xml">
+                <form string="WhiteLabel Commission Report" version="7.0">
+                    <group col="4" colspan="2">
+                        <field name="start_dt" required="1" on_change="onchange_startdt(start_dt)"/>                        
+                        <field name="end_dt" required="1"/>        
+                        <field name="partner_id"/>
+                        <field name="jasper_output" required="1"/>
+                    </group>
+                    <footer>
+                        <button string="Print" name="print_report" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>                
+            </field>
+        </record>
+        
+        <record id="action_wlabel_cmm_rpt" model="ir.actions.act_window">
+            <field name="name">WhiteLabel Commission Report</field>
+            <field name="res_model">cc.wlabel.comision.rpt.wiz</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="view_id" ref="view_wlabel_cmm_rpt"/>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem
+            icon="STOCK_INDENT"
+            action="action_wlabel_cmm_rpt"
+            id="menu_wlabel_cmm_rpt"
+            parent="base.next_id_64"            
+            sequence="13"/>
+    
+        <!-- Sales Statement Report -->
+        <record id="view_partner_ledger_rpt" model="ir.ui.view"> 
+            <field name="name">view_partner_ledger_rpt</field>
+            <field name="model">cc.partner.ledger.rpt.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Sales Statement" version="7.0">
+                    <group col="4" colspan="2">
+                        <field name="start_dt" required="1"/>                        
+                        <field name="end_dt" required="1"/>        
+                        <field name="partner_id"/>
+                        <field name="jasper_output" required="1"/>
+                    </group>
+                    <footer>
+                        <button string="Print" name="print_report" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>                
+            </field>
+        </record>
+        
+        <record id="action_partner_ledger_rpt" model="ir.actions.act_window">
+            <field name="name">Sales Statement</field>
+            <field name="res_model">cc.partner.ledger.rpt.wiz</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="view_id" ref="view_partner_ledger_rpt"/>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem
+            icon="STOCK_INDENT"
+            action="action_partner_ledger_rpt"
+            id="menu_partner_ledger_rpt"
+            parent="base.next_id_64"            
+            sequence="13"/>
+        
+       
+        <!--        Contacts Reports-->
+        
+        <record id="cc_contacts_report" model="ir.ui.view">
+            <field name="name">cc_contacts_report</field>
+            <field name="model">contacts.report</field>
+            <field name="arch" type="xml">
+                <form string="Contacts Report" version="7.0">
+                    <group col="4" colspan="2">
+                        <field name="start_dt" required="1"/> 
+                        <field name="end_dt" required="1"/>
+                        <field name="type" required="1" on_change="onchange_type(type)"/>
+                        <field name="partner_id"/>                        
+                        <field name='categ_ids' widget="many2many_tags"/>
+                        <field name="output_type" required="1"/>
+                    </group>
+                    <footer>
+                        <button name="print_report" string="Print" type="object"
+                            class="oe_highlight"/> or <button string="Cancel" class="oe_link"
+                                special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_contacts_report" model="ir.actions.act_window">
+            <field name="name">Contacts Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">contacts.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem id="menu_cc_contacts_report" name="Contacts Report" action="action_contacts_report" parent="base.next_id_64"/> 
+ 
+        <!--        Invoice Summary       -->
+        
+        <record id="cc_inv_sumry_report" model="ir.ui.view">
+            <field name="name">cc_inv_sumry_report</field>
+            <field name="model">invoice.summary.rpt</field>
+            <field name="arch" type="xml">
+                <form string="Invoice Summary" version="7.0">
+                    <group col="4" colspan="2">
+                        <field name="date_filter" required="1"/>
+                        <newline/>
+                        <field name="start_dt" required="1"/> 
+                        <field name="end_dt" required="1"/>                        
+                        <field name="partner_id"/>
+                        <field name="srv_type" required="1"/>                        
+                        <field name='is_draft'/>
+                        <field name="output_type" required="1"/>
+                    </group>
+                    <footer>
+                        <button name="print_report" string="Print" type="object"
+                            class="oe_highlight"/> or <button string="Cancel" class="oe_link"
+                                special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_inv_sumry_report" model="ir.actions.act_window">
+            <field name="name">Invoice Summary</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">invoice.summary.rpt</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem id="menu_inv_sumry_report" name="Invoice Summary" action="action_inv_sumry_report" parent="base.next_id_64"/> 
+
+                <!--       Referral Links Summary      -->
+
+        <record id="cc_links_sumry_report" model="ir.ui.view">
+            <field name="name">cc_links_sumry_report</field>
+            <field name="model">referral.link.summary</field>
+            <field name="arch" type="xml">
+                <form string="Referral Links Summary" version="7.0">
+                    <group col="4" colspan="2">
+                        <field name="start_dt" required="1"/>
+                        <field name="end_dt" required="1"/>
+                        <field name="partner_id"/>
+                        <field name="output_type" required="1"/>
+                    </group>
+                    <footer>
+                        <button name="print_report" string="Print" type="object"
+                            class="oe_highlight"/> or <button string="Cancel" class="oe_link"
+                                special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_links_sumry_report" model="ir.actions.act_window">
+            <field name="name">Referral Links Summary</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">referral.link.summary</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_links_sumry_report" name="Referral Links Summary" action="action_links_sumry_report" parent="base.next_id_64"/>
+        
+        <!--        Month Wise Sales Earnings Summary /Details     -->
+
+        <record id="cc_salesearnings_report" model="ir.ui.view">
+            <field name="name">cc_salesearnings_report</field>
+            <field name="model">cc.month.sales.earnings</field>
+            <field name="arch" type="xml">
+                <form string="Month Wise Sales Earnings" version="7.0">
+                    <group col="4" colspan="2">
+                        <field name="date_filter" required="1" on_change="onchange_date_filter(date_filter)"/>
+                        <newline/>
+                        <field name="start_dt" attrs="{'invisible':[('date_filter','=','period')],'required':[('date_filter','!=','period')]}"/>
+                        <field name="end_dt" attrs="{'invisible':[('date_filter','=','period')],'required':[('date_filter','!=','period')]}"/>
+                        <field name="period_id" attrs="{'invisible':[('date_filter','!=','period')],'required':[('date_filter','=','period')]}"/>
+                        <field name="period_to"  attrs="{'invisible':[('date_filter','!=','period')],'required':[('date_filter','=','period')]}"/>
+                        <field name="is_salesamt" attrs="{'invisible':[('type','=','summary')]}"/>
+                        <field name="is_refundamt"  attrs="{'invisible':[('type','=','summary')]}"/>
+                        <field name="is_purchaseamt"  attrs="{'invisible':[('type','=','summary')]}"/>
+                        <field name="is_debitamt"  attrs="{'invisible':[('type','=','summary')]}"/>
+                        <field name="output_type" required="1"/>
+                        <field name="type" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button name="print_report" string="Print" type="object"
+                            class="oe_highlight"/> or <button string="Cancel" class="oe_link"
+                                special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- ======================Action Month Wise Sales Earnings Summary ===============================-->
+
+        <record id="action_slearnings_sumry_report" model="ir.actions.act_window">
+            <field name="name">Month Wise Sales Earnings Summary</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">cc.month.sales.earnings</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="context">{'default_type':'summary'}</field>
+            <field name="target">new</field>
+        </record>
+        <record id="action_slearning_form_view" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="cc_salesearnings_report"/>
+            <field name="act_window_id" ref="action_slearnings_sumry_report"/>
+        </record>
+
+        <menuitem id="menu_cc_salesearnings_sumry_report"
+                  name="M.W.S.E Summary"
+                  action="action_slearnings_sumry_report"
+                  parent="base.next_id_64"/>
+
+
+        <!--     Action Month Wise Sales Earnings Details      -->
+        <record id="action_slearnings_dtls_report" model="ir.actions.act_window">
+            <field name="name">Month Wise Sales Earnings Details</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">cc.month.sales.earnings</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="context">{'default_type':'details','default_is_salesamt':1,
+                                    'default_is_refundamt':1,'default_is_purchaseamt':1,'default_is_debitamt':1}</field>
+            <field name="target">new</field>
+        </record>
+        <record id="action_slearning_form_view2" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="cc_salesearnings_report"/>
+            <field name="act_window_id" ref="action_slearnings_dtls_report"/>
+        </record>
+
+        <menuitem id="menu_cc_salesearnings_dtls_report"
+                  name="M.W.S.E Details"
+                  action="action_slearnings_dtls_report"
+                  parent="base.next_id_64"/>
+
+        <record id="cc_accounting_report_view" model="ir.ui.view">
+            <field name="name">CC Accounting Report</field>
+            <field name="model">accounting.report</field>
+            <field name="inherit_id" ref="account_financial_report_webkit.account_report_general_ledger_view_webkit"/>
+            <field name="arch" type="xml">
+                <group string="Dates"  position="attributes">
+                    <attribute name="attrs">{'invisible':[('filter_cmp', 'not in ', ['filter_date','filter_create_date'])]}</attribute>
+                </group>
+            </field>
+        </record>
+
+
+    </data>
+</openerp>

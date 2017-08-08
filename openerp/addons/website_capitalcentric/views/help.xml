@@ -1,0 +1,1195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+<!--    ==============================================================          
+                               Help  ( For T.O.)           
+        ==============================================================   -->      
+    	<template id="help_form" page="True" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="website_capitalcentric.capitalcentric_layout">  
+                <t t-set="ref_content">
+                	<t t-set="head">
+	                    <script type="text/javascript" src="/website_capitalcentric/static/src/lib/jquery.expander.js"/>
+	                    <link rel='stylesheet' href='/website_capitalcentric/static/src/css/search.css'/>
+                		<style>
+                			#wrapwrap
+                			{
+                				height: 100%;
+                				margin: 0 auto -40px;
+                			}
+                		</style>   
+                		<script type="text/javascript" src="/website_capitalcentric/static/src/js/help.js"/>
+                	</t>
+                    <style>
+						 /* Font Definitions */
+						 @font-face
+							{font-family:Wingdings;
+							panose-1:5 0 0 0 0 0 0 0 0 0;}
+						@font-face
+							{<!--font-family:"Cambria Math";-->
+							panose-1:2 4 5 3 5 4 6 3 2 4;}
+						@font-face
+							{<!--font-family:Tahoma;-->
+							panose-1:2 11 6 4 3 5 4 4 2 4;}
+						 /* Style Definitions */
+						 p.MsoNormal, li.MsoNormal, div.MsoNormal
+							{margin:0in;
+							margin-bottom:.0001pt;
+							text-align:justify;
+							line-height:15.0pt;
+							font-size:10.0pt;
+							<!--font-family:"Arial";-->}
+						h1
+							{mso-style-name:"Heading 1\,KJL\:"main"\,H1\,h1\,l1\,Section Head\,1\.0\,Chapter Heading\,Head 1 \(Chapter heading\)\,Titre§\,1\,Section Title\,OdsKap1\,1 ghost\,g\,ghost\,Attribute Heading 1\,Heading A\,Heading A1\,Header 1\,H11\,H12\,H13\,H14\,H15\,H16\,H17\,H18\,H19\,H110\,H111\,H112\,H113\,H114\,H115\,H116";
+							margin-top:16.0pt;
+							margin-right:0in;
+							margin-bottom:0in;
+							margin-left:.5in;
+							margin-bottom:.0001pt;
+							text-align:justify;
+							text-indent:-.5in;
+							line-height:15.0pt;
+							page-break-after:avoid;
+							font-size:10.0pt;
+							font-weight:bold;
+<!--							font-family:"Arial";-->
+						<!--	font-variant:small-caps;-->
+						  }                    
+						h2
+							{mso-style-name:"Heading 2\,KJL\:1st Level\,h2\,Head 2\,l2\,UNDERRUBRIK 1-2\,H2\,TitreProp\,2\,Header 2\,ITT t2\,PA Major Section\,Livello 2\,R2\,H21\,Heading 2 Hidden\,Head1\,heading 2\,\(Alt+2\)\,Attribute Heading 2\,Attribute Heading 21\,H22\,H23\,H211\,H221\,H24\,H212\,H222\,H231\,H2111\,H2211\,H25";
+							mso-style-link:"Heading 2 Char";
+							margin-top:14.0pt;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							<!--margin-left:.5in;-->
+							<!--text-align:justify;-->
+						<!--	text-indent:-.5in;-->
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							color:black;
+							font-weight:normal;}
+						h3
+							{mso-style-name:"Heading 3\,KJL\:2nd Level\,3";
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:77.95pt;
+							text-align:justify;
+							text-indent:-28.35pt;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							font-weight:normal;}
+						h4
+							{mso-style-name:"Heading 4\,KJL\:3rd Level";
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:113.4pt;
+							text-align:justify;
+							text-indent:-28.35pt;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							font-weight:normal;}
+						h5
+							{margin-top:0in;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:2.0in;
+							text-align:justify;
+							text-indent:-.5in;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							font-weight:normal;}
+						h6
+							{margin-top:8.0pt;
+							margin-right:0in;
+							margin-bottom:4.0pt;
+							margin-left:0in;
+							line-height:15.0pt;
+							page-break-after:avoid;
+							font-size:10.0pt;
+							<!--font-family:"Arial";-->}
+						p.MsoHeading7, li.MsoHeading7, div.MsoHeading7
+							{margin:0in;
+							margin-bottom:.0001pt;
+							line-height:15.0pt;
+							page-break-after:avoid;
+							font-size:12.0pt;
+<!--							font-family:"Arial";-->
+							font-variant:small-caps;
+							color:black;
+							font-weight:bold;}
+						p.MsoHeading8, li.MsoHeading8, div.MsoHeading8
+							{margin-top:30.0pt;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:0in;
+							line-height:15.0pt;
+							page-break-before:always;
+							page-break-after:avoid;
+							border:none;
+							padding:0in;
+							font-size:14.0pt;
+<!--							font-family:"Arial";-->
+							font-variant:small-caps;
+							font-weight:bold;}
+						p.MsoToc1, li.MsoToc1, div.MsoToc1
+							{margin-top:12.0pt;
+							margin-right:60.95pt;
+							margin-bottom:0in;
+							margin-left:35.45pt;
+							margin-bottom:.0001pt;
+							text-align:justify;
+							text-indent:-35.45pt;
+							line-height:13.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							font-variant:small-caps;}
+						p.MsoToc2, li.MsoToc2, div.MsoToc2
+							{margin-top:6.0pt;
+							margin-right:60.95pt;
+							margin-bottom:0in;
+							margin-left:35.45pt;
+							margin-bottom:.0001pt;
+							text-align:justify;
+							text-indent:-35.45pt;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.MsoToc3, li.MsoToc3, div.MsoToc3
+							{margin-top:0in;
+							margin-right:60.95pt;
+							margin-bottom:0in;
+							margin-left:35.45pt;
+							margin-bottom:.0001pt;
+							text-align:justify;
+							text-indent:-35.45pt;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.MsoCommentText, li.MsoCommentText, div.MsoCommentText
+							{margin:0in;
+							margin-bottom:.0001pt;
+							line-height:10.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.MsoHeader, li.MsoHeader, div.MsoHeader
+							{margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:0in;
+							text-align:justify;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.MsoFooter, li.MsoFooter, div.MsoFooter
+							{margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:0in;
+							text-align:justify;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						<!--a:link, span.MsoHyperlink
+							{color:blue;
+							text-decoration:underline;}
+						a:visited, span.MsoHyperlinkFollowed
+							{color:purple;
+							text-decoration:underline;}-->
+						p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+							{mso-style-link:"Balloon Text Char";
+							margin:0in;
+							margin-bottom:.0001pt;
+							text-align:justify;
+							font-size:8.0pt;
+<!--							font-family:"Tahoma","sans-serif";-->
+							}
+						p.Bodyclause, li.Bodyclause, div.Bodyclause
+							{mso-style-name:"Body  clause";
+							margin-top:6.0pt;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:.5in;
+							text-align:justify;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Bodysubclause, li.Bodysubclause, div.Bodysubclause
+							{mso-style-name:"Body  sub clause";
+							margin-top:12.0pt;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:.5in;
+							text-align:justify;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Bodypara, li.Bodypara, div.Bodypara
+							{mso-style-name:"Body para";
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:77.95pt;
+							text-align:justify;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Bodysubpara, li.Bodysubpara, div.Bodysubpara
+							{mso-style-name:"Body sub para";
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:113.4pt;
+							text-align:justify;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Definitions, li.Definitions, div.Definitions
+							{mso-style-name:Definitions;
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:.5in;
+							text-align:justify;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Sch"main"head, li.Sch"main"head, div.Sch"main"head
+							{mso-style-name:"Sch   "main" head";
+							margin-top:12.0pt;
+							margin-right:0in;
+							margin-bottom:.25in;
+							margin-left:.25in;
+							text-align:center;
+							text-indent:-.25in;
+							line-height:15.0pt;
+							page-break-before:always;
+							page-break-after:avoid;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							font-weight:bold;}
+						p.Schparthead, li.Schparthead, div.Schparthead
+							{mso-style-name:"Sch   part head";
+							margin-top:12.0pt;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:.5in;
+							text-align:center;
+							text-indent:-.5in;
+							line-height:15.0pt;
+							page-break-after:avoid;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							font-weight:bold;}
+						p.Sch1styleclause, li.Sch1styleclause, div.Sch1styleclause
+							{mso-style-name:"Sch  \(1style\) clause";
+							margin-top:16.0pt;
+							margin-right:0in;
+							margin-bottom:0in;
+							margin-left:.5in;
+							margin-bottom:.0001pt;
+							text-align:justify;
+							text-indent:-.5in;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							font-variant:small-caps;
+							font-weight:bold;}
+						p.Sch1stylesubclause, li.Sch1stylesubclause, div.Sch1stylesubclause
+							{mso-style-name:"Sch  \(1style\) sub clause";
+							margin-top:14.0pt;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:.5in;
+							text-align:justify;
+							text-indent:-.5in;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							color:black;}
+						p.Sch1stylepara, li.Sch1stylepara, div.Sch1stylepara
+							{mso-style-name:"Sch \(1style\) para";
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:77.95pt;
+							text-align:justify;
+							text-indent:-28.35pt;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Sch1stylesubpara, li.Sch1stylesubpara, div.Sch1stylesubpara
+							{mso-style-name:"Sch \(1style\) sub para";
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:113.4pt;
+							text-align:justify;
+							text-indent:-28.35pt;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Sch2style1, li.Sch2style1, div.Sch2style1
+							{mso-style-name:"Sch \(2style\)  1";
+							margin-top:14.0pt;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:35.45pt;
+							text-align:justify;
+							text-indent:-35.45pt;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Sch2stylea, li.Sch2stylea, div.Sch2stylea
+							{mso-style-name:"Sch \(2style\) \(a\)";
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:77.95pt;
+							text-align:justify;
+							text-indent:-28.35pt;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Sch2stylei, li.Sch2stylei, div.Sch2stylei
+							{mso-style-name:"Sch \(2style\) \(i\)";
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:113.4pt;
+							text-align:justify;
+							text-indent:-28.35pt;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.1Parties, li.1Parties, div.1Parties
+							{mso-style-name:"\(1\) Parties";
+							margin-top:6.0pt;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:.5in;
+							text-align:justify;
+							text-indent:-.5in;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.ABackground, li.ABackground, div.ABackground
+							{mso-style-name:"\(A\) Background";
+							margin-top:6.0pt;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:.5in;
+							text-align:justify;
+							text-indent:-.5in;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						span.Def
+							{mso-style-name:Def;
+							color:black;
+							font-weight:bold;}
+						p.1stIntroHeadings, li.1stIntroHeadings, div.1stIntroHeadings
+							{mso-style-name:1stIntroHeadings;
+							margin-top:6.0pt;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:0in;
+							text-align:justify;
+							line-height:15.0pt;
+							font-size:12.0pt;
+<!--							font-family:"Arial";-->
+							font-variant:small-caps;
+							font-weight:bold;}
+						p.Scha, li.Scha, div.Scha
+							{mso-style-name:"Sch a\)";
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:0in;
+							margin-left:.5in;
+							margin-bottom:.0001pt;
+							text-align:justify;
+							text-indent:-.25in;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.XExecution, li.XExecution, div.XExecution
+							{mso-style-name:"X Execution";
+							margin-top:0in;
+							margin-right:22.95pt;
+							margin-bottom:0in;
+							margin-left:0in;
+							margin-bottom:.0001pt;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							color:black;}
+						p.Comments, li.Comments, div.Comments
+							{mso-style-name:Comments;
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:14.2pt;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							font-style:italic;}
+						p.CoversheetTitle, li.CoversheetTitle, div.CoversheetTitle
+							{mso-style-name:"Coversheet Title";
+							margin-top:24.0pt;
+							margin-right:0in;
+							margin-bottom:24.0pt;
+							margin-left:0in;
+							text-align:center;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							font-variant:small-caps;
+							font-weight:bold;}
+						p.CoversheetParagraph, li.CoversheetParagraph, div.CoversheetParagraph
+							{mso-style-name:"Coversheet Paragraph";
+							margin:0in;
+							margin-bottom:.0001pt;
+							text-align:center;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						span.Defterm
+							{mso-style-name:"Defterm";
+							color:black;
+							font-weight:bold;}
+						p.NewPage, li.NewPage, div.NewPage
+							{mso-style-name:"New Page";
+							margin:0in;
+							margin-bottom:.0001pt;
+							text-align:justify;
+							line-height:15.0pt;
+							page-break-before:always;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.FrontInformation, li.FrontInformation, div.FrontInformation
+							{mso-style-name:FrontInformation;
+							margin:0in;
+							margin-bottom:.0001pt;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							color:black;}
+						span.defitem
+							{mso-style-name:defitem;}
+						span.smallcaps
+							{mso-style-name:smallcaps;
+							font-variant:small-caps;
+							font-weight:bold;}
+						p.Sch"main"headinc, li.Sch"main"headinc, div.Sch"main"headinc
+							{mso-style-name:"Sch   "main" head inc";
+							margin-top:.25in;
+							margin-right:0in;
+							margin-bottom:.25in;
+							margin-left:0in;
+							text-align:justify;
+							text-indent:0in;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							font-weight:bold;}
+						p.Sch"main"headsingle, li.Sch"main"headsingle, div.Sch"main"headsingle
+							{mso-style-name:"Sch "main" head single";
+							margin-top:12.0pt;
+							margin-right:0in;
+							margin-bottom:.25in;
+							margin-left:.5in;
+							text-align:center;
+							text-indent:-.5in;
+							line-height:15.0pt;
+							page-break-before:always;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							font-weight:bold;}
+						p.Sch"main"headincsingle, li.Sch"main"headincsingle, div.Sch"main"headincsingle
+							{mso-style-name:"Sch   "main" head inc single";
+							margin-top:12.0pt;
+							margin-right:0in;
+							margin-bottom:.25in;
+							margin-left:.5in;
+							text-align:justify;
+							text-indent:-.5in;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							font-weight:bold;}
+						p.Testimonium, li.Testimonium, div.Testimonium
+							{mso-style-name:Testimonium;
+							margin-top:.25in;
+							margin-right:0in;
+							margin-bottom:.25in;
+							margin-left:0in;
+							text-align:justify;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.App"main"headsingle, li.App"main"headsingle, div.App"main"headsingle
+							{mso-style-name:"App "main" head single";
+							margin-top:12.0pt;
+							margin-right:0in;
+							margin-bottom:.25in;
+							margin-left:.25in;
+							text-align:center;
+							text-indent:-.25in;
+							line-height:15.0pt;
+							page-break-before:always;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							font-weight:bold;}
+						p.App"main"head, li.App"main"head, div.App"main"head
+							{mso-style-name:"App   "main" head";
+							margin-top:12.0pt;
+							margin-right:0in;
+							margin-bottom:.25in;
+							margin-left:.25in;
+							text-align:center;
+							text-indent:-.25in;
+							line-height:15.0pt;
+							page-break-before:always;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							font-weight:bold;}
+						p.CoversheetTitle2, li.CoversheetTitle2, div.CoversheetTitle2
+							{mso-style-name:"Coversheet Title2";
+							margin-top:24.0pt;
+							margin-right:0in;
+							margin-bottom:24.0pt;
+							margin-left:0in;
+							text-align:center;
+							line-height:15.0pt;
+							font-size:14.0pt;
+<!--							font-family:"Arial";-->
+							font-variant:small-caps;
+							font-weight:bold;}
+						p.Headingreg, li.Headingreg, div.Headingreg
+							{mso-style-name:"Heading reg";
+							margin-top:16.0pt;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:.5in;
+							text-align:justify;
+							text-indent:-.5in;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.HeadingTitle, li.HeadingTitle, div.HeadingTitle
+							{mso-style-name:HeadingTitle;
+							margin-top:12.0pt;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:0in;
+							text-align:justify;
+							line-height:15.0pt;
+							font-size:12.0pt;
+<!--							font-family:"Arial";-->
+							font-weight:bold;}
+						p.BackSubClause, li.BackSubClause, div.BackSubClause
+							{mso-style-name:BackSubClause;
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:0in;
+							margin-left:77.75pt;
+							margin-bottom:.0001pt;
+							text-align:justify;
+							text-indent:-28.05pt;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p."NormalSpaced", li."NormalSpaced", div."NormalSpaced"
+							{mso-style-name:"NormalSpaced";
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:0in;
+							<!--text-align:justify;-->
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Bullet, li.Bullet, div.Bullet
+							{mso-style-name:Bullet;
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:17.85pt;
+							text-align:justify;
+							text-indent:-17.85pt;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Bullet2, li.Bullet2, div.Bullet2
+							{mso-style-name:Bullet2;
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:53.85pt;
+							text-align:justify;
+							text-indent:-17.85pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Bullet3, li.Bullet3, div.Bullet3
+							{mso-style-name:Bullet3;
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:97.25pt;
+							text-align:justify;
+							text-indent:-17.85pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.NormalCell, li.NormalCell, div.NormalCell
+							{mso-style-name:NormalCell;
+							margin-top:6.0pt;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:0in;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.NormalSmall, li.NormalSmall, div.NormalSmall
+							{mso-style-name:NormalSmall;
+							margin-top:6.0pt;
+							margin-right:0in;
+							margin-bottom:6.0pt;
+							margin-left:0in;
+							line-height:15.0pt;
+							font-size:9.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.BulletSmall, li.BulletSmall, div.BulletSmall
+							{mso-style-name:"Bullet Small";
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:17.85pt;
+							text-align:justify;
+							text-indent:-17.85pt;
+							line-height:15.0pt;
+							font-size:9.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Bullet4, li.Bullet4, div.Bullet4
+							{mso-style-name:Bullet4;
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:133.8pt;
+							text-align:justify;
+							text-indent:-17.85pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Bullet5, li.Bullet5, div.Bullet5
+							{mso-style-name:Bullet5;
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:169.25pt;
+							text-align:justify;
+							text-indent:-17.85pt;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Bodysubpara2, li.Bodysubpara2, div.Bodysubpara2
+							{mso-style-name:"Body sub para2";
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:151.4pt;
+							text-align:justify;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Bullet1, li.Bullet1, div.Bullet1
+							{mso-style-name:Bullet1;
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:.25in;
+							text-align:justify;
+							text-indent:-.25in;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Bullet1continued, li.Bullet1continued, div.Bullet1continued
+							{mso-style-name:Bullet1continued;
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:17.85pt;
+							text-align:justify;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Bullet2continued, li.Bullet2continued, div.Bullet2continued
+							{mso-style-name:Bullet2continued;
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:53.85pt;
+							text-align:justify;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Bullet3continued, li.Bullet3continued, div.Bullet3continued
+							{mso-style-name:Bullet3continued;
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:97.25pt;
+							text-align:justify;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Bullet4continued, li.Bullet4continued, div.Bullet4continued
+							{mso-style-name:Bullet4continued;
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:133.8pt;
+							text-align:justify;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.Bullet5continued, li.Bullet5continued, div.Bullet5continued
+							{mso-style-name:Bullet5continued;
+							margin-top:0in;
+							margin-right:0in;
+							margin-bottom:12.0pt;
+							margin-left:169.25pt;
+							text-align:justify;
+							line-height:15.0pt;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							}
+						p.XExecutionHeading, li.XExecutionHeading, div.XExecutionHeading
+							{mso-style-name:"X Execution Heading";
+							margin-top:16.0pt;
+							margin-right:22.95pt;
+							margin-bottom:12.0pt;
+							margin-left:0in;
+							line-height:15.0pt;
+							page-break-after:avoid;
+							font-size:10.0pt;
+<!--							font-family:"Arial";-->
+							font-variant:small-caps;
+							color:black;
+							font-weight:bold;}
+						span.BalloonTextChar
+							{mso-style-name:"Balloon Text Char";
+							mso-style-link:"Balloon Text";
+<!--							font-family:"Tahoma","sans-serif";-->
+							}
+						span.Heading2Char
+							{mso-style-name:"Heading 2 Char";    
+							mso-style-link:"Heading 2\,KJL\:1st Level\,h2\,Head 2\,l2\,UNDERRUBRIK 1-2\,H2\,TitreProp\,2\,Header 2\,ITT t2\,PA Major Section\,Livello 2\,R2\,H21\,Heading 2 Hidden\,Head1\,heading 2\,\(Alt+2\)\,Attribute Heading 2\,Attribute Heading 21\,H22\,H23\,H211\,H221\,H24\,H212\,H222\,H231\,H2111\,H2211\,H25";
+							color:black;}
+						 /* Page Definitions */
+						 @page WordSection1
+							{size:595.35pt 842.0pt;
+							margin:1.0in .75in 1.0in .75in;}
+						div.WordSection1
+							{page:WordSection1;}
+						 /* List Definitions */
+						 ol
+							{margin-bottom:0in;}
+						ul
+							{margin-bottom:0in;} 
+
+					</style>
+                    <div id="bookinglayout">  
+                        <t t-call="website_capitalcentric.logo"/>
+                    	<t t-if="path == 'restaurant'">
+                    		<t t-call="website_capitalcentric.logo_buttons"/>
+                    	</t>
+                    	<t t-if="path == 'operator'">
+                    		<t t-call = "website_capitalcentric.welcome_operator"/>
+                    		<t t-call="website_capitalcentric.operator_buttons"/>
+                    	</t>
+                        <br></br>
+                        <div class="Section1" style="padding:5px;font-size:10pt;min-height:205px;">
+                        	<img class="" id = "terms" src="/website_capitalcentric/static/src/img/arrow_right.png" height="17" width="17" style="cursor:pointer;"></img>&amp;nbsp;&amp;nbsp;&amp;nbsp;<span style="display:inline-block;font-weight:bold;"><b>Terms</b></span><br/>
+                        	<ul id="terms_ul">
+								<br/>								                        				
+                        		<li style="list-style-type : disc"><p class="MsoListParagraphCxSpFirst" style=''>
+                        			The TERMS menu is displayed to you when you
+                        			sign in to the system for the first time. Please read the terms and conditions
+                        			mentioned carefully. You will have to accept the Terms &amp; Conditions by
+                        			checking the I ACCEPT checkbox and clicking on SUBMIT.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpLast" style=''>On submission, the other menus of the system
+                        				will be enabled.</p>
+                        		</li>
+                        	</ul>
+                        	<br/>
+                        	
+                        	<t t-if="user.role not in ('client_user','client_cust')">
+	                        	<img class="" id="invoice_details" src="/website_capitalcentric/static/src/img/arrow_right.png" height="17" width="17" style="cursor:pointer;"></img>&amp;nbsp;&amp;nbsp;&amp;nbsp;<span style="display:inline-block;font-weight:bold;"><b>Invoice Details</b></span><br/>
+	                        	<ul id="invoice_details_ul">
+	                        		<br/>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpFirst" style=''>The details entered while signing up are captured and stored as the Invoice Details on the INVOICES menu. All invoices to you would be raised using the above details.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpMiddle" style=''>Please enter the remaining information such
+	                        				as the VAT Number, Company Registration Number and Bank Details.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpMiddle" style=''>In case you wish to make amendments to the
+	                        				Invoice address, you may do so by changing the content.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpLast" style=''>Click on SAVE to save the changes.</p>
+	                        		</li>
+	                        	</ul>
+	                            <br/>
+	                        	
+	                        	
+	                        	
+	                        	<img id ="contacts" src="/website_capitalcentric/static/src/img/arrow_right.png" height="17" width="17" style="cursor:pointer;"></img>&amp;nbsp;&amp;nbsp;&amp;nbsp;<span style="display:inline-block;font-weight:bold;"><b>Contacts</b></span><br/>
+	                        	<ul id="contacts_ul">
+	                        		<br/>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpFirst" style=''>The Contact information is necessary for FIT
+	                        				For Purpose to get in touch with the concerned people of your firm.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpMiddle" style=''>You may choose to add one or more contacts.
+	                        				The contacts added are displayed as a list on the CONTACTS menu.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpMiddle" style=''>In order to add a new contact, click on the
+	                        				ADD A CONTACT link.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpMiddle" style=''>On the page that opens, please enter the
+	                        				Contact Name, Address details (Choose USE COMPANY ADDRESS if the contact
+	                        				address is same as the Invoice Address), Email address and Phone numbers.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpMiddle" style=''>Click on SAVE to save the details and
+	                        				continue editing/adding information.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpMiddle" style=''>Click on SAVE &amp; BACK if you wish to save
+	                        				the information and go back to the list of contacts.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpMiddle" style=''>In case you wish to edit a Contact, click on the
+	                        				DETAILS icon against the contact, make the necessary changes and click on SAVE
+	                        				or SAVE &amp; BACK.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpLast" style=''>In order to delete a contact, please use the
+	                        				DELETE icon against the record.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpLast" style=''>You may choose to give access to your contacts as users.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpLast" style=''>There are two roles available – Admin and User.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpLast" style=''>The User role restricts access only to booking related information. The access to view/edit invoices, payments, mark up data, contacts is not available using the User role.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpLast" style=''>The Admin role provides complete access to all features of the system.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpLast" style=''>In order to create a new user for a contact, select the appropriate role from the User Role dropdown and click on ACTIVATE USER.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpLast" style=''>In order to deactivate a user, click on DEACTIVATE USER.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpLast" style=''>Note that once you have created the user, you can also change the role of the user by changing the value in the drop down and clicking SAVE.</p>
+	                        		</li>
+	                        	</ul>
+	                        	<br/>
+	                        	
+	                        	<img id="markup" src="/website_capitalcentric/static/src/img/arrow_right.png" height="17" width="17" style="cursor:pointer;"></img>&amp;nbsp;&amp;nbsp;&amp;nbsp;<span style="display:inline-block;font-weight:bold;"><b>Mark Up</b></span><br/>
+	                        	<ul id="markup_ul">
+	                        		<br/>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpFirst" style=''>As a user with Admin access, you can set your mark ups for various menu options available.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpMiddle" style=''>To add Mark Up, click on the MARKUP menu.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpMiddle" style=''>In order to set a common MARKUP for all restaurants/menus, you can enter the % by which you wish to markup the prices, in the TOUR OPERATOR MARK UP % (FOR ALL RESTAURANTS) field and click SAVE.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpMiddle" style=''>The markup entered as mentioned in the above point will apply to all restaurant/menus available on FIT FOR PURPOSE.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpMiddle" style=''>However, if you wish to override the common markup for a particular restaurant, use the RESTAURANT LEVEL EXCEPTIONS grid. To specify a different markup for a particular restaurant, click on ADD A RECORD link under the grid. Select the restaurant and add the markup % and click SAVE above the grid.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpMiddle" style=''>Further, if you wish to add a different markup % for a menu or a drink, use the MENU LEVEL EXCEPTIONS grid.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpMiddle" style=''>To add a different markup % for menu, click on ADD A RECORD link under the grid. Select the restaurant to view the list of menus/drinks available. Select the menu/drink for which you wish to add the markup and add the markup %. Click the SAVE button above the grid.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpMiddle" style=''>When your users search for restaurants while booking, the total cost displayed to the users will include the mark up that you have added. This is the price that you will charge your customers.</p>
+	                        		</li>
+	                        		<li style="list-style-type : disc">
+	                        			<p class="MsoListParagraphCxSpMiddle" style=''>However, while finalizing the booking and making payments to FIT FOR PURPOSE, your mark up component will be deducted and the amount payable to FIT FOR PURPOSE will be calculated and displayed accordingly.</p>
+	                        		</li>
+	                        	</ul>
+	                        	<br/>
+                        	</t>
+                        	
+                        	<img id ="search_book" src="/website_capitalcentric/static/src/img/arrow_right.png" height="17" width="17" style="cursor:pointer;"></img>&amp;nbsp;&amp;nbsp;&amp;nbsp;<span style="display:inline-block;font-weight:bold;"><b>Search (and Book)</b></span><br/>
+                        	<ul id="search_book_ul">
+                        		<br/>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpFirst" style=''>In order to book Restaurants on FIT For
+                        				Purpose, you will be using the SEARCH menu.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>There are two views provided for searching
+                        				restaurants.</p>
+                        		</li>
+                        		<ul>
+                        			<li style="list-style-type : disc">	
+                        				<p class="MsoListParagraphCxSpMiddle">	List View: This is the default view and
+                        					readily displays all the restaurants available for booking on FIT For Purpose.</p>
+                        			</li>
+                        			
+                        			<li style="list-style-type : disc">	
+                        				<p class="MsoListParagraphCxSpMiddle">Maps View: This is a unique feature made
+                        					available on FIT For Purpose for searching restaurants using Google Maps.</p>
+                        			</li>
+                        		</ul>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>On the List View, you are readily shown all restaurants available on FIT For Purpose. You may choose to use the filters (Post Code, Tube Station, Cuisine, Dining Style, Min. Price and Max. Price, Table Size and others) on the left hand side section of the page to refine your results.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>On the right hand side section, the list of
+                        				restaurants is displayed.For every
+                        				restaurant, the name, address, cuisine, dining style and the minimum and
+                        				maximum price of menus that are available for booking are displayed. A short
+                        				description about the restaurant is also made available.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>
+                        				A purple bar along the left side border of the restaurant indicates that your Administrator has added your markup for the menus offered by the restaurant.
+                        			</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>
+                        				You may choose to toggle the star icon available by clicking on the same to mark/remove a restaurant as your favourite.
+                        			</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>
+                        				A green child icon against the restaurant indicates the availability of kids menu.
+                        			</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>To switch to the Maps View, click on the
+                        				SWITCH TO MAP VIEW link available above the search results section of your
+                        				screen.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>To search restaurants on the Maps View, enter
+                        				a location/post code/land mark/tube station in the box available on the left hand side of
+                        				the screen. On tabbing out or pressing enter, you will be shown a list of
+                        				restaurants with 2000m of the search location entered.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>On the left hand side, you will the list of
+                        				restaurants and the details. On the right hand side, the restaurants are
+                        				displayed on the map.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>You may choose to increase/decrease the distance by dragging the markers on the circumference of the circle. The distance of search is displayed above the maps section. You may also choose to move the area of search by dragging the marker in the center of the circle on the map.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>Also, you can refine your search by using the
+                        				filters available. The filters can be seen by clicking on the ADD FILTERS
+                        				button. You may choose to sort the list of restaurants using the SORT feature
+                        				available on the left hand section of the screen.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>In order to proceed with the booking, select
+                        				a restaurant by clicking on the restaurant in the list of by clicking on the
+                        				restaurant icon on the map. The details of the restaurant, as on the list view,
+                        				are now shown. Click on SELECT to proceed.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>You are now taken to the detailed Restaurant
+                        				page that will allow you to compare prices on different days, view menus and
+                        				book a table.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>The top section of the page shows the basic information
+                        				about the restaurant and also images of the same.</p>
+                        		</li>
+                        		
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>On the RESTAURANT DETAILS tab, you are
+                        				provided with more information about the restaurants.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>On the PRICES tab, you are shown a calendar
+                        				that will display the time and availability status of the restaurant.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>In order to proceed, select a MEAL TYPE (from
+                        				the drop down) for which you wish to view the prices and timings.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>On selecting the MEAL TYPE, the various time slots are displayed the calendar for each day. Note that the prices may change based on the time slot and hence, the slots are categorized as Non-Premium, Standard and Premium and are depicted with different colors on the calendar.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>To view the meal and drinks menus for a particular day/time, click on the appropriate slot. On the right side, you are now shown the various meal &amp; drinks menu options available and the prices for the same.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>Note that the presence of a green child icon against the menu indicates that the menu is for kids.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>In order to proceed with the booking, select the number of guests against the required menu(s). The Grand Total is calculated automatically. To add drinks to your bookings, click on the DRINKS tab and select the number of drinks required. When you done selecting all menus, click on the CONTINUE button below the menu list.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>You are now shown the various timings that are available as part of the slot selected. Click on the time that you wish to choose.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>In case there is no availability, you are displayed a message to either choose an alternative time or send a message to the FIT For Purpose team requesting for availability.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>In case there is availability for the time selected, you are taken to the Booking Confirmation page.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>The booking confirmation page displays the summary of your booking.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>In case the restaurant provides for a discretionary service charge on a menu, you are provided with a link to remove the service charge component from the menu price. On clicking the link, the service charge is removed and the total is re-calculated.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>In order to complete your booking, please enter your reference in the Tour Operator Reference field and the guest details in the Guest Details related fields provided. Note that all guest information here is mandatory. You may also choose to add any special dietary requirements of your customers in the box provided.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>If you wish to save the current booking and make another one, click on MAKE ANOTHER BOOKING,</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpLast" style=''>If you wish to complete this booking, click on the COMPLETE BOOKING button. If you wish to send an email to your guest about the booking, please check the SEND EMAIL TO GUEST checkbox before clicking on the COMPLETE BOOKING button. If you are on the PAYMENT ON PURCHASE mode, you will be expected to select an appropriate payment option from the list before proceeding. Note that transaction charges are applicable for using the online payment option.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpLast" style=''>On click of COMPLETE BOOKING, you will be provided with a confirmation message, if you are signed up with the FULL CREDIT or PAYMENT IN ADVANCE mode. If you are expected to make the payment online, you will be redirected to the World Pay online payment screen, which you can use to enter your payment details and complete the transaction.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpLast" style=''>On successful booking, you will receive an email confirmation from FIT For Purpose and the booking details can be viewed on the BOOKINGS menu.</p>
+                        		</li>
+                        	</ul>
+                        	<br/>
+                        	
+                        	
+                        	<img id ="bookings_payments" src="/website_capitalcentric/static/src/img/arrow_right.png" height="17" width="17" style="cursor:pointer;"></img>&amp;nbsp;&amp;nbsp;&amp;nbsp;<span style="display:inline-block;font-weight:bold;"><b>Bookings &amp; Payments</b></span><br/>
+                        	<ul id="bookings_payments_ul">
+                        		<br/>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpFirst" style=''>You can view your past bookings and payments using the BOOKINGS menu.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpFirst" style=''>To open a voucher that you can handover to your customers, click on the VOUCHER link against the booking record.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>In order to cancel/amend a booking, please click on the AMEND link against the booking record. Please refer to our Cancellation Policy on the Terms page for clauses pertaining to refunds.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>On clicking the icon, you are required to select the number of covers that you wish to cancel and click on PROCEED. If you wish to cancel all covers, please enter zero against the menu(s) displayed before clicking PROCEED. On clicking the button, an email confirmation will be sent to your email regarding the cancellation of the booking.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>The amount will be refunded based as per the Cancellation Policy.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpLast" style=''>The invoices &amp; payments pertaining to bookings will be available on the INVOICES &amp; PAYMENTS menus respectively.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpLast" style=''>Please note that if you are signed up with the FULL CREDIT or PAYMENT IN ADVANCE option, an invoice will be generated at the end/start of the month and the same will be made available to you on the INVOICE menu. When the payment is made, the status of the invoice changes to PAID.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpLast" style=''>For online payments, the invoice &amp; payment records corresponding to the booking are generated immediately.</p>
+                        		</li>
+                        	</ul>
+                        	<br/>
+                        	
+                        	
+                        	<img id ="events" src="/website_capitalcentric/static/src/img/arrow_right.png" height="17" width="17" style="cursor:pointer;"></img>&amp;nbsp;&amp;nbsp;&amp;nbsp;<span style="display:inline-block;font-weight:bold;"><b>Events</b></span><br/>
+                        	<ul id="events_ul">
+                        		<br/>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpFirst" style=''>FIT For Purpose also provides for special booking of events across various restaurants.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpFirst" style=''>To view the list of restaurants offering event booking options, click on the EVENTS menu.</p>
+                        		</li>
+                        		<li style="list-style-type : disc">
+                        			<p class="MsoListParagraphCxSpMiddle" style=''>The process to search and book events is similar to the regular booking process mentioned above. Please refer the same for more details.</p>
+                        		</li>
+                        	</ul>
+                        	<br/>
+                        	
+                        	
+                        	<p class="MsoListParagraphCxSpLast" style=''>For any further assistance, please write to <a
+                        		class="main_color" href="mailto:fitforpurpose@capitalcentric.co.uk"><span>fitforpurpose@capitalcentric.co.uk</span></a></p>
+                        </div>
+                        <input class="hidden accept_tc" name="tc" t-att-value="user.partner_id.accept_tc"/>
+                    </div>
+                </t>
+            	<t t-set="ref_content1">
+            		<div id="push" style="height:40px;"></div>
+            	</t>
+            </t>
+    		<div style="height:40px;">
+    			<t t-call="website_capitalcentric.copyrightsection"/>
+    		</div>
+        </template>
+        
+        
+    </data>
+</openerp> 

@@ -1,0 +1,618 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+<!--    ==============================================================          
+                            Add Contact            
+        ==============================================================   -->    
+        <template id="add_contact" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="website_capitalcentric.capitalcentric_layout">
+                <t t-set="ref_content">
+                    <link rel='stylesheet' href='/website_capitalcentric/static/src/css/search.css'/>
+                    <link rel='stylesheet' href='/website_capitalcentric/static/src/css/profile.css'/>
+                    <link rel="stylesheet" type="text/css" href="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/jquery.multiselect.css" />
+                    <link rel="stylesheet" type="text/css" href="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/jquery.multiselect.filter.css" />
+<!--                    <link rel="stylesheet" type="text/css" href="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/demos/assets/style.css" />-->
+                    <link rel="stylesheet" type="text/css" href="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/demos/assets/prettify.css" />
+                    <!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script> -->
+                    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+                    <script type="text/javascript" src="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/src/jquery.multiselect.js"></script>
+                    <script type="text/javascript" src="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/src/jquery.multiselect.filter.js"></script>
+                    <script type="text/javascript" src="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/demos/assets/prettify.js"></script>
+                    <script type="text/javascript" src="/website_capitalcentric/static/src/js/profile_contact.js"></script>
+                    <style>
+                        #wrapwrap
+                        {
+                            height: 100%;
+                            margin: 0 auto -40px;
+                        }
+                    </style>  
+                    <script>
+                        $(document).ready(function()
+                        {   
+<!--                            $("#res_con_contact").multiselect();-->
+                            $("#res_con_contact").multiselect({
+                                noneSelectedText: "Select Restaurants",
+                                selectedText : "# Restaurant(s) Selected",
+                                click: function(e)
+                                {
+                                    if($(this).multiselect("widget").find(":checked").length > 0 )
+                                    {
+                                        $('#plz_select_res').hide();                                 
+                                    }
+                                    else
+                                    {
+                                        $('#plz_select_res').show();
+                                    }
+                                }
+                            });
+                            
+                            $('.ui-widget-header').hide();
+                            $('.ui-multiselect').css('width','100%');
+                            $('.ui-multiselect').css('border-radius','5px');
+                            $('.ui-multiselect').css('cursor','default');
+                            $(".ui-state-default").css('background-image','none');
+                            $(".ui-state-default").css('background-color','white');
+                            $('.ui-multiselect-menu').outerWidth($('.ui-multiselect').outerWidth());
+                            $('.ui-multiselect-checkboxes label input').css('margin-right','1%');
+                            $('div.ui-helper-clearfix a.ui-multiselect-close span').replaceWith(function()
+                            {
+                                return $("<span>Close</span>").append($(this).contents());
+                            });
+                            $(".ui-multiselect-header li.ui-multiselect-close").css('padding-right','1%');
+                        });
+                    </script>
+                    <div id="bookinglayout">
+                        <t t-call="website_capitalcentric.logo"/>
+                        <t t-if="type == 'restaurant'"> 
+                            <t t-call="website_capitalcentric.logo_buttons"/>
+                        </t>
+                        <t t-if="type == 'operator'">
+                            <t t-call="website_capitalcentric.welcome_operator"/>
+                            <t t-call="website_capitalcentric.operator_buttons"/>
+                        </t>
+                        <br></br>
+                            <div id="titleblock"> <span id="profiletitleblock_text" style="top:22%;"> Contact Details </span> </div>
+                            <form action="/capital_centric/add_new_contact" method="Post" id="form_style_css">
+                                <div id="restaurant_inner_form">
+                                    <input class="hidden" name="parent_id" t-att-value="partner_id"/>
+                                    <input type="text" name="save" class="hidden input-control input_val" value="" id="save"/>
+                                    <t t-if="type == 'restaurant'">
+                                        <input type="text" value="restaurant" name="type" class="hidden"></input> 
+                                    </t>
+                                    <t t-if="type == 'operator'">
+                                        <input type="text" value="operator" name="type" class="hidden"></input> 
+                                    </t>
+                                    <table id="invoice_table">
+                                        <tr> 
+                                            <td style="width:9%;" class="invoice_td"> <label> Contact Name </label> </td>
+                                            <td style="width:38%;"> <input id="required_name" type="text" name="name" class="input-control input_val" required="True" title="Contact Name"/> </td>
+                                            <td class="blank_td"></td>
+                                            <td style="width:9%;" class="invoice_td"> <label> Address 1 </label> </td>
+                                            <td style="width:38%;"> <input id="street" type="text" name="street" class="input-control input_val" title="Address 1"/> </td>
+                                        </tr>
+                                        <tr> 
+                                            <td class="invoice_td" colspan="2"> 
+                                                <input style="cursor:pointer" type="checkbox" name="use_parent_address" class="checkbox" title="Check this box if the address of this contact is the same as the Invoice Address"></input> &amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                                <span id="add_label"> Use Company Address </span>
+                                            </td>
+                                            <td class="blank_td"></td>
+                                            <td style="" class="invoice_td"> <label> Address 2 </label> </td>
+                                            <td> <input id="street2" type="text" name="street2" class="input-control input_val" title="Address 2"/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <table id="inner_table">
+                                                    <tr>
+                                                    <td style="width:19%;" class="invoice_inner_td"> <label> Country </label> </td>
+                                                    <td style="width:30%;">
+                                                        <select style="padding:1.5px;" name="Country" id="con_country" class="input-control input_val" title="Select a country">
+                                                            <option value="">Select Country..</option>
+                                                            <t t-foreach="country_ids or []" t-as="country">
+                                                                <option t-att-value="country.id"><t t-esc="country.name"/></option>
+                                                            </t>
+                                                        </select>
+                                                    </td>
+                                                    <td class="blank_inner_td"></td>
+                                                    <td style="width:19%;" class="invoice_inner_td"> <label> County </label> </td>
+                                                    <td style="width:30%;"> 
+                                                        <select style="padding:1.5px;" name="State" id="con_state" class="input-control input_val" title="Select a county">
+                                                            <option value="">Select County..</option>
+                                                        </select>
+                                                    </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td class="blank_td"></td>
+                                            <td style="" class="invoice_td"> <label> Email </label> </td>
+                                            <td> 
+                                                <input required="True" type="email" name="email" class="input-control input_val" title="Enter the email address of the contact. Emails will be sent to this address."/>
+                                                <span class="error_inline" id="email_error_line"/>
+                                            </td>
+                                        </tr>
+                                        <tr> 
+                                            <td colspan="2">
+                                                <table id="inner_table">
+                                                    <td style="width:19%;" class="invoice_inner_td"> <label> City </label> </td>
+                                                    <td style="width:30%;">
+                                                        <input style="padding-left:3%;" type="text" name="city" id="con_city" class="input-control input_val" title="Enter your city"/>
+                                                    </td>
+                                                    <td class="blank_inner_td"></td>
+                                                    <td style="width:19%;" class="invoice_inner_td"> <label> Post Code </label> </td>
+                                                    <td style="width:30%;"> 
+                                                        <input style="padding-left:3%;" type="text" id="con_zip" name="zip" class="input-control input_val" title="Enter the post code"/>
+                                                    </td>
+                                                </table>
+                                            </td>
+                                            <td class="blank_td"></td>
+                                            <td colspan="2">
+                                                <table id="inner_table">
+                                                    <td style="width:19%;" class="invoice_inner_td"> <label> Phone </label> </td>
+                                                    <td style="width:30%;">
+                                                        <input style="padding-left:4%" type="text" name="phone" class="input-control input_val" title="Enter the phone number of the contact"/>
+                                                    </td>
+                                                    <td class="blank_inner_td"></td>
+                                                    <td style="width:19%;" class="invoice_inner_td"> <label> Mobile </label> </td>
+                                                    <td style="width:30%;"> 
+                                                        <input style="padding-left:4%" type="text" name="mobile" class="input-control input_val" title="Enter the mobile number of the contact"/>
+                                                    </td>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <t t-if="type == 'restaurant'">
+                                                <td style="" class="invoice_td"> <label>Job Title</label></td>
+                                                <td>
+                                                    <select style="padding:1.5px;" name="work_detail" id="work_detail" class="input-control input_val" title="Select a relevant job title">
+                                                        <option value=""> Select Job Title..</option>
+                                                        <t t-foreach="work_ids or []" t-as="work">
+                                                            <option t-att-value="work.id"><t t-esc="work.name"/></option>
+                                                        </t>
+                                                    </select>
+                                                </td>
+                                            </t>
+                                            <td class="blank_td"></td>
+                                            <t t-if="type == 'restaurant'">
+                                                <td style="" class="invoice_td" id="res_label"> <label>Restaurants</label></td>
+                                                <td id="res_td">
+                                                    <select name="rest_cont_name" id="res_con_contact" class="input-control input_val" title="" multiple="multiple" onchange='show_res_in_cont()'>
+                                                        <t t-foreach="venues" t-as="venue">
+                                                            <option t-att-value="venue.id"><t t-esc="venue.name"/></option>
+                                                        </t>
+                                                    </select>
+                                                    <textarea class="hidden" name="res_cont_selected" id="txtEditions"/>
+                                                </td>    
+                                            </t>
+                                        </tr>
+                                        <tr>
+                                            <td/>
+                                            <td/>
+                                            <td/>
+                                            <td/>
+                                            <td colspan="">
+                                                <div id="">
+                                                    <p class="error_inline" id="plz_select_res">Please select a restaurant!!</p>
+                                                </div>
+                                            </td>                                                                                                          
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <table id="inner_table">
+                                                    <tr>
+                                                        <td style="width:19%;" class="invoice_inner_td"> <label> User Role </label> </td>
+                                                        <td style="width:30%;">
+                                                            <select name="user_role" id="user_role" style="padding:1.5px;" class="input-control input_val" title="" onchange='change_role()'>
+                                                                <option value="">Select User Role</option>
+                                                                <t t-if="user.role in ('client','client_mng')" >
+                                                                    <option value="client_mng" t-att-selected="cont_user and cont_user.role == 'client_mng'">Admin</option>
+                                                                    <option value="client_user" t-att-selected="cont_user and cont_user.role == 'client_user'">User</option>
+                                                                    <t t-if="user.is_wlabeling"><option value="client_cust" t-att-selected="cont_user and cont_user.role == 'client_cust'">Customer</option></t>
+                                                                                                                                       
+                                                                </t>
+                                                                
+                                                                <t t-if="user.role in ('venue','venue_mng')" >
+                                                                    <option value="venue_mng" t-att-selected="cont_user and cont_user.role == 'venue_mng'">Admin</option>
+                                                                    <option value="venue_user" t-att-selected="cont_user and cont_user.role == 'venue_user'">User</option>
+                                                                </t>                                              
+                                                            </select>
+                                                        </td>
+                                                        <td class="blank_inner_td"></td>
+                                                        <td style="49%"> 
+                                                            <input type="checkbox" name="activate_user" class="user_act_checkbox" title="" disabled="disabled"/> &amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                                            <span id="add_label"> User Active? </span>&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                                            <button id="activate_user" type="submit" class="button activate_user" style="float:right;width:120px;"> Activate User </button>                  
+                                                            <button id="deactivate_user" type="submit" class="hidden button deactivate_user" style="float:right;width:120px;"> Deactivate User </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr id="cont_psswd">
+                                                        <td style="width:19%;" class="invoice_inner_td"> <label> Password </label> </td>
+                                                        <td>
+                                                            <input type="password" name="password" id='contpasswd' class="input-control input_val" title=""/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td class="blank_td"></td>
+                                            <td colspan="2">   
+                                                <div id="contact_save_button">
+                                                    <button type="submit" id="save" class="button con_save"> Save </button>&amp;nbsp;&amp;nbsp;
+                                                    <button type="submit" id="save_back" class="button con_save_back"> Save &amp; Back</button>
+                                                </div>
+                                            </td>                                                                                                          
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td colspan="4">
+                                                <p class="error_inline" id="sel_usr_role">Please select User Role!!</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5" style="padding-top:0.5%;">
+                                                <span style="font-size:9pt;font-style:italic;color:#c00000">
+                                                    <t t-if="type == 'restaurant'"> 
+                                                        Note: Contacts who have been assigned an ADMIN role will get all access to the system. Contacts who have been assigned a USER role will have functionality limited to restaurants assigned to them only.
+                                                    </t>
+                                                    <t t-if="type == 'operator'">
+                                                        Note: Contacts who have been assigned an ADMIN role will get all access to the system. Contacts who have been assigned a USER role will have functionality limited to booking restaurants and viewing/booking information only.
+                                                    </t>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <br></br>
+                </t>
+                <t t-set="ref_content1">
+                    <div id="push" style="height:40px;"></div>
+                </t>
+            </t>
+            <div style="height:40px;">
+                <t t-call="website_capitalcentric.copyrightsection"/>
+            </div>
+        </template>
+        
+
+<!--    ==============================================================          
+                            Edit  Contact            
+        ==============================================================   -->    
+        <template id="edit_contact" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="website_capitalcentric.capitalcentric_layout">
+                <t t-set="ref_content">
+                    <link rel='stylesheet' href='/website_capitalcentric/static/src/css/search.css'/>
+                    <link rel='stylesheet' href='/website_capitalcentric/static/src/css/profile.css'/>
+                    <link rel="stylesheet" type="text/css" href="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/jquery.multiselect.css" />
+                    <link rel="stylesheet" type="text/css" href="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/jquery.multiselect.filter.css" />
+<!--                    <link rel="stylesheet" type="text/css" href="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/demos/assets/style.css" />-->
+                    <link rel="stylesheet" type="text/css" href="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/demos/assets/prettify.css" />
+                    <!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script> -->
+                    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+                    <script type="text/javascript" src="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/src/jquery.multiselect.js"></script>
+                    <script type="text/javascript" src="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/src/jquery.multiselect.filter.js"></script>
+                    <script type="text/javascript" src="/website_capitalcentric/static/src/jquery-ui-multiselect-widget-master/demos/assets/prettify.js"></script>
+                    <script type="text/javascript" src="/website_capitalcentric/static/src/js/profile_contact.js"></script>
+                    <style>
+                        #wrapwrap
+                        {
+                            height: 100%;
+                            margin: 0 auto -40px;
+                        }
+                    </style>  
+                    <script>
+                        $(document).ready(function()
+                        {   
+<!--                        $("#res_con_contact").multiselect();-->
+                            $("#res_con_contact").multiselect({
+                                noneSelectedText: "Select Restaurants",
+                                selectedText : "# Restaurant(s) Selected",
+                                click: function(e)
+                                {
+                                    if( $(this).multiselect("widget").find(":checked").length > 0 )
+                                    {
+                                        $('#plz_select_res').hide();                                 
+                                    }
+                                    else
+                                    {
+                                        $('#plz_select_res').show();
+                                    }
+                                }
+                            });
+                            $('.ui-widget-header').hide();
+                            $('.ui-multiselect').css('width','100%');
+                            $('.ui-multiselect').css('border-radius','5px');
+                            $('.ui-multiselect').css('cursor','default');
+                            $(".ui-state-default").css('background-image','none');
+                            $(".ui-state-default").css('background-color','white');
+                            $('.ui-multiselect-menu').outerWidth($('.ui-multiselect').outerWidth());
+                            $('.ui-multiselect-checkboxes label input').css('margin-right','1%');
+                            $('div.ui-helper-clearfix a.ui-multiselect-close span').replaceWith(function()
+                            {
+                                return $("<span>Close</span>").append($(this).contents());
+                            });
+                            $(".ui-multiselect-header li.ui-multiselect-close").css('padding-right','1%');
+                        });
+                    </script>
+                    <script type="text/javascript" src="/website_capitalcentric/static/src/js/profile_contact.js"/>
+                    
+                    <div id="bookinglayout">
+                        <t t-call="website_capitalcentric.logo"/>
+                        <t t-if="type == 'restaurant'">
+                            <t t-call="website_capitalcentric.logo_buttons"/>
+                        </t>
+                        <t t-if="type == 'operator'">
+                            <t t-call="website_capitalcentric.welcome_operator"/>
+                            <t t-call="website_capitalcentric.operator_buttons"/>
+                        </t>
+                        <br></br>
+                        <div id="titleblock"> <span id="profiletitleblock_text"> Contact Details </span> </div>
+                        <form action="/capital_centric/edited_contact" method="Post" id="form_style_css">
+                          <div id="restaurant_inner_form">
+                            <input type="text" name="save" class="hidden input-control input_val" value="" id="save"/>
+                            <t t-if="type == 'restaurant'">
+                                <input type="text" value="restaurant" name="type" class="hidden"/> 
+                            </t>
+                            <t t-if="type == 'operator'">
+                                <input type="text" value="operator" name="type" class="hidden"/> 
+                            </t>
+                            <p class="hidden" name="partner_id" id="partnerid"><t t-esc="partner.id"/></p>
+                            <input class="hidden" name="partner_id" id="partner_id" t-att-value="partner.id"/>
+                          <table id="invoice_table">
+                              <tr> 
+                                  <td style="width:9%;" class="invoice_td"> <label> Contact Name </label> </td>
+                                  <td style="width:38%;"> <input id="required_name" type="text" name="name" class="input-control input_val" required="True" t-att-value="partner.name" title="Contact Name"/> </td>
+                                  <td class="blank_td"></td>
+                                  <td style="width:9%;" class="invoice_td"> <label> Address 1 </label> </td>
+                                  <td style="width:38%;"> <input id="street" type="text" name="street" class="input-control input_val" title="Address 1" t-att-value="partner.street"/> </td>
+                              </tr>
+                              <tr> 
+                                  <td class="invoice_td" colspan="2"> 
+                                      <t t-if="partner.use_parent_address == True">
+                                          <input style="cursor:pointer" checked="checked" type="checkbox" name="use_parent_address" class="checkbox_edit" title="Select this if you want to set company's address information  for this contact"/> &amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                      </t>
+                                      <t t-if="partner.use_parent_address == False">
+                                          <input style="cursor:pointer" type="checkbox" name="use_parent_address" class="checkbox_edit" title="Select this if you want to set company's address information  for this contact"/> &amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                      </t>
+                                      <span id="add_label"> Use Company Address </span>
+                                  </td>
+                                  <td class="blank_td"></td>
+                                  <td style="" class="invoice_td"> <label> Address 2 </label> </td>
+                                  <td> <input id="street2" type="text" name="street2" class="input-control input_val" title="Address 2" t-att-value="partner.street2"/> </td>
+                              </tr>
+                              <tr> 
+                                  <td colspan="2">
+                                      <table id="inner_table">
+                                          <tr>
+                                              <td style="width:19%;" class="invoice_inner_td"> <label> Country </label> </td>
+                                              <td style="width:30%;">
+                                                  <select style="padding:1.5px;" name="Country" id="con_country" class="input-control input_val" title="Select a country">
+                                                      <option class="" value=""> Select Country.. </option>
+                                                      <t t-foreach="country_ids or []" t-as="country">
+                                                          <option t-att-value="country.id" t-att-selected="country.id == partner.country_id.id"><t t-esc="country.name"/></option>
+                                                      </t>
+                                                  </select>
+                                              </td>
+                                              <td class="blank_inner_td"></td>
+                                              <td style="width:19%;" class="invoice_inner_td"> <label> County </label> </td>
+                                              <td style="width:30%;">
+                                                  <select t-att-disabled="None if partner.state_id.id or partner.country_id.name == 'United Kingdom' else 'disabled'" style="padding:1.5px;" name="State" id="con_state" class="input-control input_val" t-att-title="'Select a County' if partner.state_id.id or partner.country_id.name == 'United Kingdom' else 'Please Select United Kingdom as country to choose a county'">
+                                                      <option class="" value=""> Select County.. </option>
+                                                      <t t-foreach="state_ids or []" t-as="state">
+                                                          <option t-att-value="state.id" t-att-selected="state.id == partner.state_id.id"><t t-esc="state.name"/></option>
+                                                      </t>
+                                                  </select>
+                                              </td>
+                                          </tr>
+                                      </table>
+                                  </td>
+                                  <td class="blank_td"></td>
+                                  <td style="" class="invoice_td"> <label> Email </label> </td>
+                                  <td>
+                                      <table style="width:100%;">
+                                          <tr>
+                                              <td style="width:95%;">
+                                                  <input required="True" style="width:95%;" type="email" name="email" class="input-control input_val" title="Enter the email address of the contact. Emails will be sent to this address." t-att-value="partner.email"/>
+                                                  <span class="error_inline" style="display:block;" id="email_error_line"><t t-esc="email_error"/></span>
+                                              </td>
+                                              <t t-if="cont_user">
+                                                  <td style="width:5%;vertical-align: top;">
+                                                      <a id="chng_pswrd" title="Click to Change Password" type="button" class="" style="width:100%;height:24px;"><i style="font-size:1.5em" class="fa fa-unlock-alt main_color"/></a>
+                                                  </td>
+                                              </t>
+                                          </tr>
+                                      </table>
+                                  </td>
+                                  
+                              </tr>
+                              <tr> 
+                                  <td colspan="2">
+                                      <table id="inner_table">
+                                          <tr>
+                                              <td style="width:19%;" class="invoice_inner_td"> <label> City </label> </td>
+                                              <td style="width:30%;">
+                                                  <input style="padding-left:3%;" name="city" id="con_city" class="input-control input_val" t-att-value="partner.city" title="Enter your city"/>
+                                              </td>
+                                              <td class="blank_inner_td"></td>
+                                              <td style="width:19%;" class="invoice_inner_td"> <label> Post Code </label> </td>
+                                              <td style="width:30%;"> 
+                                                  <input style="padding-left:3%;" type="text" id="con_zip" name="zip" class="input-control input_val" t-att-value="partner.zip" title="Enter the post code"/>
+                                              </td>
+                                          </tr>
+                                      </table>
+                                  </td>
+                                  <td class="blank_td"></td>
+                                  <td colspan="2">
+                                      <table id="inner_table">
+                                          <tr>
+                                              <td style="width:19%;" class="invoice_inner_td"> <label> Phone </label> </td>
+                                              <td style="width:30%;">
+                                                  <input style="padding-left:4%" type="text" name="phone" class="input-control input_val" title="Enter the phone number of the contact" t-att-value="partner.phone"/>
+                                              </td>
+                                              <td class="blank_inner_td"></td>
+                                              <td style="width:19%;" class="invoice_inner_td"> <label> Mobile </label> </td>
+                                              <td style="30%"> 
+                                                  <input style="padding-left:4%" type="text" name="mobile" class="input-control input_val" title="Enter the mobile number of the contact" t-att-value="partner.mobile"/>
+                                              </td>
+                                          </tr>
+                                      </table>
+                                  </td>
+                              </tr>
+                              <tr> 
+                                  <t t-if="type == 'restaurant'">
+                                      <td style="" class="invoice_td"> <label> Job Title </label> </td>
+                                      <td>
+                                          <select style="padding:1.5px;" name="work_detail" id="work_detail" class="input-control input_val" title="Select a relevant job title">
+                                              <option class="" value=""> Select Job Title..</option>
+                                              <t t-foreach="work_ids or []" t-as="work">
+                                                  <option t-att-value="work.id" t-att-selected="work.id == partner.work_dt_id.id"><t t-esc="work.name"/></option>
+                                              </t>
+                                          </select>
+                                      </td>
+                                  </t>
+                                  <td class="blank_td"></td>
+                                  <t t-if="type == 'restaurant'">
+                                      <td style="" class="invoice_td"> <label id="res_label">Restaurants</label></td>
+                                      <td id="res_td">
+                                          <select name="rest_cont_name" id="res_con_contact" class="input-control input_val" title="" multiple="multiple" onchange='show_res_in_cont()'>
+                                              <t t-foreach="rest_cont_ids or []" t-as="res_contact">
+                                                  <option t-att-value="res_contact.id" t-att-selected="res_contact.id in res_contact_ids"><t t-esc="res_contact.name"/></option>
+                                              </t>
+                                          </select> 
+                                          <textarea class="hidden" name="res_cont_selected" id="txtEditions"><t t-esc="res_contacts"/></textarea>
+                                      </td>    
+                                  </t>                                                                                                        
+                              </tr>
+                              <tr>
+                                  <td/>
+                                  <td/>
+                                  <td/>
+                                  <td/>
+                                  <td colspan="">
+                                      <div id="">
+                                          <p class="error_inline" id="plz_select_res">Please select a restaurant!!</p>
+                                      </div>
+                                  </td>                                                                                                          
+                              </tr>
+                              <tr>
+                                  <td colspan="2">
+                                      <table id="inner_table">
+                                          <tr>
+                                              <td style="width:19%;" class="invoice_inner_td"> <label> User Role </label> </td>
+                                              <td style="width:30%;">
+                                                  <select name="user_role" id="user_role" style="padding:1.5px;" class="input-control input_val" title="" onchange='change_role()'>
+                                                      <option value="">Select User Role</option>
+                                                      <t t-if="user.role in ('client','client_mng')" >
+                                                          <option value="client_mng" t-att-selected="cont_user and cont_user.role == 'client_mng'">Admin</option>
+                                                          <option value="client_user" t-att-selected="cont_user and cont_user.role == 'client_user'">User</option>
+                                                          <t t-if="user.is_wlabeling"><option value="client_cust" t-att-selected="cont_user and cont_user.role == 'client_cust'">Customer</option></t>
+                                                      </t>
+                                                      <t t-if="user.role in ('venue','venue_mng')" >
+                                                          <option value="venue_mng" t-att-selected="cont_user and cont_user.role == 'venue_mng'">Admin</option>
+                                                          <option value="venue_user" t-att-selected="cont_user and cont_user.role == 'venue_user'">User</option>
+                                                      </t>                                              
+                                                  </select>
+                                              </td>
+                                              <td class="blank_inner_td"></td>
+                                              <td style="49%"> 
+                                                  <t t-if="cont_user and cont_user.active == True">
+                                                      <input disabled="disabled" checked="checked" type="checkbox" name="" class="" title=""/> &amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                                      <input name="user_active" class="hidden" value="checked" title=""/> &amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                                  </t>
+                                                  <t t-if="not cont_user or cont_user.active == False">
+                                                      <input disabled="disabled" type="checkbox" name="" class="" title=""></input> &amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                                      <input name="user_active" class="hidden" value="unchecked" title=""/> &amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                                  </t>
+                                                  <span id="add_label"> User Active? </span>&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                                  <t t-if="not cont_user or cont_user.active == False">
+                                                      <button type="submit" id="activate_user" class="button activate_user" style="width:120px;float:right;"> Activate User </button>
+                                                      <button type="submit" id="deactivate_user" class="button deactivate_user" style="display:none;width:120px;" t-att-disabled="user and user.partner_id.id == partner.id and 'disabled' or None"> Deactivate User </button>
+                                                  </t>
+                                                  <t t-if="cont_user and cont_user.active == True">
+                                                      <button type="submit" id="activate_user" class="button activate_user" style="width:120px;display:none;"> Activate User </button>
+                                                      <button type="submit" id="deactivate_user" class="button deactivate_user" style="width:120px;float:right;" t-att-disabled="user and user.partner_id.id == partner.id and 'disabled' or None"> Deactivate User </button>
+                                                  </t>
+                                              </td>
+                                          </tr>
+                                          <t t-if="not cont_user">
+                                          <tr id="cont_psswd">
+                                              <td style="width:19%;" class="invoice_inner_td"> <label> Password </label> </td>
+                                              <td>
+                                                  <input type="password" name="password" id='contpasswd' class="input-control input_val" title=""/>
+                                              </td>
+                                          </tr>
+                                          </t>
+                                      </table>
+                                  </td>
+                                  <td class="blank_td"></td>
+                                  <td colspan="2">   
+                                       <div id="contact_save_button">
+                                          <button type="submit" id="save" class="button con_save"> Save </button>&amp;nbsp;&amp;nbsp;
+                                          <button type="submit" id="save_back" class="button con_save_back"> Save &amp; Back</button>
+                                       </div>
+                                  </td>                                                                                                          
+                              </tr>
+                              <tr>
+                                  <td></td>
+                                  <td colspan="4">
+                                      <p class="error_inline" id="sel_usr_role">Please select User Role!!</p>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <td colspan="5" style="padding-top:0.5%;">
+                                      <span style="font-size:9pt;font-style:italic;color:#c00000">
+                                          <t t-if="type == 'restaurant'"> 
+                                              Note: Contacts who have been assigned an ADMIN role will get all access to the system. Contacts who have been assigned a USER role will have functionality limited to restaurants assigned to them only.
+                                          </t>
+                                          <t t-if="type == 'operator'">
+                                              Note: Contacts who have been assigned an ADMIN role will get all access to the system. Contacts who have been assigned a USER role will have functionality limited to booking restaurants and viewing/booking information only.
+                                          </t>
+                                      </span>
+                                  </td>
+                              </tr>
+                          </table>
+                          </div>
+                            
+<!--                          Pop up For Change in Password   -->
+                          <div id="login_fader"/>
+                          <div class="modal-dialog" id="ch_pswrd" style="background-color:transparent;width:48%;">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title" style="font-size:x-large;text-indent:0;">Change Password</h3>
+                                    </div>
+                                    <div class="modal-body" style="padding:15px;">
+                                        <table style="width:100%;">
+                                            <tr>
+                                                <td style="width:33.3%;">
+                                                    <div style="padding-right:3%">
+                                                        <label>Change Password: </label>
+                                                        <p></p>
+                                                        <input name="type" style="width:100%;" class="hidden" t-att-value="type" id=""/>
+                                                        <input name="user" style="width:100%;" class="hidden" t-att-value="cont_user and cont_user.id or False" id=""/>
+                                                        <input name="chnge_pswrd" type="password" style="width:100%;" class="input-control" id=""/>                                                            
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer" style="margin-top:0;padding:15px;">
+                                        <input value="Change" id="payment_continue_button" type="submit" class="btn btn-priCmary main_bgcolor" style="color:white;"/>
+                                        <input type="button" class="btn btn-priCmary cancel_button_cmn" value="Cancel" id="cancel_button" style="width:84px;background-color:#c00000;color:white;"/>
+                                    </div>
+                                </div>                               
+                           </div>
+                        </form>
+                    </div>
+                    <br></br>
+                </t>
+                <t t-set="ref_content1">
+                    <div id="push" style="height:40px;"></div>
+                </t>
+            </t>
+            <div style="height:40px;">
+                <t t-call="website_capitalcentric.copyrightsection"/>
+            </div>
+        </template>
+        
+        
+    </data>
+</openerp>

@@ -1,0 +1,850 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <openerp>
+    <data noupdate="1">
+    
+<!--     To update Admin groups -->
+        <record model="res.users" id="base.user_root">
+            <field name="partner_id" ref="base.partner_root"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="company_ids" eval="[(4, ref('base.main_company'))]"/> 
+            <field name="menu_id" ref="base.action_menu_admin"/>
+            <field name="signature">--Administrator</field>
+    		<field name="groups_id" eval="[(6,0,[ref('base.group_partner_manager')
+    											,ref('base.group_no_one')
+    											,ref('base.group_system')
+    											,ref('base.group_user')
+    											,ref('cc_object_admin')
+    											,ref('cc_admin')
+    											,ref('cc_bo')
+    											,ref('cc_client')
+    											,ref('cc_venues')])]"/>            
+        </record>
+        
+<!--         Products -->
+    	<record id="product_product_venues" model="product.product">
+            <field name="list_price">0.00</field>
+            <field name="standard_price">0.00</field>
+            <field name="uom_id" ref="product.product_uom_hour"/>
+            <field name="uom_po_id" ref="product.product_uom_hour"/>
+            <field name="name">Venues</field>
+            <field name="categ_id" ref="product.product_category_all"/>
+            <field name="type">service</field>
+        </record>
+        <record id="product_product_noontea" model="product.product">
+            <field name="list_price">0.00</field>
+            <field name="standard_price">0.00</field>
+            <field name="uom_id" ref="product.product_uom_hour"/>
+            <field name="uom_po_id" ref="product.product_uom_hour"/>
+            <field name="name">Afternoon Tea</field>
+            <field name="categ_id" ref="product.product_category_all"/>
+            <field name="type">service</field> 
+        </record> 
+        
+        <record id="product_product_fitforpurpose" model="product.product">
+            <field name="list_price">0.00</field>
+            <field name="standard_price">0.00</field>
+            <field name="uom_id" ref="product.product_uom_hour"/>
+            <field name="uom_po_id" ref="product.product_uom_hour"/>
+            <field name="name">FIT for Purpose</field>
+            <field name="categ_id" ref="product.product_category_all"/>
+            <field name="type">service</field> 
+        </record>
+    	
+<!--     	Crm Case Stage -->
+		
+		<record model="crm.case.stage" id="crm.stage_lead8">
+            <field name="name">Lost</field>
+            <field eval="1" name="case_default"/>
+            <field eval="True" name="fold"/>
+            <field eval="1" name="on_change"/>
+            <field name="state">cancel</field>
+            <field eval="0" name="probability"/>
+            <field eval="158" name="sequence"/>
+            <field name="type">opportunity</field>
+        </record>
+
+<!--     	Schedular-> Reminder Message for User -->  
+         <record id="ir_cron_user_reminder_msg" model="ir.cron">
+            <field name="name">Reminder Message for User</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model">crm.lead</field>
+            <field name="function">_Send_mesg_BOuser</field>
+            <field name="args">()</field>
+            <!-- Active flag is set on fetchmail_server.create/write -->
+            <field name="active" eval="False"/>
+        </record>
+        
+<!--     	Schedular-> Reminder Mail for Restaurant -->  
+         <record id="ir_cron_rest_reminder_mail" model="ir.cron">
+            <field name="name">Reminder Mail for Restaurant</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model">cc.send.rest.info</field>
+            <field name="function">_Send_mail_to_Restaurant</field>
+            <field name="args">()</field>
+            <!-- Active flag is set on fetchmail_server.create/write -->
+            <field name="active" eval="False"/>
+        </record>
+        
+        <!--Definition of an email template with an empty body that will be used in opportunity mailing. Used to give a
+            basis for email recipients, name and to ease the definition of a further elaborated template. 
+            Overridden:-->
+
+        <!--Email template -->
+			<!--           Quotation -->
+        
+        <record id="email_template_quot_sale_line" model="email.template">
+            <field name="name">Sales - Send Quotation</field>
+            <field name="email_from">${object.order_id.user_id.email or ''}</field>
+            <field name="subject">${object.order_id.lead_id.lead_no or ''}::Quotation From ${object.company_id.name}</field>
+            <field name="email_recipients">${object.order_id.partner_invoice_id.id}</field>
+            <field name="model_id" ref="sale.model_sale_order_line"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+    
+   <img src="http://www.capitalcentric.co.uk/pixs/headermain.gif"/>
+
+    <p>Hello ${object.order_id.partner_id.name},</p>
+    
+    <p>Here is your order confirmation from ${object.company_id.name}: </p>
+
+    <p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+      &nbsp;&nbsp;<strong>REFERENCES</strong><br />
+       &nbsp;&nbsp;<strong>${object.restaurant_id.name}</strong><br />
+       &nbsp;&nbsp;Order number  : ${object.order_id.name}<br />
+       &nbsp;&nbsp;Date&Time     : ${object.order_id.cc_datetime}<br />
+       &nbsp;&nbsp;Covers        : ${object.product_uom_qty}<br />
+       &nbsp;&nbsp;Menu          : ${object.menu_id.name} ;${object.courses}Courses<br /> 
+       &nbsp;&nbsp;Menu Rate     : ${object.order_id.pricelist_id.currency_id.symbol} ${object.price_unit + object.markup}<br />
+       &nbsp;&nbsp;Payemnt Total : ${object.order_id.pricelist_id.currency_id.symbol} ${object.order_id.amount_total}<br />
+       &nbsp;&nbsp;Drinks: To be paid directly to the restaurant at the time of the booking<br />
+       % if object.order_id.client_order_ref:
+       &nbsp;&nbsp;Your reference: ${object.order_id.client_order_ref}<br />
+       % endif
+       % if object.order_id.user_id:
+       &nbsp;&nbsp;Your contact: <a href="mailto:${object.order_id.user_id.email or ''}?subject=Order%20${object.order_id.name}">${object.order_id.user_id.name}</a>
+       % endif
+    </p>
+   
+    <br/>
+    <p>If you have any question, do not hesitate to contact us.</p>
+    <p>Thank you for choosing ${object.company_id.name or 'us'}!</p>
+    <br/>
+    <div style="width: 375px; margin: 0px; padding: 0px; background-color: #CF7ED7; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
+        <h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: black;">
+            <strong style="text-transform:uppercase;">${object.company_id.name}</strong></h3>
+    </div>
+    <div style="width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;">
+        <span style="color: #222; margin-bottom: 5px; display: block; ">
+        % if object.company_id.street:
+            ${object.company_id.street}<br/>
+        % endif
+        % if object.company_id.street2:
+            ${object.company_id.street2}<br/>
+        % endif
+        % if object.company_id.city or object.company_id.zip:
+            ${object.company_id.zip} ${object.company_id.city}<br/>
+        % endif
+        % if object.company_id.country_id:
+            ${object.company_id.state_id and ('%s, ' % object.company_id.state_id.name) or ''} ${object.company_id.country_id.name or ''}<br/>
+        % endif
+        </span>
+        % if object.company_id.phone:
+            <div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; ">
+                Phone:&nbsp; ${object.company_id.phone}
+            </div>
+        % endif
+        % if object.company_id.website:
+            <div>
+                Web :&nbsp;<a href="${object.company_id.website}">${object.company_id.website}</a>
+            </div>
+        % endif
+        <p></p>
+    </div>
+</div>            
+            ]]></field>
+        </record>
+        
+			<!--Leads - Send Info with menu details-->
+         <record id="email_template_lead_menu_det" model="email.template">
+            <field name="name">Enquiry - Send With Menu Details</field>
+            <field name="email_from">${object.user_id.email or ''}</field>
+            <field name="subject">${object.lead_no or ''}:: Information Regarding Your Enquiry From ${object.company_id.name}</field>
+            <field name="email_recipients">${object.partner_id.id}</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+            
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+
+<img src="http://www.capitalcentric.co.uk/pixs/headermain.gif"/>
+
+    <p>Dear ${object.partner_id.cont_name or ''},</p>
+    
+    <p>Thank you for your e mail.  Please see below for some suggestions for your group as follows:-</p>
+
+    <p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+       &nbsp;&nbsp;<strong>DETAILS</strong><br />
+
+% if object.lead_no:       
+&nbsp;&nbsp;Enquiry No: <strong>${object.lead_no}</strong><br />
+% endif
+% if object.date_requested:       
+&nbsp;&nbsp;Date of Booking: <strong>${object.date_requested}</strong><br />
+% endif
+% if object.no_of_covers:
+       &nbsp;&nbsp;No. of Covers: <strong>${object.no_of_covers}</strong><br />
+% endif
+       % if object.dining_room:       
+       &nbsp;&nbsp;Private Dining Required:<strong> ${object.dining_room}</strong><br />
+       % endif
+% if object.hire_required:
+       &nbsp;&nbsp;Exclusive Hire Required: <strong>${object.hire_required}</strong><br />
+% endif
+    </p>
+
+<br/>
+[Restaurant Info]
+
+    <p>Please let me know if any of these are of interest to you and we can check availability.
+    <br/><br/>
+     Many thanks and best wishes</p>
+    <br/>
+    <br/>
+    <div style="width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
+        <h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;">
+            <strong style="text-transform:uppercase;">${object.company_id.name}</strong></h3>
+    </div>
+    <div style="width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;">
+        <span style="color: #222; margin-bottom: 5px; display: block; ">
+        % if object.company_id.street:
+            ${object.company_id.street}<br/>
+        % endif
+        % if object.company_id.street2:
+            ${object.company_id.street2}<br/>
+        % endif
+        % if object.company_id.city or object.company_id.zip:
+            ${object.company_id.zip} ${object.company_id.city}<br/>
+        % endif
+        % if object.company_id.country_id:
+            ${object.company_id.state_id and ('%s, ' % object.company_id.state_id.name) or ''} ${object.company_id.country_id.name or ''}<br/>
+        % endif
+        </span>
+        % if object.company_id.phone:
+            <div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; ">
+                Phone:&nbsp; ${object.company_id.phone}
+            </div>
+        % endif
+        % if object.company_id.website:
+            <div>
+                Web :&nbsp;<a href="${object.company_id.website}">${object.company_id.website}</a>
+            </div>
+        %endif
+        <p></p>
+    </div>
+</div>
+            ]]></field>
+        </record>
+        
+        	<!--Leads - Send Info with menu and pricing details-->
+        <record id="email_template_lead_menupricing_det" model="email.template">
+            <field name="name">Enquiry - Send With Menu and Pricing Details</field>
+            <field name="email_from">${object.user_id.email or ''}</field>
+            <field name="subject">${object.lead_no or ''}:: Information Regarding Your Enquiry From ${object.company_id.name}</field>
+            <field name="email_recipients">${object.partner_id.id}</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+            
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+
+<img src="http://www.capitalcentric.co.uk/pixs/headermain.gif"/>
+
+    <p>Dear ${object.partner_id.cont_name or ''},</p>
+    
+    <p>Thank you for your e mail.  Please see below for some suggestions for your group as follows:-</p>
+
+    <p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+       &nbsp;&nbsp;<strong>DETAILS</strong><br />
+
+% if object.lead_no:       
+&nbsp;&nbsp;Enquiry No: <strong>${object.lead_no}</strong><br />
+% endif
+% if object.date_requested:       
+&nbsp;&nbsp;Date of Booking: <strong>${object.date_requested}</strong><br />
+% endif
+% if object.no_of_covers:
+       &nbsp;&nbsp;No. of Covers: <strong>${object.no_of_covers}</strong><br />
+% endif
+       % if object.dining_room:       
+       &nbsp;&nbsp;Private Dining Required:<strong> ${object.dining_room}</strong><br />
+       % endif
+% if object.hire_required:
+       &nbsp;&nbsp;Exclusive Hire Required: <strong>${object.hire_required}</strong><br />
+% endif
+    </p>
+
+<br/>
+[Restaurant Info]
+
+    <p>Please let me know if any of these are of interest to you and we can check availability.
+    <br/><br/>
+     Many thanks and best wishes</p>
+    <br/>
+    <br/>
+    <div style="width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
+        <h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;">
+            <strong style="text-transform:uppercase;">${object.company_id.name}</strong></h3>
+    </div>
+    <div style="width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;">
+        <span style="color: #222; margin-bottom: 5px; display: block; ">
+        % if object.company_id.street:
+            ${object.company_id.street}<br/>
+        % endif
+        % if object.company_id.street2:
+            ${object.company_id.street2}<br/>
+        % endif
+        % if object.company_id.city or object.company_id.zip:
+            ${object.company_id.zip} ${object.company_id.city}<br/>
+        % endif
+        % if object.company_id.country_id:
+            ${object.company_id.state_id and ('%s, ' % object.company_id.state_id.name) or ''} ${object.company_id.country_id.name or ''}<br/>
+        % endif
+        </span>
+        % if object.company_id.phone:
+            <div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; ">
+                Phone:&nbsp; ${object.company_id.phone}
+            </div>
+        % endif
+        % if object.company_id.website:
+            <div>
+                Web :&nbsp;<a href="${object.company_id.website}">${object.company_id.website}</a>
+            </div>
+        %endif
+        <p></p>
+    </div>
+</div>
+            
+            ]]></field>
+        </record>
+        
+        <!--Leads - Request Availability-->
+         <record id="email_template_lead_request_avail" model="email.template">
+            <field name="name">Enquiry - Request Availability</field>
+            <field name="email_from">${object.lead_id.user_id.email or object.company_id.email}</field>
+            <field name="subject">${object.lead_id.lead_no} :: Request For Availability Of Your Venue From ${object.lead_id.company_id.name}</field>
+            <field name="email_recipients">${object.restaurant_id.id}</field>
+            <field name="model_id" ref="model_cc_send_rest_info"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+            <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+<img src="http://www.capitalcentric.co.uk/pixs/headermain.gif"/>
+
+            <p>Dear ${object.restaurant_id.cont_name}</p>
+
+<p>Hope you are doing well.</p>
+<p>I request you to confirm availability of your venue for the following.</p>
+
+<p>Date Requested: <strong>${object.lead_id.date_requested or 'N/A'}</strong><br \>
+No. of Covers: <strong>${object.lead_id.no_of_covers or 'N/A'}</strong><br \>
+Private Dining Required: <strong>${object.lead_id.dining_room or 'N/A'}</strong><br \>
+Exclusive Hire Required: <strong>${object.lead_id.hire_required or 'N/A'}</strong></p>
+
+I look forward to your response.<br \>
+Thank you.<br \><br \>
+
+<div style="width: 375px; margin: 0px; padding: 0px; background-color: #CF7ED7; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
+        <h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: black;">
+            <strong style="text-transform:uppercase;">Capital Centric</strong></h3>
+    </div>
+    <div style="width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;">
+        <span style="color: #222; margin-bottom: 5px; display: block; ">
+            47 Red Lion Street<br>
+            Holborn <br>
+            WC1R 4PF London<br>
+             United Kingdom<br>
+        </span>
+            <div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; ">
+                Phone:&nbsp; +44 (0) 203 384 6481
+            </div>
+            <div>
+                Web :&nbsp;<a href="http://capitalcentric.co.uk/">http://capitalcentric.co.uk/</a>
+            </div>
+        <p></p>
+    </div>
+</div> 
+
+            ]]></field>
+        </record>
+        
+        
+        <!-- SO-Request Provisional Booking -->
+         <record id="email_template_so_provbook_req" model="email.template">
+            <field name="name">Sales - Request Provisional Booking</field>
+            <field name="email_from">${object.order_id.user_id.email or object.company_id.email}</field>
+            <field name="subject">${object.order_id.lead_id.lead_no} :: Request For Provisional Booking Of Your Venue From ${object.company_id.name}</field>
+            <field name="email_recipients">${object.restaurant_id.id}</field>
+            <field name="model_id" ref="sale.model_sale_order_line"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+            <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+<img src="http://www.capitalcentric.co.uk/pixs/headermain.gif"/>
+
+            <p>Dear ${object.restaurant_id.cont_name}</p>
+
+Hope you are doing well.<br \>
+I request you to undertake provisional availability of your venue for the following and revert with a cutoff date.<br \><br \>
+
+Date Requested: ${object.order_id.lead_id.date_requested}<br \>
+No. of Covers: ${object.product_uom_qty} <br \><br \>
+
+I look forward to your response.<br \>
+Thank you.<br \><br \>
+
+<div style="width: 375px; margin: 0px; padding: 0px; background-color: #CF7ED7; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
+        <h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: black;">
+            <strong style="text-transform:uppercase;">Capital Centric</strong></h3>
+    </div>
+    <div style="width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;">
+        <span style="color: #222; margin-bottom: 5px; display: block; ">
+            47 Red Lion Street<br>
+            Holborn <br>
+            WC1R 4PF London<br>
+             United Kingdom<br>
+        </span>
+            <div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; ">
+                Phone:&nbsp; +44 (0) 203 384 6481
+            </div>
+            <div>
+                Web :&nbsp;<a href="http://capitalcentric.co.uk/">http://capitalcentric.co.uk/</a>
+            </div>
+        <p></p>
+    </div>
+</div> 
+
+            ]]></field>
+        </record>
+        
+        <!-- SO-Confirmation of Provisional Booking -->
+         <record id="email_template_so_provbook_confrm" model="email.template">
+            <field name="name">Sales - Confirmation of Provisional Booking</field>
+            <field name="email_from">${object.order_id.user_id.email or object.company_id.email}</field>
+            <field name="subject">${object.order_id.lead_id.lead_no} :: Confirmation of Provisional Booking From ${object.company_id.name}</field>
+            <field name="email_recipients">${object.order_id.partner_invoice_id.id}</field>
+            <field name="model_id" ref="sale.model_sale_order_line"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+            <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+<img src="http://www.capitalcentric.co.uk/pixs/headermain.gif"/>
+
+            <p>Dear ${object.order_id.partner_id.name}</p>
+
+Hope you are doing well.<br \>
+I am writing to inform that the provisional booking has been made for your enquiry. The details are as under.<br><br \>
+
+<p>Restaurant: ${object.restaurant_id.name}<br \>
+Date Requested: ${object.order_id.lead_id.date_requested}<br \>
+No. of Covers: ${object.product_uom_qty}<br \>
+Cutoff Date: ${object.order_id.cc_datetime}<br \></p>
+
+I request you to confirm your booking before the Cutoff date mentioned above.<br \>
+I look forward to your response.<br \>
+Thank you.<br \><br \>
+
+<div style="width: 375px; margin: 0px; padding: 0px; background-color: #CF7ED7; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
+        <h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: black;">
+            <strong style="text-transform:uppercase;">Capital Centric</strong></h3>
+    </div>
+    <div style="width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;">
+        <span style="color: #222; margin-bottom: 5px; display: block; ">
+            47 Red Lion Street<br>
+            Holborn <br>
+            WC1R 4PF London<br>
+             United Kingdom<br>
+        </span>
+            <div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; ">
+                Phone:&nbsp; +44 (0) 203 384 6481
+            </div>
+            <div>
+                Web :&nbsp;<a href="http://capitalcentric.co.uk/">http://capitalcentric.co.uk/</a>
+            </div>
+        <p></p>
+    </div>
+</div> 
+
+            ]]></field>
+        </record>
+        
+        <!-- SO-Booking Confirmation To Venue -->
+         <record id="template_so_provbook_confrm_venue" model="email.template">
+            <field name="name">Sales - Booking Confirmation To Venue</field>
+            <field name="email_from">${object.order_id.user_id.email or object.company_id.email}</field>
+            <field name="subject">${object.order_id.lead_id.lead_no} :: Confirmation of Booking From ${object.company_id.name}</field>
+            <field name="email_recipients">${object.restaurant_id.id}</field>
+            <field name="model_id" ref="sale.model_sale_order_line"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+            <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+<img src="http://www.capitalcentric.co.uk/pixs/headermain.gif"/>
+
+            <p>Dear ${object.restaurant_id.cont_name}</p>
+
+Hope you are doing well.<br \>
+Please find attached the details of the booking confirmation.<br \>
+Thank you.<br \><br \>
+
+<div style="width: 375px; margin: 0px; padding: 0px; background-color: #CF7ED7; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
+        <h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: black;">
+            <strong style="text-transform:uppercase;">Capital Centric</strong></h3>
+    </div>
+    <div style="width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;">
+        <span style="color: #222; margin-bottom: 5px; display: block; ">
+            47 Red Lion Street<br>
+            Holborn <br>
+            WC1R 4PF London<br>
+             United Kingdom<br>
+        </span>
+            <div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; ">
+                Phone:&nbsp; +44 (0) 203 384 6481
+            </div>
+            <div>
+                Web :&nbsp;<a href="http://capitalcentric.co.uk/">http://capitalcentric.co.uk/</a>
+            </div>
+        <p></p>
+    </div>
+</div> 
+
+            ]]></field>
+        </record>
+        
+        <!-- Booking Confirmation To Customer -->
+         <record id="template_so_provbook_confrm_client" model="email.template">
+            <field name="name">Sales - Booking Confirmation To Customer</field>
+            <field name="email_from">${object.order_id.user_id.email or object.company_id.email}</field>
+            <field name="subject">${object.order_id.lead_id.lead_no} :: Confirmation of Provisional Booking From ${object.company_id.name}</field>
+            <field name="email_recipients">${object.order_id.partner_invoice_id.id}</field>
+            <field name="model_id" ref="sale.model_sale_order_line"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+			<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+<img src="http://www.capitalcentric.co.uk/pixs/headermain.gif"/>
+            
+            <p>Dear ${object.order_id.partner_id.name}</p>
+
+Hope you are doing well.<br \>
+I am writing to inform that your booking has been confirmed. The details are as under. <br \>
+
+<p>Restaurant: ${object.restaurant_id.name}<br \>
+Date Requested: ${object.order_id.cc_datetime}<br \>
+No. of Covers: ${object.product_uom_qty}<br \></p>
+
+Thank you.<br \><br \>
+
+<div style="width: 375px; margin: 0px; padding: 0px; background-color: #CF7ED7; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
+        <h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: black;">
+            <strong style="text-transform:uppercase;">Capital Centric</strong></h3>
+    </div>
+    <div style="width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;">
+        <span style="color: #222; margin-bottom: 5px; display: block; ">
+            47 Red Lion Street<br>
+            Holborn <br>
+            WC1R 4PF London<br>
+             United Kingdom<br>
+        </span>
+            <div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; ">
+                Phone:&nbsp; +44 (0) 203 384 6481
+            </div>
+            <div>
+                Web :&nbsp;<a href="http://capitalcentric.co.uk/">http://capitalcentric.co.uk/</a>
+            </div>
+        <p></p>
+    </div>
+</div> 
+
+            ]]></field>
+        </record>
+
+        <!--Leads - Reminder Template Venues-->  
+         <record id="reminder_email_template" model="email.template">
+            <field name="name">Reminder Mail Of Booking - Venues</field>
+             <field name="email_from">fitforpurpose@capitalcentric.co.uk</field>
+             <field name="subject">Reminder for booking on FIT FOR PURPOSE</field>
+             <field name="email_to">${object.contact_email}</field>
+             <field name="email_cc">fitforpurpose@capitalcentric.co.uk</field>
+             <field name="reply_to">fitforpurpose@capitalcentric.co.uk</field>
+            <field name="model_id" ref="model_cc_send_rest_info"/>
+            <field name="auto_delete" eval="True"/>
+             <field name="body_html"><![CDATA[<div style="font-family:Calibri; font-size: 12pt; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+<img src="https://fitforpurposeonline.com/website_capitalcentric/static/src/img/fitcclogo.jpg" height="156" width="245"><p>
+</p><p>Hello.</p>
+
+<span style="font-size: 12pt;">
+
+<p>Please find below a reminder for the booking made on FIT FOR PURPOSE for your restaurant, <strong>${object.restaurant_id.name or ''}</strong>.</p>
+
+<p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+
+             <strong>DETAILS</strong><br>
+           Booking ID: <strong>${object.lead_id.lead_no or ''}</strong><br>
+           Guest Name: <strong>${object.lead_id.title.name or ''} ${object.lead_id.partner_name or ''} ${object.lead_id.contact_name or ''}</strong><br>
+           Total Covers: <strong>${object.lead_id.covers or ''}</strong>
+           Date of Booking: <strong>${object.lead_id.conv_dob or ''}</strong><br>
+           Time of Booking: <strong>${object.lead_id.conv_tob or ''}</strong><br>
+           Special Dietary Requirements: <strong>${object.spcl_req or 'None'}</strong><br></p>
+       % for menu in object.menu_dt_ids:
+<p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+                 Menu Name: <strong>${menu.menu_id.name or ''}</strong><br>
+% if menu.menu_id.course:
+                 Courses: <strong>${menu.menu_id.course.replace("c","")}</strong><br>
+% endif
+</p>
+<table style="border-left: 1px solid #8e0000; margin-left: 30px;"><tbody><tr><td valign="top"> Menu Description:</td><td>
+                                 <strong>${menu.menu_desc.replace("\n", " <br> ")}</strong></td></tr></tbody></table>
+<p style="border-left: 1px solid #8e0000; margin-left: 30px;">   
+                 No. of Covers: <strong>${menu.no_of_covers or ''}</strong><br>
+</p>
+       % endfor
+       
+<p>Thank you.</p>
+</span>
+
+<br><div style="width: 375px; height: 20px; margin: 0px; padding: 0px; background-color: #CF7ED7; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
+        <h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: black;">
+            <strong style="text-transform:uppercase;">The FIT For Purpose Team</strong></h3>
+    </div>
+    <div style="width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;">
+        <span style="color: #222; margin-bottom: 5px; display: block; ">
+            Unit 15, Streatham Business Centre<br>
+            1 Empire News<br>
+            London<br>
+            SW16 2BF<br></span>
+            <div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; ">
+            
+            </div>
+        <p></p>
+    </div>
+</div>]]></field>
+        </record> 
+        
+        <!--Leads - Reminder Template Venues-->  
+        <record id="top_reminder_email_template" model="email.template">
+            <field name="name">Reminder Mail Of Booking - Tour Operator</field>
+            <field name="email_from">fitforpurpose@capitalcentric.co.uk</field>
+            <field name="subject">Reminder for booking on FIT FOR PURPOSE</field>
+            <field name="email_to">${object.lead_id.partner_id.email}</field>
+            <field name="email_cc">fitforpurpose@capitalcentric.co.uk</field>
+            <field name="reply_to">fitforpurpose@capitalcentric.co.uk</field>
+            <field name="model_id" ref="model_cc_send_rest_info"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[<div style="font-family:Calibri; font-size: 12pt; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+<img src="https://fitforpurposeonline.com/website_capitalcentric/static/src/img/fitcclogo.jpg" height="156" width="245"><p>
+</p><p>Hello.</p>
+
+<span style="font-size: 12pt;">
+
+<p>Please find below a reminder for the booking made on FIT FOR PURPOSE for your restaurant, <strong>${object.restaurant_id.name or ''}</strong>.</p>
+
+<p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+
+             <strong>DETAILS</strong><br>
+           Booking ID: <strong>${object.lead_id.lead_no or ''}</strong><br>
+           Guest Name: <strong>${object.lead_id.title.name or ''} ${object.lead_id.partner_name or ''} ${object.lead_id.contact_name or ''}</strong><br>
+           Total Covers: <strong>${object.lead_id.covers or ''}</strong>
+           Date of Booking: <strong>${object.lead_id.conv_dob or ''}</strong><br>
+           Time of Booking: <strong>${object.lead_id.conv_tob or ''}</strong><br>
+           Special Dietary Requirements: <strong>${object.spcl_req or 'None'}</strong><br></p>
+       % for menu in object.menu_dt_ids:
+<p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+                 Menu Name: <strong>${menu.menu_id.name or ''}</strong><br>
+% if menu.menu_id.course:
+                 Courses: <strong>${menu.menu_id.course.replace("c","")}</strong><br>
+% endif
+</p>
+<table style="border-left: 1px solid #8e0000; margin-left: 30px;"><tbody><tr><td valign="top"> Menu Description:</td><td>
+                                 <strong>${menu.menu_desc.replace("\n", " <br> ")}</strong></td></tr></tbody></table>
+<p style="border-left: 1px solid #8e0000; margin-left: 30px;">   
+                 No. of Covers: <strong>${menu.no_of_covers or ''}</strong><br>
+</p>
+       % endfor
+       
+<p>Thank you.</p>
+</span>
+
+<br><div style="width: 375px; height: 20px; margin: 0px; padding: 0px; background-color: #CF7ED7; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
+        <h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: black;">
+            <strong style="text-transform:uppercase;">The FIT For Purpose Team</strong></h3>
+    </div>
+    <div style="width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;">
+        <span style="color: #222; margin-bottom: 5px; display: block; ">
+            Unit 15, Streatham Business Centre<br>
+            1 Empire News<br>
+            London<br>
+            SW16 2BF<br></span>
+            <div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; ">
+            
+            </div>
+        <p></p>
+    </div>
+</div>]]></field>
+        </record>
+        
+
+        <!--Leads - Reminder Template Afternoon Tea-->
+        <record id="reminder_email_template_noontea" model="email.template">
+            <field name="name">Reminder Mail Of Booking - Afternoon Tea</field>
+            <field name="email_from">${object.lead_id.user_id.email or object.company_id.email}</field>
+            <field name="subject">${object.lead_id.lead_no} :: ${object.lead_id.company_id.name}</field>
+            <field name="email_to">${object.restaurant_id.email}</field>
+            <field name="model_id" ref="model_cc_send_rest_info"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+            <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+<img src="http://www.capitalcentric.co.uk/pixs/headermain.gif"/>
+
+            <p>Dear ${object.restaurant_id.cont_name}</p>
+            
+<p>Hope you are doing well.</p>
+<p>I request you to confirm availability of your venue for the following.</p>
+
+<div style="width: 375px; margin: 0px; padding: 0px; background-color: #CF7ED7; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
+        <h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: black;">
+            <strong style="text-transform:uppercase;">Capital Centric</strong></h3>
+    </div>
+    <div style="width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;">
+        <span style="color: #222; margin-bottom: 5px; display: block; ">
+            47 Red Lion Street<br>
+            Holborn <br>
+            WC1R 4PF London<br>
+             United Kingdom<br>
+        </span>
+            <div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; ">
+                Phone:&nbsp; +44 (0) 203 384 6481
+            </div>
+            <div>
+                Web :&nbsp;<a href="http://capitalcentric.co.uk/">http://capitalcentric.co.uk/</a>
+            </div>
+        <p></p>
+    </div>
+</div> 
+            ]]></field>
+        </record>
+
+        <!--  Invoice – Send Invoice  -->
+         <record id="template_invoice_confrm" model="email.template">
+            <field name="name">Invoice - Send Invoice </field>
+            <field name="email_from">${object.user_id.email or object.company_id.email}</field>
+            <field name="subject">${object.lead_id.lead_no} :: Invoice For Booking From ${object.company_id.name}</field>
+            <field name="email_recipients">${object.partner_id.id}</field>
+            <field name="model_id" ref="account.model_account_invoice"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+            <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+<img src="http://www.capitalcentric.co.uk/pixs/headermain.gif"/>
+
+            <p>Dear ${object.partner_id.name}</p>
+
+Hope you are doing well.<br \>
+Please find attached the invoice for your booking.<br \>
+We thank you for your custom.<br \><br \>
+
+<div style="width: 375px; margin: 0px; padding: 0px; background-color: #CF7ED7; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
+        <h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: black;">
+            <strong style="text-transform:uppercase;">Capital Centric</strong></h3>
+    </div>
+    <div style="width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;">
+        <span style="color: #222; margin-bottom: 5px; display: block; ">
+            47 Red Lion Street<br>
+            Holborn <br>
+            WC1R 4PF London<br>
+             United Kingdom<br>
+        </span>
+            <div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; ">
+                Phone:&nbsp; +44 (0) 203 384 6481
+            </div>
+            <div>
+                Web :&nbsp;<a href="http://capitalcentric.co.uk/">http://capitalcentric.co.uk/</a>
+            </div>
+        <p></p>
+    </div>
+</div> 
+            ]]></field>
+        </record>
+        
+        <!--  Receipt  – Send Receipt  -->
+         <record id="template_voucher_receipt" model="email.template">
+            <field name="name">Receipt - Send Receipt</field>
+            <field name="email_from">${object.user_id.email or object.company_id.email}</field>
+            <field name="subject">Receipt From ${object.company_id.name}</field>
+            <field name="email_recipients">${object.partner_id.id}</field>
+            <field name="model_id" ref="account_voucher.model_account_voucher"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+            <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+<img src="http://www.capitalcentric.co.uk/pixs/headermain.gif"/>
+
+            <p>Dear ${object.partner_id.name}</p>
+
+Hope you are doing well.<br \>
+Please find attached the receipt for the payment made. <br \>
+Thank you.<br \><br \>
+
+<div style="width: 375px; margin: 0px; padding: 0px; background-color: #CF7ED7; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
+        <h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: black;">
+            <strong style="text-transform:uppercase;">Capital Centric</strong></h3>
+    </div>
+    <div style="width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;">
+        <span style="color: #222; margin-bottom: 5px; display: block; ">
+            47 Red Lion Street<br>
+            Holborn <br>
+            WC1R 4PF London<br>
+             United Kingdom<br>
+        </span>
+            <div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; ">
+                Phone:&nbsp; +44 (0) 203 384 6481
+            </div>
+            <div>
+                Web :&nbsp;<a href="http://capitalcentric.co.uk/">http://capitalcentric.co.uk/</a>
+            </div>
+        <p></p>
+    </div>
+</div> 
+            ]]></field>
+        </record>
+        
+        
+        <!-- Email template for reset password -->
+        <record id="reset_password_email_client" model="email.template">
+            <field name="name">Reset Password Client</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from"><![CDATA[${object.company_id.name} <${(object.company_id.email or user.email)|safe}>]]></field>
+            <field name="email_to">${object.email|safe}</field>
+            <field name="subject">Password reset</field>
+            <field name="body_html"><![CDATA[
+<p>A password reset was requested for the OpenERP account linked to this email.</p>
+
+<p>You may change your password by following <a href="http://localhost:8068/capital_centric/restaurant_login/client_mode">this link</a>.</p>
+
+<p>Note: If you do not expect this, you can safely ignore this email.</p>]]></field>
+        </record>
+        
+        <!-- Daily Booking Details  -->
+        <record id="daily_booking_details" model="email.template">
+            <field name="name">Daily Booking Details</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="email_from"><![CDATA[fitforpurpose@capitalcentric.co.uk]]></field>
+            <field name="email_to">${object.rpt_to|safe}</field>
+            <field name="subject">Daily Booking Details</field>
+            <field name="body_html"><![CDATA[ Booking Details]]></field>
+        </record>
+        
+    </data>
+  </openerp>
+   
+
+		

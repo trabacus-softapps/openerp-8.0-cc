@@ -1,0 +1,236 @@
+#restaurant_page
+{
+   clear:both;   
+}
+#upperdiv:before,
+#upperdiv:after {
+    content: " "; 
+    display: table;
+}
+
+#upperdiv:after {
+    clear: both;
+}
+#upperdiv
+{
+    min-height:200px;
+    width:100%;
+    clear:both;
+}
+.onlyimage
+{
+   width:26%;
+   height:200px;
+   display:table-cell;
+   float:left;
+}
+.imageonly
+{
+    float:left;
+    display:table-cell;
+    width:100%;
+    height:100%;
+}
+#onlyinfo
+{
+/*    height:100%;*/
+    width:73.5%;
+    display:inline-block;
+    float:right;
+}
+/*#imageonly
+{
+     -webkit-box-sizing: border-box; /\* Safari/Chrome, other WebKit *\/
+     -moz-box-sizing: border-box;    /\* Firefox, other Gecko *\/
+     box-sizing: border-box;  
+     
+}*/
+.same_line
+{
+    display:inline-block;
+}
+#hoteladdress
+{
+    width:100%;
+/*    height:30%;*/
+}
+#hotelinfo
+{
+   width:100%;
+/*   padding-top:6px;*/
+/*   height:50%;*/
+}
+#button_special_content:before,
+#button_special_content:after {
+    content: " "; 
+    display: table;
+}
+
+#button_special_content:after {
+    clear: both;
+}
+#button_special_content
+{
+    clear:both;
+}
+#button_special_content,#button_restaurant_content,#button_map_content,#button_cancel_content
+{
+    border-right:1px solid #bfbfbf;
+    border-left:1px solid #bfbfbf;  
+    border-bottom:1px solid #bfbfbf; 
+}
+#grand_total
+{
+   width:100%;
+   height:25px;
+}
+#grand_total_div
+{
+   float:right;
+}
+.common_button.restaurant_page
+{
+    cursor:pointer;
+}
+.menu_name
+{
+    color:#c00000;
+    font-size:10pt;
+    margin-left:2%;
+}
+.menu_descp
+{
+    font-size:9pt;
+    text-align:left;
+    margin-left:2%;
+}
+.descp
+{
+    width:55%;   
+}
+.price
+{
+    width:15%;  
+    text-align:center;
+}
+.select_guest
+{
+    width:15%;   
+    text-align:center;
+}
+.total_price
+{
+    width:15%;   
+    text-align:center;
+}
+.input-control.guest
+{
+    width:60px;
+    height:18px;
+    text-align:left;
+}
+.spacing
+{
+    margin:-12px;
+}
+.guestspacing
+{
+     margin:-12px;
+}
+#booking_details
+{
+    display:inline-block;
+    float:right;
+    margin-top:0.3%;
+}
+#date1
+{
+    color:#c00000;
+}
+.button.proceedbutton
+{
+    display:inline-block; 
+    width:50px;
+    margin-right: 1%;
+    margin-bottom: 1%;
+   /* margin-top: 2.5%;*/
+    height:24px;
+}
+#select_time
+{
+    padding-left: 2%;
+    padding-right: 2%;
+    border-radius: 5px;
+}
+.test
+{
+    width:4%;
+}
+.btn-primary 
+{
+color: #fff;
+background-color: #ad4bc2;
+border-color: #ad4bc2;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
+color: #fff;
+background-color: #ad4bc2;
+border-color: #ad4bc2;
+}
+/*th.fc-sat
+{
+    width:79px;
+}*/
+table.fc-border-separate
+{
+    table-layout:auto;
+}
+#main_div
+{
+    width:100%;
+}
+#main_calendar_div
+{
+    width:50%;
+    float:left;
+}
+#main_result_div
+{
+    width:48%;
+    float:right;
+}
+/*.fc-header-title {
+margin-left: 210%;
+}
+
+.fc-header-title h2 {
+font-size: 20px;
+}*/
+.oe_subtotal_footer {
+  width: 1% !important;
+}
+.oe_right {
+  float: right;
+  margin-left: 8px;
+}
+.popover-markup
+{
+    display: inline-block;
+    float: right;
+    padding-top: 1.5%;
+    font-size: 10pt;
+}
+
+#upper_left_div .popover-title {
+    color:white;
+    background-color: #793487;
+    border-bottom: 0px;
+}
+
+#upper_left_div .popover-content {
+    background-color: white;
+    font-size:9pt;
+
+}
+

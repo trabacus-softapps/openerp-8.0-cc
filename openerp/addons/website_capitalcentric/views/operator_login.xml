@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>  
+        
+<!--    ==============================================================          
+                Tour Operator Login ( Capital Centric HomePage )         
+        ==============================================================   -->
+        
+        <template id="mainlayout" inherit_id="website.homepage" name="Restaurant Reservations For The Travel Trade">
+            <xpath expr="//t[@t-call='website.layout']" position="replace"> 
+                <t t-call="website_capitalcentric.capitalcentric_layout">
+                   <t t-set="ref_content">
+                      <t t-set="head">
+                        <script type="text/javascript" src="/website_capitalcentric/static/src/js/signup.js"/>
+                        <link rel='stylesheet' href='/website_capitalcentric/static/src/css/operator_login.css'/>
+                        <style>
+                              #wrapwrap
+                              {
+                                  height: 100%;
+                                  margin: 0 auto -180px;
+                              }
+                        </style>
+                      </t>
+                      <div id="hme_background">
+                          <div id="main_hme_div">
+                              <div id="header">
+                                <t t-call="website_capitalcentric.logo"/>
+                                <div class="operator_signin">
+                                    <p id="check_which" class="hidden" ><t t-esc="mode"/></p>
+                                    <form action="/capital_centric/siginin/login" method="Post" id="operator_form" style="clear:both;">
+                                        <div>
+                                            <input class="hidden" name="login_type" value="client"/> 
+                                            <input type="email" name="login" class="input-control email" id="email_res" placeholder="Email Address" required="True"/>&amp;nbsp;
+                                            <t t-if="mode != 'reset'">                                
+                                                <input id="password_res" style="padding-left:1%" type="password" name="password" class="input-control password password_res" placeholder="Password" required="True"/>
+                                            </t> 
+                                            <t t-if="mode == 'reset'">
+                                                <input style="padding-left:1%" type="password" name="password" class="input-control password password_res" placeholder="Password" required="True"/>&amp;nbsp;
+                                                <input style="padding-left:1%" type="password" name="password" class="input-control password password_res" placeholder="Confirm your password" required="True"/>
+                                            </t>
+                                            <t t-if="mode != 'reset'">
+                                                <button class="button operator_button button_common_res valign_bottom">Sign In</button>
+                                            </t>
+                                            <t t-if="mode == 'reset'">  
+                                                <button id="submit" type="submit" class="button button_common_res valign_bottom"> Submit </button>
+                                            </t>
+                                        </div>
+                                        <div style="float:right;" class="main_color">
+                                            <t t-if="mode != 'reset'">
+                                                <t t-set="to_signup" t-value="'Tour Operator Sign Up'"/>
+                                                <t t-if="user.is_wlabeling">
+                                                    <t t-set="to_signup" t-value="'Sign Up'"/>
+                                                </t>
+                                                <t t-if="not user.is_wlabeling and not user.is_group">
+                                                    <a t-attf-href="/capital_centric/restaurant_login" class="main_color" style="font-size:10pt;font-weight:bold;"> Sign In as a Restaurant</a>
+                                                    <span style="font-size:10pt;font-weight:bold;">|</span>
+                                                </t>
+                                                <t t-if="not user.is_group">
+                                                    <t t-if="user.is_wlabeling">
+                                                        <a href="/capital_centric/fit/grid_view" class="main_color" style="font-size:10pt;font-weight:bold;">Browse</a>
+                                                        <span style="font-size:10pt;font-weight:bold;">|</span>
+                                                    </t>
+                                                    <a t-attf-href="/capital_centric/sign_up/operator" class="main_color" style="font-size:10pt;font-weight:bold;"><t t-esc="to_signup"/></a>
+                                                    <span style="font-size:10pt;font-weight:bold;">|</span>
+                                                </t>
+                                                <button id="forget_password" type="submit" class="button button_common_res" style="padding:0;width:auto;"> Forgot Password? </button>
+                                            </t>  
+                                        </div>
+                                        <input name="fromwch" id="from_wch_button" class="hidden"/>
+                                    </form>
+                                    <p style="clear:both;width:100%;height:25px;padding-top:2px;text-align:center;" class="alert alert-danger" t-if="error">
+                                        <t t-esc="error"/>
+                                    </p>
+                                </div>
+                                <br/><br/>
+                              </div>
+                              <t t-if="user.cc_url=='vb.fitforpurposeonline.com'">
+                                <div id="site-nav">
+                                  <div class="row">
+                                    <div class="large-12 columns">
+                                      <nav class="top-bar">
+                                        <section class="top-bar-section main-nav">
+                                          <ul class="navitems-7">
+                                                <li data-cattype="nav-travel" class="top-nav nav-travel" style="border-left:1px solid #e1e0e0;"><a tabindex="1" href="https://www.visitbritainshop.com/world/travel-and-transport/" class="nav" target="blank">Travel and transport</a></li>
+                                                <li data-cattype="nav-attractions" class="top-nav nav-attractions"><a tabindex="1" href="https://www.visitbritainshop.com/world/attractions/" class="nav" target="blank">Attractions</a></li>
+                                                <li data-cattype="nav-sightseeing" class="top-nav nav-sightseeing"><a tabindex="1" href="https://www.visitbritainshop.com/world/sightseeing-passes/" class="nav" target="blank">Sightseeing passes</a></li>
+                                                <li data-cattype="nav-trips" class="top-nav nav-trips"><a tabindex="1" href="https://www.visitbritainshop.com/world/things-to-do/" class="nav" target="blank">Things to do</a></li>
+                                                <li data-cattype="nav-travelessentials" class="top-nav nav-travelessentials"><a tabindex="1" href="https://www.visitbritainshop.com/world/trips-and-tours/" class="nav" target="blank">Trips and tours</a></li>
+                                                <li data-cattype="nav-other" class="top-nav nav-other"><a tabindex="1" href="https://www.visitbritainshop.com/world/must-sees/" class="nav" target="blank">Must sees</a></li>
+                                                <li data-cattype="nav-theatre" class="top-nav nav-theatre"><a tabindex="1" href="https://www.visitbritainshop.com/world/special-offers/" class="nav" target="blank">Special offers</a></li>
+
+                                          </ul>
+                                        </section>
+                                      </nav>
+                                    </div>
+                                  </div>
+                                </div>
+                              </t>
+                              <div id="operator_content" t-att-style="'padding-top:0;padding-bottom: 0' if user.is_wlabeling or user.is_group else 'padding-top: 1.5%;padding-bottom: 0.5%'">
+                                  <t t-if="user.is_wlabeling or user.is_group">
+                                      <div class="mask" style="margin-top: 1%;">
+                                          <ul class='images'>
+                                              <li>
+                                                  <img id="res_image" class="img-rounded" src="/website_capitalcentric/static/src/img/img.png" alt="Restaurant"/>
+                                                  <a href="/capital_centric/fit/grid_view" class="flex-caption">BROWSE OUR RESTAURANTS NOW</a>    
+                                              </li>
+                                          </ul>
+                                      </div>
+                                  </t>
+                                  <t t-if="not user.is_wlabeling and not user.is_group">
+                                      <div class="" style="float:left;width:35%;margin-left:5%;">
+                                          <iframe width="444" height="248" src="https://www.youtube.com/embed/3FQSsEWKs40?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen=""></iframe>
+                                      </div>
+                                      <div class="" style="float:right;width:47%;margin-right:5%;">
+                                          <div class="w_mask">
+                                              <ul class='w_images'>
+                                                  <li>
+                                                      <img id="" class="img-w-rounded" src="/website_capitalcentric/static/src/img/Banner_1.jpg"/>                                           
+                                                  </li>
+                                                  <li>
+                                                      <img id="" class="img-w-rounded" src="/website_capitalcentric/static/src/img/Banner_2.jpg"/>                                           
+                                                  </li>
+                                              </ul>
+                                              <div id="w_triggers" style="visibility:hidden">  
+                                                  <ul class="w_triggers">
+                                                      <li></li>
+                                                      <li></li>
+                                                  </ul>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <p style="clear:both;"/>
+                                  </t>
+                                 
+                              </div>
+                              <div style="margin-top:2%;">
+                                  <div style="width:46%;float:left;margin-left:2%;">
+                                      <div id="heading_block">
+                                          <div class="">
+                                              <span id="font_headingblock"> OUR RESTAURANTS </span>
+                                          </div>
+                                      </div>
+                                      <p></p>
+                                      <div id="display_result">
+                                          <t t-if="not user.is_wlabeling and not user.is_group">
+                                              <!--<table style="width:100%;">
+                                                  <tr>
+                                                      <td class="text-center">
+                                                          <t t-foreach="recent_venues" t-as="partner" class="">
+                                                              <div class="imgrounded" style="width:47%;">
+                                                                  <img id="" class="image_within" t-att-src="'/website/image?model=res.partner&amp;field=display_image&amp;id='+str(partner.id)" title=""/>
+                                                                  <p class="caption">
+                                                                      <t t-esc="partner.name"/>
+                                                                      <pcaption class="caption_info">
+                                                                          <span class="text_span_8" id="res_name"> Address :  <t t-esc="partner.street"/> </span>
+                                                                          <span class="text_span_8"><t t-esc="partner.street2"/></span>
+                                                                          <span class="text_span_8"><t t-esc="partner.city"/> </span>
+                                                                          <span class="text_span_8"><t t-esc="partner.zip"/> </span>
+                                                                          <br/>
+                                                                          <span class="text_span_8"> Dining Style :
+                                                                              <t t-set="count" t-value="0"/>
+                                                                              <t t-foreach="partner.dining_style_ids" t-as="dining">
+                                                                                  <t t-set="count" t-value="count+1"/> 
+                                                                                  <span class="text_span_8"><t t-if="dining.name"><t t-esc="dining.name"/></t></span>
+                                                                                  <t t-if="count &lt; len(partner.dining_style_ids)">
+                                                                                      <span class="text_span_8">,</span>
+                                                                                  </t>
+                                                                              </t>
+                                                                          </span>
+                                                                          <br/>
+                                                                          <span class="text_span_8"> Cuisine :
+                                                                              <t t-set="count" t-value="0"/>
+                                                                              <t t-foreach="partner.cuisine_ids" t-as="cuisine">
+                                                                                  <t t-set="count" t-value="count+1"/> 
+                                                                                  <span class="text_span_8"><t t-esc="cuisine.name"/></span>
+                                                                                  <t t-if="count &lt; len(partner.cuisine_ids)">
+                                                                                      <span class="text_span_8">,</span>
+                                                                                  </t>
+                                                                              </t>
+                                                                          </span> 
+                                                                      </pcaption>
+                                                                  </p>
+                                                              </div>
+                                                          </t>
+                                                      </td>
+                                                  </tr>
+                                              </table>-->
+                                              <div class="col-lg-6">
+                                                  <div class="l_mask">
+                                                      <ul class='l_images'>
+                                                          <li>
+                                                              <img id="" class="img-l-rounded" src="/website_capitalcentric/static/src/img/1.png"/>                                           
+                                                          </li>
+                                                          <li>
+                                                              <img id="" class="img-l-rounded" src="/website_capitalcentric/static/src/img/w4.jpg"/>                                           
+                                                          </li>
+                                                          <li>
+                                                              <img id="" class="img-l-rounded" src="/website_capitalcentric/static/src/img/2.png"/>                                           
+                                                          </li>
+                                                          <li>
+                                                              <img id="" class="img-l-rounded" src="/website_capitalcentric/static/src/img/12.jpg"/>                                           
+                                                          </li>
+                                                          <li>
+                                                              <img id="" class="img-l-rounded" src="/website_capitalcentric/static/src/img/3.jpg"/>                                           
+                                                          </li>
+                                                      </ul>
+                                                      <div id="l_triggers" style="visibility:hidden">  
+                                                          <ul class="l_triggers">
+                                                              <li/>
+                                                              <li/>
+                                                              <li/>
+                                                              <li/>
+                                                              <li/>
+                                                          </ul>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="col-lg-6">
+                                                  <div class="r_mask">
+                                                      <ul class='r_images'>
+                                                          <li>
+                                                              <img id="" class="img-r-rounded" src="/website_capitalcentric/static/src/img/4.jpg"/>                                           
+                                                          </li>
+                                                          <li>
+                                                              <img id="" class="img-r-rounded" src="/website_capitalcentric/static/src/img/gw_4.jpg"/>                                             
+                                                          </li>
+                                                          <li>
+                                                              <img id="" class="img-r-rounded" src="/website_capitalcentric/static/src/img/5.png"/>                                           
+                                                          </li>
+                                                          <li>
+                                                              <img id="" class="img-r-rounded" src="/website_capitalcentric/static/src/img/13.jpg"/>                                             
+                                                          </li>
+                                                          <li>
+                                                              <img id="" class="img-r-rounded" src="/website_capitalcentric/static/src/img/6.png"/>                                           
+                                                          </li>
+                                                      </ul>
+                                                      <div id="r_triggers" style="visibility:hidden">  
+                                                          <ul class="r_triggers">
+                                                              <li/>
+                                                              <li/>
+                                                              <li/>
+                                                              <li/>
+                                                              <li/>
+                                                          </ul>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <p style="clear:both;"/>
+                                              <div class="col-lg-6">
+                                                  <div class="ll_mask" style="height:140px;">
+                                                      <ul class='ll_images' style="height:140px;">
+                                                          <li>
+                                                              <img id="" class="img-ll-rounded" src="/website_capitalcentric/static/src/img/7.jpg"/>                                           
+                                                          </li>
+                                                          <li>
+                                                              <img id="" class="img-ll-rounded" src="/website_capitalcentric/static/src/img/w3.jpg"/>                                           
+                                                          </li>
+                                                          <li>
+                                                              <img id="" class="img-ll-rounded" src="/website_capitalcentric/static/src/img/8.png"/>                                           
+                                                          </li>
+                                                          <li>
+                                                              <img id="" class="img-ll-rounded" src="/website_capitalcentric/static/src/img/14.jpg"/>                                           
+                                                          </li>
+                                                          <li>
+                                                              <img id="" class="img-ll-rounded" src="/website_capitalcentric/static/src/img/9.jpg"/>                                           
+                                                          </li>
+                                                      </ul>
+                                                      <div id="ll_triggers" style="visibility:hidden">  
+                                                          <ul class="ll_triggers">
+                                                              <li/>
+                                                              <li/>
+                                                              <li/>
+                                                              <li/>
+                                                              <li/>
+                                                          </ul>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="col-lg-6">
+                                                  <div class="rr_mask">
+                                                      <ul class='rr_images'>
+                                                          <li>
+                                                              <img id="" class="img-rr-rounded" src="/website_capitalcentric/static/src/img/10.png"/>                                           
+                                                          </li>
+                                                          <li>
+                                                              <img id="" class="img-rr-rounded" src="/website_capitalcentric/static/src/img/w2.jpg"/>                                           
+                                                          </li>
+                                                          <li>
+                                                              <img id="" class="img-rr-rounded" src="/website_capitalcentric/static/src/img/11.jpg"/>                                           
+                                                          </li>
+                                                          <li>
+                                                              <img id="" class="img-rr-rounded" src="/website_capitalcentric/static/src/img/15.jpg"/>                                           
+                                                          </li>
+                                                          <li>
+                                                              <img id="" class="img-rr-rounded" src="/website_capitalcentric/static/src/img/18.jpg"/>                                           
+                                                          </li>
+                                                      </ul>
+                                                      <div id="rr_triggers" style="visibility:hidden">  
+                                                          <ul class="rr_triggers">
+                                                              <li/>
+                                                              <li/>
+                                                              <li/>
+                                                              <li/>
+                                                              <li/>
+                                                          </ul>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </t>
+                                          <t t-if="user.is_wlabeling or user.is_group">
+                                              <t t-set="count" t-value="0"/>
+                                              <div id="myCarousel" class="carousel slide">
+                                                  <div class="carousel-inner">
+                                                      <t t-foreach="recent_venues" t-as="partner" class="">
+                                                          <div t-att-class="'item active' if count == 0 else 'item'">
+                                                              <div class="col-xs-6" style="padding:0px;">
+                                                                  <a href="#">
+                                                                      <div class="imgrounded">
+                                                                          <img id="" class="image_within" t-att-src="'/website/image?model=res.partner&amp;field=display_image&amp;id='+str(partner.id)" title=""/>
+                                                                          <p class="caption">
+                                                                              <t t-esc="partner.name"/>
+                                                                              <pcaption class="caption_info">
+                                                                                  <span class="text_span_8" id="res_name"> Address :  <t t-esc="partner.street"/> </span>
+                                                                                  <span class="text_span_8"><t t-esc="partner.street2"/></span>
+                                                                                  <span class="text_span_8"><t t-esc="partner.city"/> </span>
+                                                                                  <span class="text_span_8"><t t-esc="partner.zip"/> </span>
+                                                                                  <br/>
+                                                                                  <span class="text_span_8"> Dining Style :
+                                                                                      <t t-set="count" t-value="0"/>
+                                                                                      <t t-foreach="partner.dining_style_ids" t-as="dining">
+                                                                                          <t t-set="count" t-value="count+1"/> 
+                                                                                          <span class="text_span_8"><t t-if="dining.name"><t t-esc="dining.name"/></t></span>
+                                                                                          <t t-if="count &lt; len(partner.dining_style_ids)">
+                                                                                              <span class="text_span_8">,</span>
+                                                                                          </t>
+                                                                                      </t>
+                                                                                  </span>
+                                                                                  <br/>
+                                                                                  <span class="text_span_8"> Cuisine :
+                                                                                      <t t-set="count" t-value="0"/>
+                                                                                      <t t-foreach="partner.cuisine_ids" t-as="cuisine">
+                                                                                          <t t-set="count" t-value="count+1"/> 
+                                                                                          <span class="text_span_8"><t t-esc="cuisine.name"/></span>
+                                                                                          <t t-if="count &lt; len(partner.cuisine_ids)">
+                                                                                              <span class="text_span_8">,</span>
+                                                                                          </t>
+                                                                                      </t>
+                                                                                  </span> 
+                                                                              </pcaption>
+                                                                          </p>
+                                                                          <t t-set="count" t-value="count + 1"/>
+                                                                      </div>
+                                                                  </a>
+                                                              </div>
+                                                          </div>
+                                                      </t>
+                                                  </div>
+                                                  
+                                                  <!-- Controls -->
+                                                  <a class="left carousel-control main_color" href="#myCarousel" role="button" data-slide="prev">
+                                                      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                                      <span class="sr-only">Previous</span>
+                                                  </a>
+                                                  <a class="right carousel-control main_color" href="#myCarousel" role="button" data-slide="next">
+                                                      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                                      <span class="sr-only">Next</span>
+                                                  </a>
+                                                  
+                                                  <!--<div class="text-center" style="margin-top:2%;">
+                                                          <a class="" href="#myCarousel" role="button" data-slide="prev">
+                                                              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                                              <span class="sr-only">Previous</span>
+                                                          </a>
+                                                          <a class="" href="#myCarousel" role="button" data-slide="next">
+                                                              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                                              <span class="sr-only">Next</span>
+                                                          </a>
+                                                      </div>-->
+                                              </div>
+                                          </t>
+                                      </div>
+                                      <p></p>
+                                 </div>
+                                 
+                                 <div style="width:46%;float:right;margin-right:2%;">
+                                     <t t-if="user.is_wlabeling or user.is_group">
+                                      <div id="front_block" style="height:150px;">
+                                          <div id="heading_block">
+                                              <t t-set="c_name" t-value="'FIT FOR PURPOSE'"/>
+                                              <t t-if="user.is_group">
+                                                  <t t-set="c_name" t-value="'CAPITAL CENTRIC'"/>
+                                              </t>
+                                              <t t-if="user.is_wlabeling">
+                                                  <t t-set="c_name" t-value="user.name.upper()"/>
+                                                  <t t-if="user.role != 'client'">
+                                                      <t t-set="c_name" t-value="user.partner_id.parent_id.name.upper()"/>
+                                                  </t>
+                                              </t>
+                                              <span id="font_headingblock"> <t t-esc="c_name"/> </span>
+                                          </div>
+                                          <p></p>
+                                          <div id="westfield_slideshow" style="height:150px;display:table;">
+                                              <div style="display:table-cell;vertical-align:middle;">
+                                                  <t t-if="not user.is_group">
+                                                      <div id="sub_div">
+                                                          <span class="main_color">JOIN</span>
+                                                          <div class="join">
+                                                              
+                                                              Sign Up in quick steps, choose
+                                                              your payment method and 
+                                                              you are all set to go 
+                                                              
+                                                          </div>
+                                                      </div>
+                                                      <div id="sub_div">
+                                                          <span class="main_color">DISCOVER</span>
+                                                          <div class="join">
+                                                              
+                                                              Choose from a wide range of finest 
+                                                              restaurants &amp; cuisines available across
+                                                              the United Kingdom &amp; Scotland
+                                                              
+                                                          </div> 
+                                                      </div>
+                                                      <div id="sub_div">
+                                                          <span class="main_color">BOOK</span>
+                                                          <div class="join">
+                                                              
+                                                              Book more for your guests with 
+                                                              less effort. Fast, easy &amp; confirmed 
+                                                              bookings guaranteed
+                                                              
+                                                          </div> 
+                                                      </div>
+                                                  </t>
+                                                  <t t-if="user.is_group">
+                                                      <div class="join">
+                                                          Capital Centric offers a personal and 
+                                                          bespoke booking service for groups of any size and 
+                                                          most budgets and we are totally dedicated 
+                                                          to placing restaurant groups across the UK 
+                                                          and in Scotland.
+                                                          <a href="/capital_centric/about_us" class="main_color" style="float:right;">Read More..</a>
+                                                      </div>
+                                                  </t>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <p></p>
+                                     </t>
+                                         
+                                      <div>
+                                          <t t-if="not user.is_wlabeling and not user.is_group">
+                                              <div id="heading_block">
+                                                  <span id="font_headingblock">
+                                                      <t t-if="not user.is_wlabeling and not user.is_group"> TESTIMONIALS </t>
+    <!--                                                  <t t-if="user.is_wlabeling or user.is_group"> OUR PARTNERS </t> -->
+                                                  </span>
+                                              </div>
+                                          </t>
+                                          <p></p>
+                                          <!--<div class="w_mask">
+                                              <t t-if="user.is_wlabeling or user.is_group">
+                                                  <ul class='w_images'>
+                                                      <li>
+                                                          <img id="" class="img-w-rounded" src="/website_capitalcentric/static/src/img/w1.jpg" alt="Westfield Logo"/>                                           
+                                                      </li>
+                                                      <!-\-<li>
+                                                          <img id="" class="img-w-rounded" src="/website_capitalcentric/static/src/img/w2.jpg" alt="Westfield Image"/>
+                                                      </li>-\->
+                                                      <li>
+                                                          <img id="" class="img-w-rounded" src="/website_capitalcentric/static/src/img/w3.jpg" alt="Westfield Image"/>
+                                                      </li>
+                                                      <li>
+                                                          <img id="" class="img-w-rounded" src="/website_capitalcentric/static/src/img/w4.jpg" alt="Westfield Image"/>
+                                                      </li>
+                                                      <li>
+                                                          <img id="" class="img-w-rounded" src="/website_capitalcentric/static/src/img/w5.jpg" alt="Westfield Image"/>
+                                                      </li>
+                                                      <li>
+                                                          <img id="" class="img-w-rounded" src="/website_capitalcentric/static/src/img/g1_logo_front.jpg" alt="Greenwich Logo"/>                                           
+                                                      </li>
+                                                      <li>
+                                                          <img id="" class="img-w-rounded" src="/website_capitalcentric/static/src/img/gw_1.jpg" alt="Greenwich Image"/>
+                                                      </li>
+                                                      <li>
+                                                          <img id="" class="img-w-rounded" src="/website_capitalcentric/static/src/img/gw_2.jpg" alt="Greenwich Image"/>
+                                                      </li>
+                                                      <li>
+                                                          <img id="" class="img-w-rounded" src="/website_capitalcentric/static/src/img/gw_3.jpg" alt="Greenwich Image"/>
+                                                      </li>
+                                                      <li>
+                                                          <img id="" class="img-w-rounded" src="/website_capitalcentric/static/src/img/gw_4.jpg" alt="Greenwich Image"/>
+                                                      </li>
+                                                      <li>
+                                                          <img id="" class="img-w-rounded" src="/website_capitalcentric/static/src/img/gw_5.jpg" alt="Greenwich Image"/>
+                                                      </li>
+                                                      <li>
+                                                          <img id="" class="img-w-rounded" src="/website_capitalcentric/static/src/img/gw_6.jpg" alt="Greenwich Image"/>
+                                                      </li>
+                                                  </ul>
+                                                  <div id="w_triggers" style="visibility:hidden">  
+                                                      <ul class="w_triggers">
+                                                          <!-\-                                              <li></li>-\->
+                                                          <li></li>
+                                                          <li></li>
+                                                          <li></li>
+                                                          <li></li> 
+                                                          <li></li>
+                                                          <li></li>
+                                                          <li></li>
+                                                          <li></li>
+                                                          <li></li> 
+                                                          <li></li>
+                                                          <li></li>
+                                                      </ul>
+                                                  </div>
+                                              </t>
+                                          </div>-->
+                                          <t t-if="not user.is_wlabeling and not user.is_group">
+                                              <div class="oe_structure">
+                                                  <div id="myQuoteCarousel" class="carousel quotecarousel slide mb0" data-snippet-id="slider">
+                                                      <ol class="carousel-indicators mb0">
+                                                          <li data-slide-to="0" class="active" data-target="#myQuoteCarousel"></li>
+                                                          <li data-slide-to="1" data-target="#myQuoteCarousel" class=""></li>
+                                                          <li data-slide-to="2" data-target="#myQuoteCarousel" class=""></li>
+                                                          <li data-slide-to="3" data-target="#myQuoteCarousel" class=""></li>
+                                                          <li data-slide-to="4" data-target="#myQuoteCarousel" class=""></li>
+                                                          <li data-slide-to="5" data-target="#myQuoteCarousel" class=""></li>
+                                                      </ol>
+                                                      
+                                                      <div class="carousel-inner">
+                                                          <div class="item text_only active">
+                                                              <div class="container">
+                                                                  <div class="content">
+                                                                      <div class="row">
+                                                                          <blockquote class="mt48 mb16 col-md-12">
+                                                                              <p><em>“FIT for Purpose is the ideal online platform for travel professionals to assist in offering clients a memorable add-on for their trip to London.<br/>
+                                                                                  The tool offers a wide range of restaurants including all styles and cuisines, from typical English pubs, to high-end restaurants.<br/>
+                                                                                  The handling of the website is easy and fast so that a booking is quickly made and administrated.<br/>
+                                                                                  A big advantage is the individual adaptability of each booking – options range from meal types and menu choices over date and time adjustments and special dietary requirements.<br/>
+                                                                                  All bookings made can be easily monitored via a booking overview and where necessary amendments can be done easily which only takes seconds. Additionally the website also offers the possibility to monitor payments and download detailed invoices.<br/>
+                                                                                  Altogether, we can highly recommend a co-operation with FIT for Purpose to anyone who wishes to add value to their London products!”</em></p>
+                                                                              <small><span style="color:#ad4bc2;">Hotels &amp; More</span></small></blockquote>
+                                                                      </div>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                          
+                                                          <div class="item text_only">
+                                                              <div class="container">
+                                                                  <div class="content">
+                                                                      <div class="row">
+                                                                          <blockquote class="mt48 mb16 col-md-12">
+                                                                              <p><em>"FIT for Purpose an ideal booking portal for us. Variety of popular restaurants you can choose from, without any hassle. It is also very easy system to navigate."</em></p>
+                                                                              <small><span style="color:#ad4bc2;">Veltra</span></small></blockquote>
+                                                                          
+                                                                          <blockquote class="mt48 mb16 col-md-12 col-md-1">
+                                                                              <p><em>"Congratulations! &amp;nbsp;Very good website- FIT for Purpose - a nice and easy way to find a good selection of value-for- money restaurants."</em></p>
+                                                                              <small><span style="color:#ad4bc2;">Interjet</span></small></blockquote>
+                                                                      </div>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                          
+                                                          <div class="item text_only">
+                                                              <div class="container">
+                                                                  <div class="content">
+                                                                      <div class="row">
+                                                                          <blockquote class="mt48 mb16 col-md-12">
+                                                                              <p><em>“I find FIT for Purpose a great tool, as it allows you to look for restaurants by city, area, name, cuisine type even by budget. Just choose what you need and the results are in front of you in a few seconds. It is the quickest way to offer and book just the right kind of restaurant for our clients. I’ve been using it on and off since the tool became available and find it really saves loads of time and worries”</em></p>
+                                                                              <small><span style="color:#ad4bc2;">AC Tours</span></small></blockquote>
+                                                                      </div>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                          
+                                                          <div class="item text_only">
+                                                              <div class="container">
+                                                                  <div class="content">
+                                                                      <div class="row">
+                                                                          <blockquote class="mt48 mb16 col-md-12">
+                                                                              <p><em>"I believe FIT for Purpose (FFP) has played a great role in bridging as a platform to quote or book online various types of restaurants for our clients.<br/>
+                                                                                  FFP's huge database of restaurants has provided further evidence of just how far the company has progressed in recent times - a perfect blend for local market requirements and well worth.<br/>
+                                                                                  I have found &amp;nbsp;the FFP experience something more than an opportunity to enjoy an excellent meals for our clients with wider choices.<br/>
+                                                                                  Look forward to see more and more restaurants in its database and I wish all the best for its future endeavours."</em></p>
+                                                                              <small><span style="color:#ad4bc2;">Jalpak International</span></small></blockquote>
+                                                                      </div>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                          
+                                                          <div class="item text_only">
+                                                              <div class="container">
+                                                                  <div class="content">
+                                                                      <div class="row">
+                                                                          <blockquote class="mt48 mb16 col-md-12">
+                                                                              <p><em>"FIT for Purpose is a unique tool for us as a DMC. It allow us to access to a range of venues and menus to view and use without having to contact venues directly where often we are unable to get hold anyone who can help us with prices and menu samples.<br/>
+                                                                                  Being able to issue vouchers for smaller parties gives us a competitive edge and allows us to offer our overseas clients a service we found difficult to do before.<br/>
+                                                                                  The service is easy to use as the booking and payment process is quick and uncomplicated making the whole experience less laborious and therefore allowing us to work faster and more efficiently. Perfect !"</em></p>
+                                                                              <small><span style="color:#ad4bc2;">Scancoming UK</span></small></blockquote>
+                                                                      </div>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                          
+                                                          <div class="item text_only">
+                                                              <div class="container">
+                                                                  <div class="content">
+                                                                      <div class="row">
+                                                                          <blockquote class="mt48 mb16 col-md-12">
+                                                                              <p><em>"When we were introduced to FIT for Purpose by Capital Centric felt a little apprehensive of using the&amp;nbsp;<br/>
+                                                                                  system as we’ve never been confident about making bookings for our clients on line. &amp;nbsp;<br/>
+                                                                                  We had a specific request for a restaurant so took the bull by the horns and went for it and I couldn’t<br/>
+                                                                                  believe how easy and simple it was… then I was concerned as I had to amend numbers a few weeks before the reservation date but once again it was simple..&amp;nbsp;<br/>
+                                                                                  Printed the invoice off eventually, had a few problems with this but this was actually down to my computer !"</em></p>
+                                                                              <small><span style="color:#ad4bc2;">SJ International</span></small></blockquote>
+                                                                      </div>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </t>
+                                      </div>
+                                 </div>
+                                 <p style="clear:both;"/>
+                          </div>
+                          </div>
+                      </div>
+                  </t>
+                   <t t-set="ref_content1">
+                        <div id="push" style="height:180px;"></div>
+                   </t>
+                </t>
+                
+                <div style="height:180px;">
+                    <t t-call="website_capitalcentric.footersection"/>
+                    <t t-call="website_capitalcentric.copyrightsection"/>
+                </div>
+            </xpath>
+        </template> 
+        
+        
+<!--    ==============================================================          
+                               Video Template          
+        ==============================================================   -->
+        
+        <template id="video_template" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="website_capitalcentric.capitalcentric_layout">
+                <t t-set="ref_content">
+                    <t t-set="head">
+                        <script type="text/javascript" src="/website_capitalcentric/static/src/js/signup.js"/>
+                        <link rel='stylesheet' href='/website_capitalcentric/static/src/css/operator_login.css'/>
+                        <style>
+                            #wrapwrap
+                            {
+                                height: 100%;
+                                margin: 0 auto -180px;
+                            }
+                        </style>
+                    </t>
+                    <div id="bookinglayout" style="padding-bottom:180px;">
+                        <t t-call="website_capitalcentric.logo"/>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <div id="Sign_up">
+                            <h2> Watch our video to see how ‘FIT For Purpose’ can help your business today! </h2>
+                        </div>
+                        <br></br>
+                        <div style="width:640px;height:360px;margin:0 auto;">
+                            <iframe tye="text/html" width="100%" height="360" class="youtube-player" src="https://www.youtube.com/embed/3FQSsEWKs40?rel=0" frameborder="0" allowfullscreen="">
+                            </iframe>
+                        </div>
+                        <p id="operator_spacing"/>
+                        <div id="submit_reset">
+                            <a href="/" id="home_button" class="button button_operator text-center"> Home </a>
+                        </div>
+                        <p id="operator_spacing"/>
+                    </div>
+                </t>
+                <t t-set="ref_content1">
+                    <div id="push" style="height:180px;"></div>
+                </t>
+            </t>
+            <div style="height:180px;">
+                <t t-call="website_capitalcentric.footersection"/>
+                <t t-call="website_capitalcentric.copyrightsection"/>
+            </div>
+        </template>
+        
+    </data>
+</openerp>

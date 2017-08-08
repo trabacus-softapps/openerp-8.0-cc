@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+<!--    ===============================================================================================          
+                                          Template for Venue Welcome              
+        ===============================================================================================   -->
+        <template id="logo_buttons">
+            <div id="welcomeuser">
+                <span> Welcome, <t t-esc = "user.partner_id.name or ''"/></span>
+                <br/>
+                <div style="float:right;">
+                    <a style="" href="/capital_centric/restaurant/bookings" title="Home"><i style="font-size:1.3em;color:#404040;" class="fa fa-home"></i></a>&amp;nbsp;&amp;nbsp;
+                    <a style="" t-attf-href="/capital_centric/contact_us" title="Contact Us" target="_blank"><i style="color:#404040;font-size:1.2em" class="fa fa-envelope"/></a>&amp;nbsp;&amp;nbsp;
+                    <a class="bookinginfolink" style="" title="Log Off" t-attf-href="/web/session/logout?redirect=/capital_centric/restaurant_login" role="menuitem"><i style="font-size:1.3em;color:#404040;" class="fa fa-sign-out"/></a>
+<!--                    <p id="log_out" class="bookinginfolink" style="" title="Log Off" onclick=""><i style="font-size:1.3em;color:#404040;" class="fa fa-sign-out"/></p>-->
+                </div>
+            </div>
+            <t t-call="website_capitalcentric.buttons"/>
+            <div style="cursor: pointer;position: fixed;_position: absolute;display: block;top: 15%;_top: expression(eval(document.body.scrollTop)+422);right: 0px;z-index: 2147000000;" class="main_color">
+                <table>
+                    <tr>
+                        <td style="vertical-align:top;padding:0;">
+                            <div class="border_main" style="border-right:0px;padding: 10px 5px 10px 10px;border-top-left-radius: 10px;border-bottom-left-radius: 10px;background:white;" title="Contact Us" id="button">
+                                <i class="fa fa-envelope" style="font-size:2em;"/>
+                            </div>
+                        </td>
+                        <td style="padding:0;">
+                            <div id="contact_us_pop_up" class="border_main">
+                                <form action="/website_capitalcentric/contact_us_form/pop_up" name="" method="POST" id="pop_up_contact_form">
+                                    <div class="modal-content" style="border-radius: 0px;">
+                                        <div class="modal-header" style="padding:10px;">
+                                            <h3 class="modal-title" style="font-size:x-large;text-indent:0;">Contact Us</h3>
+                                        </div>
+                                        <div class="modal-body" style="padding:15px;">
+                                            <table style="width:100%;">
+                                                <tr>
+                                                    <td style="width:20%">
+                                                        <label>Name</label>
+                                                        <p></p>
+                                                    </td>
+                                                    <td style="width:80%">
+                                                        <input id="contact_name" style="width:100%;padding-left:1%" required="True" class="input-control operator_inputs" type="text" name="name" title=""/>
+                                                        <p></p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label>Email</label>
+                                                        <p></p>
+                                                    </td>
+                                                    <td>
+                                                        <input id="contact_email" style="width:100%;padding-left:1%" required="True" class="input-control operator_inputs" type="email" name="email" placeholder="" title=""/>
+                                                        <p></p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label>Phone</label>
+                                                        <p></p>
+                                                    </td>
+                                                    <td>
+                                                        <input style="width:100%;padding-left:1%" required="True" id="contact_phone" class="input-control operator_inputs" type="text" name="phone" placeholder="" title=""/>
+                                                        <p></p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label>Message</label>
+                                                        <p></p>
+                                                    </td>
+                                                    <td>
+                                                        <textarea style="width:100%;padding-left:1%;height:150px;resize:none;overflow:auto;display:block;" required="True" id="contact_message" class="input-control operator_inputs" type="text" name="message" title=""/>
+                                                        <p></p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <p class="alert alert-danger contact_us_msg" style="margin:0;width:100%;text-align:center;">
+                                                Thank you. We will get back to you shortly.
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer" style="margin-top:0;padding:15px;">
+                                            <input type="reset" id="" class="btn btn-priCmary" style="width:70px;background-color:#ad4bc2;color:white;" value="Reset"/>
+                                            <input value="Submit" id="contact_continue_button" type="submit" class="btn btn-priCmary" style="width:70px;background-color:#ad4bc2;color:white;"/>
+            <!--                                <input class="btn btn-priCmary cancel_button_cmn" value="Cancel" id="cancel_button" style="width:70px;background-color:#c00000;color:white;"/>-->
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </template>
+        
+        
+<!--    ===============================================================================================          
+                                          Template for Venue Links              
+        ===============================================================================================   -->
+        
+        <template id="buttons">
+            <div id="bookingline">
+                <div id="fitbutton" class="text-center" style="width:12%;">
+                    <a href="/capital_centric/restaurant/bookings" class="text_span main_links_style"> BOOKINGS </a>
+
+                </div>
+                <t t-if="user.role != 'venue_user'">
+                    <div id="invoicebutton" class="text-center" style="width:12%;">
+                        <a t-attf-href="/capital_centric/invoice_details/restaurant" title="Use this menu to enter the invoice details for your restaurant/group. All invoices for your restaurants will be raised with the details entered here. The information entered while signing up is displayed here by default." class="text_span main_links_style"> INVOICE </a>
+                    </div>
+                </t>
+                <div id="restaurantbutton" class="text-center" style="width:12%;">
+                    <a href="/capital_centric/restaurant" class="text_span main_links_style" title="Use this menu to add details about your restaurants, including address, timings, menus, pricing, allocations etc."> RESTAURANTS </a>
+                </div>
+                <t t-if="user.role != 'venue_user'">
+                    <div id="contactbutton" class="text-center" style="width:12%;">
+                        <a t-attf-href="/capital_centric/contacts/restaurant" class="text_span main_links_style" title="Use this menu to add contacts of your company/restaurant. You will be able to choose from this list of contacts on the Invoice Detail and Restaurant pages"> CONTACTS </a>
+                    </div>
+                </t>
+                <div id="tcbutton" class="text-center" style="width:12%;">
+                    <a href="/capital_centric/restaurant/tc" class="text_span main_links_style" title="Click to read the TERMS &amp; CONDITIONS applicable for using this service"> TERMS </a>
+                </div>
+                <div id="privacy_policy" class="text-center" style="width:12%;">
+                    <a id="" class="text_span main_links_style" href="/capital_centric/privacy_policy" title="Click to read the privacy policy of this service"> PRIVACY POLICY </a>
+                </div>
+            </div>
+        </template>
+        
+         
+        
+<!--    ==============================================================          
+                 Bookings Template for Tour Operator & Venue             
+        ==============================================================   -->    
+        <template id="bookings" page="True" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="website_capitalcentric.capitalcentric_layout">
+                <t t-set="ref_content">
+                    <t t-set="head">
+                        <link rel='stylesheet' href='/website_capitalcentric/static/src/css/search.css'/>
+                        <link rel='stylesheet' href='/website_capitalcentric/static/src/css/fit.css'/>
+                        <style>
+                            #wrapwrap
+                            {
+                                height: 100%;
+                                margin: 0 auto -40px;
+                            }
+                        </style>
+                        <script type="text/javascript" src="/website_capitalcentric/static/src/js/fit.js"/>
+                        <script>
+                            $(document).ready(function()
+                            {
+                                $(".datepicker").datepicker({dateFormat: "dd-mm-yy", yearRange: '-99:+0'});
+                            }); 
+                        </script>
+                    </t>
+                    <div id="bookinglayout">
+                        <t t-call="website_capitalcentric.logo"/>
+                        <t t-if="path == 'restaurant'">
+                            <t t-call="website_capitalcentric.logo_buttons"/>
+                        </t>
+                        <t t-if="path == 'operator'">
+                            <t t-call = "website_capitalcentric.welcome_operator"/>
+                            <t t-call="website_capitalcentric.operator_buttons"/>
+                        </t>
+                        <p></p>
+                        <div style="height:30px;width:100%;display:table;">
+                            <span style="display: table-cell;vertical-align: middle;font-size:8pt;color:#c00000;font-style:italic;">* Discretionary service charge removed by customer</span>    
+                        <button style="float:right;width:120px;" class="button" id="add_filters_button"><img src="/website_capitalcentric/static/src/img/filled-filter.png" height="15" width="15"> Add Filters </img></button></div>
+                        <p></p>
+                        <input id="path_for_js" t-att-value="path"/>
+
+<!--  Bookings Filter Table  -->
+                        <form name = "bookings_filter_form" id="filter_form" t-att-action="'/capital_centric/'+ path +'/bookings'" method="post" style="padding-top:1%;">
+                            <table style="width:100%;table-layout:fixed;">
+                                <tr>
+                                    <td style="padding-left:1%;padding-right:1%;">
+                                        <label> Enquiry No. </label>
+                                        <input id="enq_no" name="enq_no." class="input-control input_val" style="display:block;padding-left:4%;" t-att-value="'enq_no.' in vals and vals['enq_no.'] or ''"> </input>   
+                                    </td>
+                                    <td style="padding-left:1%;padding-right:1%;">
+                                        <label> Start Date</label>
+                                        <input style="position:initial;padding-left:4%;" id="start_date" name="start_date" t-att-value="'start_date' in vals and vals['start_date'] or ''" type="text" class="datepicker input-control input_val"/>
+                                    </td>
+                                    <td style="padding-left:1%;padding-right:1%;">
+                                        <label> End Date </label>
+                                        <input style="position:initial;padding-left:4%;" id="end_date" name="end_date" t-att-value="'end_date' in vals and vals['end_date'] or ''" type="text" class="datepicker input-control input_val"/>
+                                    </td>                                    
+                                    <t t-if="path=='operator'">
+                                        <td style="padding-left:1%;padding-right:1%;">
+                                            <label> Restaurant Name </label>
+                                            <input id="res_name" name="res_name" class="input-control input_val" style="padding-left:4%;display:block;" t-att-value="'res_name' in vals and vals['res_name'] or ''"> </input>
+                                        </td>
+                                    </t>
+                                    <td style="padding-left:1%;padding-right:1%;">
+                                        <label> Guest Name </label>
+                                        <input id="guest_name" name="guest_name" class="input-control input_val" style="display:block;padding-left:4%;" t-att-value="'guest_name' in vals and vals['guest_name'] or ''"> </input>
+                                    </td>
+                                    <td style="padding-left:1%;padding-right:1%;">
+                                        <label> Guest Email </label>
+                                        <input id="guest_email" type="email" name="guest_email" class="input-control input_val" style="display:block;padding-left:4%;" t-att-value="'guest_email' in vals and vals['guest_email'] or '' "> </input>
+                                        <input name="from_which_path" style="display:none;" t-att-value="path"/>                                        
+                                    </td>
+                                    <!--<t t-if="path == 'operator'">
+                                        <td style="padding-left:1%;padding-right:1%;">
+                                            <label> Booked By </label>
+                                            <select name="bookd_by" style="display:block;padding:2px;" id="bookd_by" class="input-control input_val" title="Booked By">
+                                                <option value=""> Select Booked By.. </option>
+                                                <t t-foreach = "bookdby_ids or []" t-as='bkd_by'>
+                                                    <option t-att-value="bkd_by.id" t-att-selected="'bookd_by' in vals and vals['bookd_by'] == str(bkd_by.id)"><t t-esc="bkd_by.name"/></option>
+                                                </t>
+                                            </select>
+                                        </td>
+                                    </t>-->
+                                    <td style="padding-left:1%;padding-right:1%;">
+                                        <label> Status </label>
+                                        <select name="bking_status" style="display:block;padding:2px;" id="bking_status" class="input-control input_val" title="Select Booking Status">
+                                            <option value=""> Select Status.. </option>
+                                            <t t-if="path == 'restaurant'">
+                                                <option t-att-selected="'bking_status' in vals and vals['bking_status'] == 'open' or ''" value="['open','done']"> Confirmed </option>
+                                                <option t-att-selected="'bking_status' in vals and vals['bking_status'] == 'cancel' or ''" value="['cancel']"> Cancelled </option>
+                                            </t>
+                                            <t t-if="path == 'operator'">
+                                                <option t-att-selected="'bking_status' in vals and vals['bking_status'] == 'Completed' or ''" value="Completed"> Completed </option>
+                                                <option t-att-selected="'bking_status' in vals and vals['bking_status'] == 'Invoiced' or ''" value="Invoiced"> Invoiced </option>
+                                                <option t-att-selected="'bking_status' in vals and vals['bking_status'] == 'Paid' or ''" value="Paid"> Paid </option>
+                                            </t>
+                                        </select>
+                                    </td>
+                                    <t t-if="path == 'operator'">
+                                        <td style="padding-left:1%;padding-right:1%;">
+                                            <label> Tour Operator Ref. </label>
+                                            <input id="top_ref" name="top_ref" class="input-control input_val" style="display:block;padding-left:4%;" t-att-value="'top_ref' in vals and vals['top_ref'] or ''"> </input>   
+                                        </td>
+                                    </t>
+                                    <t t-if="path == 'restaurant'"> 
+                                        <td style="padding-left:1%;padding-right:1%;">
+                                            <label> Invoice Status </label>
+                                            <select name="inv_status" style="display:block;padding:2px;" id="inv_status" class="input-control input_val" title="Select Invoice Status">
+                                                <option value=""> Select Status.. </option>
+                                                <option t-att-selected="'inv_status' in vals and vals['inv_status'] == 'open' or ''" value="open"> Received </option>
+                                                <option t-att-selected="'inv_status' in vals and vals['inv_status'] == 'paid' or ''" value="paid"> Paid </option>                                                                                        
+                                            </select>   
+                                        </td>
+                                        <td style="padding-left:1%;padding-right:1%;">
+                                            <label> Enquiry No. </label>
+                                            <input id="enq_no" name="enq_no." class="input-control input_val" style="display:block;padding-left:4%;" t-att-value="'enq_no.' in vals and vals['enq_no.'] or ''"> </input>   
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr>
+                                    <t t-if="path == 'operator'">
+                                       <td style="padding-left:1%;padding-right:1%;" colspan="2">
+                                           <label> Ref. Link </label>
+                                           <select id="reflinks" name="reflinks" class="input-control input_val" style="display:block;padding-left:4%;">
+                                                 <option value=""> Select Ref. Links </option>
+                                                  <t t-foreach="ref_links or []" t-as="ref">
+                                                     <option t-att-selected="vals and vals['reflinks'] == ref or ''"> <t t-esc="ref"/> </option>
+                                                  </t>
+                                           </select>
+                                       </td>
+                                    </t>
+                                    <td style="padding-left:1%;padding-right:1%;">
+                                        <t t-if="path == 'restaurant'">
+                                            <label> Tour Operator Ref. </label>
+                                            <input id="top_ref" name="top_ref" class="input-control input_val" style="display:block;padding-left:4%;" t-att-value="'top_ref' in vals and vals['top_ref'] or ''"> </input>
+                                        </t>
+                                    </td>
+                                    <td/>
+                                    <td colspan="4" style="padding-top:1.2%;padding-left:1%;text-align:right;">
+                                        <button style="height:24px;width:100px;" type="submit" id = "filter_search" class="button"> Filter </button>&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                        <button style="height:24px;width:100px;" type="button" id = "reset_filter" class="button" onClick="resetForm()"> Reset </button>&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                        <button style="height:24px;width:auto;" type="button" id="btnExport" class="button">Export to Excel</button>&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                                    </td>                                    
+                                </tr>
+                            </table>
+                        </form>
+                        <t t-call="website_capitalcentric.fit_form"/>
+                     </div>
+                    <br></br>
+                </t>
+                <t t-set="ref_content1">
+                    <div id="push" style="height:40px;"></div>
+                </t>
+            </t>
+            <div style="height:40px;">
+                <t t-call="website_capitalcentric.copyrightsection"/>
+            </div>
+        </template>
+        
+
+<!--   Bookings Table  -->
+        <template id="fit_form">
+            <p></p>
+            <table id="lead_table" style="">
+                <tr>
+                    <th id="column_id" class="columns_text"> Enquiry No. </th> 
+                    <th id="column_dob" class="columns_text"> Booking Date &amp; Time </th>
+                    <th id="column_gname" class="columns_text">Restaurant</th>                    
+                    <th id="column_to_ref" class="columns_text"> T.O. Ref. </th>
+                    <th id="column_guest" class="columns_number"> Guest(s) </th>
+                    <th id="column_guest_name" class="columns_text"> Guest Name </th>
+                    <th id="column_guest_email" class="columns_text" style="padding-left:0;padding-right:0;"> Guest Email / Contact </th>
+                   <!-- <th id="column_ref_link" class="columns_text" style="padding-left:0;padding-right:0;"> Referral Link </th> -->
+                    <t t-if="path == 'operator'">
+                        <th id="column_guest_name" class="columns_text"> Booked By </th>
+                    </t>
+                    <th id="column_menu" class="columns_text"> Menu(s) </th>
+                    <th id="column_amount" class="columns_number"> Amt.(<t t-esc="symbol"/>) </th>
+                    <th id="column_status" class="columns_text"> Status </th>
+                    <t t-if="path == 'restaurant'">
+                        <th id="column_viewlink" class="columns_text"> Inv. Status</th>
+                    </t>
+                    <t t-if="path == 'operator'">
+                        <th id="" style="width:4%" class="columns_center"></th>
+                        <th id="" style="width:2%" class="columns_center"></th>
+                        <th id="" style="width:3%" class="columns_center"></th>
+                        <th id="column_viewlink" class="columns_center"></th>
+                    </t>
+                </tr>
+                <tr class="alternative_record" t-foreach="lead_ids" t-as="lead"> 
+                    <td style="display:none;" id="lead_id"><t t-esc="lead.id"/></td>
+                    <td class="singleblock_text"><t t-esc="lead.lead_no"/></td> 
+                    <td class="singleblock_text"><t t-esc="lead.conv_dob"></t>&amp;nbsp;&amp;nbsp;<t t-esc="lead.conv_tob"/></td>
+                    <td class="singleblock_text"><t t-esc="lead.restaurant_id.name"/></td>                    
+                    <td class="singleblock_text"><t t-esc="lead.cust_ref"/></td>
+                    <td class="singleblock_number"><t t-esc="lead.covers"/></td>
+                    <td class="singleblock_text"><t t-if="lead.title"><t t-esc="lead.title.name"/>&amp;nbsp;</t><t t-esc="lead.partner_name"/>&amp;nbsp;<t t-esc="lead.contact_name"/></td>
+                    <td class="singleblock_text" style="padding-left:0;"><t t-esc="lead.email_from"/> / <br/><t t-esc="lead.mobile"/></td>
+                    <!--<td class="singleblock_text" id="ref_link" style="padding-left:0;"><t t-esc="lead.referral_link"/></td> -->
+                    <t t-if="path == 'operator'">
+                        <td class="singleblock_text"><t t-esc="lead.sales_person and lead.sales_person.name or ''"/></td>
+                    </t>
+                    <td class="singleblock_text"><t t-esc="info_dtls[lead.id]['menus']"/></td>
+                    <t t-if="path == 'operator'">
+                        <td class="singleblock_number"><t t-esc="info_dtls[lead.id]['to_price']"/><t t-if="lead.is_servccharge"><b>*</b></t></td>
+                    </t>
+                    <t t-if="path != 'operator'">
+                        <td class="singleblock_number"><t t-esc="info_dtls[lead.id]['rest_price']"/><t t-if="lead.is_servccharge"><b>*</b></t></td>
+                    </t>
+                    <td class="singleblock_text" id="lead_stage">
+                        <t t-if="path != 'operator' and lead.stage_id.name in ('Completed','Invoiced','Paid')">Confirmed</t>
+                        <t t-if="lead.stage_id.name == 'Lost'">Cancelled</t>
+                        <t t-if="path == 'operator' and lead.stage_id.name != 'Lost'"><t t-esc="lead.stage_id.name"/></t></td>
+                    <t t-if="path == 'restaurant'">
+                        <td class="singleblock_text">
+                            <t t-if="lead.invoice_status=='open'">Received</t>
+                            <t t-if="lead.invoice_status=='paid'">Paid</t>
+                        </td>
+                    </t>
+                    <t t-if="path == 'operator'">
+                        <td class="singleblock_center" style="" id="amend_td">
+                            <a disabled="disabled" id="amend" class="main_color bookinginfolink cancel_booking_request" title="Amend"><i style="font-size:1.2em" class="fa fa-pencil-square-o"/></a>
+                        </td>
+                        <td class="singleblock_center" style="" id="cancel_icon_td">
+                            <t t-if="lead.is_cancelled">
+                                <a id="make_booking" href="#" class="main_color bookinginfolink make_booking_request" title="Make another booking for this customer"><i style="font-size:1.2em" class="fa fa-plus-square-o"/></a>                                
+                            </t>
+                            <t t-if="not lead.is_cancelled">
+                                <a id="make_booking" t-attf-href="/capital_centric/fit/grid_view?lead_id=#{lead.id}" class="main_color bookinginfolink make_booking_request" title="Make another booking for this customer"><i style="font-size:1.2em" class="fa fa-plus-square-o"/></a>    
+                            </t>
+                            
+                        </td>
+                        <td class="singleblock_center" style="" id="cancel_icon_td">
+                            <a id="cancel_icon" class="main_color bookinginfolink cancel_booking_request" title="Cancel booking"><i style="font-size:1.2em" class="fa fa-times-circle-o"></i></a>
+                        </td> 
+                        <td class="singleblock_center" style="padding-left:0;" id="print_voucher">
+                            <a id="" t-attf-href="/capital_centric/report/#{lead.id}" class="bookinginfolink print_voucher main_color" title="Print voucher"><i style="font-size:1.2em" class="fa fa-print"></i></a>
+                        </td>
+                    </t>
+                </tr>   
+            </table>
+            
+            
+<!--  Dialog Box for Bookings Cancellation Icon in Bookings Table  -->
+            <div id="login_fader"/>
+            <div class="modal-dialog" id="div3" style="background-color:transparent;width:50%;">
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:15px;">
+                        <h3 class="modal-title"></h3>
+                    </div>
+                    <div class="modal-body" style="padding:15px;">
+                        <t t-call="website_capitalcentric.menu_and_covers"/>
+                    </div>
+                    <div class="modal-footer" style="margin-top:0;padding:15px;">
+                        <p class="alert alert-danger" id="alert_text" style="display:inline-block;width: auto;font-size: 10pt;">
+                            <t t-esc="error"/> 
+                        </p>  
+                        <button type="submit" id="" class="btn btn-priCmary main_bgcolor continue_button" style="color:white;padding: 5px 12px;">Amend Booking</button> 
+                        <input type="button" class="btn btn-priCmary" value="Cancel" id="cancel_button_menu_covers" style="display:inline-block;width:84px;background-color:#c00000;color:white;"/>
+                    </div>
+                </div>
+            </div>
+        </template>
+        
+        <template id="menu_and_covers">
+            <div class="replaced_div" style="display:inline-block;width:100%;">
+                <t t-if="not_allowed">
+                    <input id="error_msg" t-att-value="not_allowed" style="display:none;"/>
+                </t>
+                <span id="info_id" style="display:none;"><t t-esc="info and info.id or False"/></span>
+                <table style="width:100%;font-size: 10pt;" class="">
+                    <tr>
+                        <td style="width:15%;">
+                            <p> Enquiry No.</p>
+                        </td>
+                        <td style="width:3%;text-align:center;">
+                            <p> : </p>
+                        </td>
+                        <td style="width:32%;">
+                            <p><t t-esc="lead and lead.lead_no"/></p>
+                        </td>
+                        <td style="width:15%;">
+                            <p> Restaurant </p>
+                        </td>
+                        <td style="text-align:center;width:3%;">
+                            <p> : </p>
+                        </td>
+                        <td style="width:32%;">
+                            <p><t t-esc="lead and lead.restaurant_id.name"/></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p> Booking Date </p>
+                        </td>
+                        <td style="width:5%;text-align:center;">
+                            <p> : </p>
+                        </td>
+                        <td>
+                            <p><t t-esc="lead and lead.conv_dob"></t>&amp;nbsp;&amp;nbsp;<t t-esc="lead and lead.conv_tob"/></p>
+                        </td>
+                        <td/>
+                        <td/>
+                        <td/>
+                    </tr>
+                    <tr id="info_tr">
+                        <td colspan="6">
+                            <p style="font-size:9pt;color:#c00000">Enter the revised number of covers and click on Amend Booking </p>            
+                        </td>
+                    </tr>
+                </table>             
+                <div id="res_button_block" style="border-bottom: 0px;">
+                    <div id="menus_btn" style="text-align:center;height:36px;" class="common_button button_common chng_menus" title="Use this tab to change the menu details of your restaurant" onclick="click_tab(this)"><p id="res_button_text"> Menus </p></div>
+                    <div id="custinfo_btn" style="text-align:center;height:36px;" class="common_button chng_custinfo" title="" onclick="click_tab(this)"><p id="res_button_text"> Customer Info </p></div>
+                </div>
+                <div id="menus_tab" style="padding: 1%;border: 1px solid #bfbfbf;height: 276px;">
+                    <table style="width:100%;">
+                        <tr>
+                            <th class="columns_text" style="width:50%;padding-left:1%;"> Menu Name </th>
+                            <th class="columns_text" style="width:50%"> No. of Covers </th>
+                        </tr>                        
+                        <tr>
+                            <td colspan="2">
+                            <div style="overflow-y:auto;height:192px;">
+                                <table style="width:100%;" id="menu_covers_table">
+                                    <tr t-foreach="menus or []" t-as="menu" class="alternative_record">
+                                        <td style="display:none"> <input id="menu_id" t-att-value="menu.id"></input></td>
+                                        <td style="padding-left:1%;">
+                                           <span style="min-width:200px;font-size:10pt;"><t t-esc="menu.menu_id.name or 'NA'"/></span>
+                                        </td>
+                                        <td style="padding-top:2%;padding-bottom:2%;">
+                                            <input name="covers" id="covers" style="height:24px;width:50px;margin:0;" class="input-control covers_class" t-att-value="menu.no_of_covers or '0'" onchange="covers_onfocus()"/>            
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            </td>
+                        </tr>                        
+                    </table>
+                    <p></p>
+                    <input name="send_confirmation_fit" class="" id="send_confirmation_fit" type="checkbox" style="display:inline-block;"/>
+                    <span class="text_span" style="display:inline-block"> Send Confirmation to guest</span>
+                    
+                </div>                
+                <div style="padding:1%;border: 1px solid #bfbfbf;height: 276px;" id="cust_info_tab">
+                    <!--<button type="submit" id="edit_btn" class="btn btn-priCmary main_bgcolor" style="color:white;float:right;padding: 2px 13px;font-size:12px;" onclick="save_customerinfo(this)">Edit</button>
+                    <button type="submit" id="save_btn" class="btn btn-priCmary main_bgcolor" style="color:white;display:none;float:right;padding: 2px 13px;font-size:12px;" onclick="save_customerinfo(this)">Save</button>
+-->                    <table class="table-condensed" id="customer_confirm" style="clear:both;">
+                         <tr>
+                            <td colspan="2">
+                                <div>
+                                    <label>Tour Operator Reference</label>
+                                    <div>
+                                        <input style="width:100%;padding-left:1.5%;" id="cust_ref"  class="input-control guest_input cust_ref" type="text" name="cust_ref" t-att-value="lead and lead.cust_ref or ''"  onchange="covers_onfocus()"/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:20%">
+                                <label>Title</label>
+                                <div>
+                                    <select name="title" class="input-control guest_input title"  id="title" style="width:100%;padding:4px;padding-left:1%"  onchange="covers_onfocus()">
+                                        <option value="">Title..</option>
+                                        <t t-foreach="title_ids or []" t-as="title">
+                                            <option t-att-value="title.id" t-att-selected="lead and lead.title and lead.title.id == title.id"><t t-esc="title.name"/></option>
+                                        </t>
+                                    </select>
+                                </div>
+                            </td>
+                            <td style="width:40%">
+                                <label style="text-align:left;">First Name</label>
+                                <div>
+                                    <input name="f_name" style="padding-left:2%;width:100%"  class="input-control guest_input partner_name" id="partner_name" t-att-value="lead and lead.partner_name"  onchange="covers_onfocus()"/>
+                                </div>
+                            </td>
+                            <td style="width:40%">
+                                <label style="text-align:left;">Second Name</label>
+                                <div>
+                                    <input name="s_name" style="padding-left:2%;width:100%"  class="input-control guest_input contact_name" id="contact_name" t-att-value="lead and lead.contact_name"  onchange="covers_onfocus()"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                           <td>
+                                <label>Mobile</label>
+                                <div>
+                                    <input style="padding-left:5%;width:100%" class="input-control guest_input mobile"  id="mobile" name="mobile" t-att-value="lead and lead.mobile"  onchange="covers_onfocus()"/>
+                                </div>
+                           </td>
+                           <td colspan="2">
+                                <label>Email</label>
+                                <div>
+                                    <input style="padding-left:1%;width:100%" class="input-control guest_input email_from"  id="email_from" type="email" name="email" t-att-value="lead and lead.email_from "  onchange="covers_onfocus()"/>
+                                </div>
+                           </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <label>Special Dietary Requirements</label>
+                                <input style="padding-left:1%;width:100%" class="input-control guest_input spcl_req"  id="spcl_req" type="text" name="spcl_req" t-att-value="info and info.spcl_req"  onchange="covers_onfocus()"/>            
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> <input style="display:none;" id="prev_cust_ref" type="text" name="prev_cust_ref" t-att-value="lead and lead.cust_ref or ''"/></td>
+                            <td> <input style="display:none;" id="prev_title" type="text" name="prev_title" t-att-value="lead and lead.title and lead.title.id"/> </td>
+                            <td> <input style="display:none;" id="prev_partner_name" name="prev_f_name"   t-att-value="lead and lead.partner_name"/> </td>
+                            <td> <input style="display:none;" id="prev_contact_name" name="prev_s_name"     t-att-value="lead and lead.contact_name"/></td>
+                            <td> <input style="display:none;" id="prev_mobile" name="prev_mobile" t-att-value="lead and lead.mobile"/> </td>
+                            <td> <input style="display:none;" id="prev_email_from" type="email" name="prev_email" t-att-value="lead and lead.email_from "/> </td>
+                            <td> <input style="display:none;" id="prev_spcl_req" type="text" name="prev_spcl_req" t-att-value="info and info.spcl_req"/> </td>
+                        </tr>
+                    </table>                    
+                </div>
+            </div>
+        </template>
+        
+    </data>
+</openerp>

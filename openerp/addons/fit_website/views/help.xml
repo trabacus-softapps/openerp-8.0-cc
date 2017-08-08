@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+<!--    ==============================================================          
+                               Help  ( For T.O.)           
+        ==============================================================   -->      
+    	<template id="help_form" page="True" name="Restaurant Reservations For The Travel Trade">
+            <t t-call="fit_website.capitalcentric_layout">  
+                <t t-set="ref_content">
+                    <div id="bookinglayout">
+                        <!-- start Main Wrapper -->
+		                <div class="main-wrapper">
+                            <!-- start breadcrumb -->
+                            <div class="breadcrumb-wrapper">
+
+                                <div class="container">
+
+                                    <ol class="breadcrumb-list booking-step">
+                                        <li><a href="#">Home</a></li>
+                                        <li><span>User Profile</span></li>
+                                    </ol>
+
+                                </div>
+
+                            </div>
+                            <!-- end breadcrumb -->
+
+			                <div class="admin-container-wrapper">
+				                <div class="container">
+					                <div class="GridLex-gap-15-wrappper">
+						                <div class="GridLex-grid-noGutter-equalHeight">
+                                            <div class="GridLex-col-2_sm-4_xs-12">
+                                                <div class="admin-sidebar">
+                                                   <t t-if="path == 'restaurant'">
+                                                        <t t-call="fit_website.logo_buttons"/>
+                                                    </t>
+                                                    <t t-if="path == 'operator'">
+                                                        <t t-call = "fit_website.welcome_operator"/>
+                                                        <t t-call="fit_website.operator_buttons"/>
+                                                    </t>
+                                                </div>
+                                            </div>
+                                            <div class="GridLex-col-10_sm-8_xs-12">
+                                                <div class="admin-content-wrapper" style="padding-left:0px;margin-left:0px;">
+                                                    <div class="admin-section-title" style="padding-bottom: 0px;">
+                                                        <h2>help</h2>
+                                                    </div>
+                                                    <t t-raw="user.company_id.help_html"/>
+                                                </div>
+                                            </div>
+						                </div>
+					                </div>
+				                </div>
+			                </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+        
+        
+    </data>
+</openerp> 

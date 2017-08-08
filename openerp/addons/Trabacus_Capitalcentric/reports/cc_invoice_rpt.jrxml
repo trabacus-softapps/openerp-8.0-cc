@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cc_invoice_rpt" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="OPENERP_RELATIONS" value="[&apos;invoice_line&apos;]"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/serveradmin/bin/packages/openerp-7.0/openerp/addons/Trabacus_Capitalcentric/reports/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Header" class="java.lang.Object" isForPrompting="false"/>
+	<parameter name="tax" class="java.lang.Object" isForPrompting="false"/>
+	<queryString language="xPath">
+		<![CDATA[/data/record]]>
+	</queryString>
+	<field name="Name-name" class="java.lang.String">
+		<fieldDescription><![CDATA[Partner-partner_id/Name-name]]></fieldDescription>
+	</field>
+	<field name="Street-street" class="java.lang.String">
+		<fieldDescription><![CDATA[Partner-partner_id/Street-street]]></fieldDescription>
+	</field>
+	<field name="Street2-street2" class="java.lang.String">
+		<fieldDescription><![CDATA[Partner-partner_id/Street2-street2]]></fieldDescription>
+	</field>
+	<field name="City-city" class="java.lang.String">
+		<fieldDescription><![CDATA[Partner-partner_id/City-city]]></fieldDescription>
+	</field>
+	<field name="State_Name-name" class="java.lang.String">
+		<fieldDescription><![CDATA[Partner-partner_id/State-state_id/State_Name-name]]></fieldDescription>
+	</field>
+	<field name="Country_Name-name" class="java.lang.String">
+		<fieldDescription><![CDATA[Partner-partner_id/Country-country_id/Country_Name-name]]></fieldDescription>
+	</field>
+	<field name="Email-email" class="java.lang.String">
+		<fieldDescription><![CDATA[Partner-partner_id/Email-email]]></fieldDescription>
+	</field>
+	<field name="Phone-phone" class="java.lang.String">
+		<fieldDescription><![CDATA[Partner-partner_id/Phone-phone]]></fieldDescription>
+	</field>
+	<field name="Mobile-mobile" class="java.lang.String">
+		<fieldDescription><![CDATA[Partner-partner_id/Mobile-mobile]]></fieldDescription>
+	</field>
+	<field name="Zip-zip" class="java.lang.String">
+		<fieldDescription><![CDATA[Partner-partner_id/Zip-zip]]></fieldDescription>
+	</field>
+	<field name="Number-number" class="java.lang.String">
+		<fieldDescription><![CDATA[Number-number]]></fieldDescription>
+	</field>
+	<field name="Invoice_Date-date_invoice" class="java.lang.String">
+		<fieldDescription><![CDATA[Invoice_Date-date_invoice]]></fieldDescription>
+	</field>
+	<field name="Due_Date-date_due" class="java.lang.String">
+		<fieldDescription><![CDATA[Due_Date-date_due]]></fieldDescription>
+	</field>
+	<field name="Quantity-quantity" class="java.lang.Float">
+		<fieldDescription><![CDATA[Invoice_Lines-invoice_line/Quantity-quantity]]></fieldDescription>
+	</field>
+	<field name="Description-name" class="java.lang.String">
+		<fieldDescription><![CDATA[Invoice_Lines-invoice_line/Description-name]]></fieldDescription>
+	</field>
+	<field name="Unit_Price-price_unit" class="java.lang.Float">
+		<fieldDescription><![CDATA[Invoice_Lines-invoice_line/Unit_Price-price_unit]]></fieldDescription>
+	</field>
+	<field name="Amount-price_subtotal" class="java.lang.Float">
+		<fieldDescription><![CDATA[Invoice_Lines-invoice_line/Amount-price_subtotal]]></fieldDescription>
+	</field>
+	<field name="Subtotal-amount_untaxed" class="java.lang.Float">
+		<fieldDescription><![CDATA[Subtotal-amount_untaxed]]></fieldDescription>
+	</field>
+	<field name="Total-amount_total" class="java.lang.Float">
+		<fieldDescription><![CDATA[Total-amount_total]]></fieldDescription>
+	</field>
+	<field name="Additional_Information-comment" class="java.lang.String">
+		<fieldDescription><![CDATA[Additional_Information-comment]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<field name="Symbol-symbol" class="java.lang.String">
+		<fieldDescription><![CDATA[User-User/Company-company_id/Currency-currency_id/Symbol-symbol]]></fieldDescription>
+	</field>
+	<field name="tax_amt" class="java.lang.Float">
+		<fieldDescription><![CDATA[Invoice_Lines-invoice_line/Tax_Amount-tax_amt]]></fieldDescription>
+	</field>
+	<field name="Tax_ID-vat" class="java.lang.String">
+		<fieldDescription><![CDATA[User-User/Company-company_id/Tax_ID-vat]]></fieldDescription>
+	</field>
+	<group name="Invoice">
+		<groupExpression><![CDATA[$F{id}]]></groupExpression>
+		<groupHeader>
+			<band height="15">
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="0" width="66" height="15" backcolor="#CBCBCB"/>
+					<box leftPadding="2" rightPadding="5">
+						<pen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<topPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<leftPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<bottomPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<rightPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Covers]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="66" y="0" width="268" height="15" backcolor="#CBCBCB"/>
+					<box leftPadding="5" rightPadding="2">
+						<pen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<topPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<leftPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<bottomPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<rightPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Description]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="334" y="0" width="83" height="15" backcolor="#CBCBCB"/>
+					<box leftPadding="2" rightPadding="5">
+						<pen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<topPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<leftPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<bottomPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<rightPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Nett Rate]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="417" y="0" width="83" height="15" backcolor="#CBCBCB"/>
+					<box leftPadding="2" rightPadding="5">
+						<pen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<topPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<leftPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<bottomPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<rightPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Total]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="500" y="0" width="55" height="15" backcolor="#CBCBCB"/>
+					<box leftPadding="2" rightPadding="5">
+						<pen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<topPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<leftPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<bottomPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<rightPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[VAT]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="67">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="13" width="247" height="38"/>
+					<box topPadding="10" leftPadding="7" bottomPadding="10" rightPadding="7">
+						<pen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<topPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<leftPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<bottomPen lineWidth="0.75" lineColor="#9E9E9E"/>
+						<rightPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{Additional_Information-comment}]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement positionType="Float" x="402" y="28" width="153" height="15">
+						<property name="OPENERP_PATH_PREFIX" value="invoice_line/invoice_line_tax_id"/>
+					</reportElement>
+					<dataSourceExpression><![CDATA[$P{tax}]]></dataSourceExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "cc_inv_taxes.jasper"]]></subreportExpression>
+				</subreport>
+				<textField isStretchWithOverflow="true" pattern="###0.00">
+					<reportElement positionType="Float" x="500" y="13" width="55" height="15"/>
+					<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="5">
+						<pen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<topPen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<leftPen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<bottomPen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<rightPen lineWidth="0.0" lineColor="#9E9E9E"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Float"><![CDATA[$F{Subtotal-amount_untaxed} == null ? 0.00 : $F{Subtotal-amount_untaxed}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="402" y="13" width="93" height="15"/>
+					<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="false" pdfFontName="Times-Roman"/>
+					</textElement>
+					<text><![CDATA[Total Net Amount]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="495" y="13" width="5" height="15"/>
+					<box topPadding="1" leftPadding="0" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+					</textElement>
+					<text><![CDATA[:  ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="402" y="43" width="93" height="15"/>
+					<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="false" pdfFontName="Times-Roman"/>
+					</textElement>
+					<text><![CDATA[Invoice Total]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="495" y="43" width="5" height="15"/>
+					<box topPadding="1" leftPadding="0" bottomPadding="1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Roman"/>
+					</textElement>
+					<text><![CDATA[:  ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="###0.00">
+					<reportElement positionType="Float" x="500" y="43" width="55" height="15"/>
+					<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="5">
+						<pen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<topPen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<leftPen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<bottomPen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<rightPen lineWidth="0.0" lineColor="#9E9E9E"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Float"><![CDATA[$F{Total-amount_total} == null ? 0.00 :$F{Total-amount_total}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="500" y="13" width="10" height="15"/>
+					<box topPadding="1" leftPadding="0" bottomPadding="1" rightPadding="0">
+						<pen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<topPen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<leftPen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<bottomPen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<rightPen lineWidth="0.0" lineColor="#9E9E9E"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{Symbol-symbol}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="500" y="43" width="10" height="15"/>
+					<box topPadding="1" leftPadding="0" bottomPadding="1" rightPadding="0">
+						<pen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<topPen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<leftPen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<bottomPen lineWidth="0.0" lineColor="#9E9E9E"/>
+						<rightPen lineWidth="0.0" lineColor="#9E9E9E"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{Symbol-symbol}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="46" splitType="Stretch"/>
+	</title>
+	<columnHeader>
+		<band height="172" splitType="Stretch">
+			<frame>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="324" y="54" width="231" height="101"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<topPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<leftPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<bottomPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<rightPen lineWidth="0.75" lineColor="#9E9E9E"/>
+				</box>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="93" y="9" width="138" height="15"/>
+					<box leftPadding="7"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{Number-number}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+					<reportElement positionType="Float" x="93" y="24" width="138" height="15">
+						<printWhenExpression><![CDATA[$F{Invoice_Date-date_invoice}]]></printWhenExpression>
+					</reportElement>
+					<box leftPadding="7"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+					</textElement>
+					<textFieldExpression class="java.util.Date"><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($F{Invoice_Date-date_invoice})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="9" width="88" height="15"/>
+					<box leftPadding="7"/>
+					<textElement>
+						<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<text><![CDATA[Invoice Number]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="54" width="231" height="101"/>
+				<box>
+					<pen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<topPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<leftPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<bottomPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<rightPen lineWidth="0.75" lineColor="#9E9E9E"/>
+				</box>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="0" y="30" width="231" height="15"/>
+					<box leftPadding="7"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{Street-street} + " " + $F{Street2-street2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="0" y="15" width="231" height="15"/>
+					<box leftPadding="7"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{Name-name}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="0" y="60" width="231" height="15"/>
+					<box leftPadding="7"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{Country_Name-name} + " " + $F{Zip-zip}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="0" y="45" width="231" height="15"/>
+					<box leftPadding="7"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{City-city} + " " + $F{State_Name-name}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<staticText>
+				<reportElement x="324" y="78" width="88" height="15"/>
+				<box leftPadding="7"/>
+				<textElement>
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Invoice Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="93" width="88" height="15"/>
+				<box leftPadding="7"/>
+				<textElement>
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Due Date]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+				<reportElement positionType="Float" x="417" y="93" width="138" height="15">
+					<printWhenExpression><![CDATA[$F{Due_Date-date_due}]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="7"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($F{Due_Date-date_due})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="324" y="108" width="88" height="15"/>
+				<box leftPadding="7"/>
+				<textElement>
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Account No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="412" y="63" width="5" height="15"/>
+				<box topPadding="1" leftPadding="0" bottomPadding="1"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[:  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="412" y="108" width="5" height="15"/>
+				<box topPadding="1" leftPadding="0" bottomPadding="1"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[:  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="412" y="93" width="5" height="15"/>
+				<box topPadding="1" leftPadding="0" bottomPadding="1"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[:  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="412" y="78" width="5" height="15"/>
+				<box topPadding="1" leftPadding="0" bottomPadding="1"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[:  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="28" width="231" height="20"/>
+				<box leftPadding="7">
+					<pen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<topPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<leftPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<bottomPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<rightPen lineWidth="0.75" lineColor="#9E9E9E"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="L M Roman Slant17" size="12" isBold="true" pdfFontName="Times-Bold" pdfEncoding="Cp1252"/>
+				</textElement>
+				<text><![CDATA[Invoice]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="123" width="88" height="15"/>
+				<box leftPadding="7"/>
+				<textElement>
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Purchase Order       :  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="412" y="123" width="5" height="15"/>
+				<box topPadding="1" leftPadding="0" bottomPadding="1"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[:  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="138" width="88" height="15"/>
+				<box leftPadding="7"/>
+				<textElement>
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[VAT Reg. No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="412" y="138" width="5" height="15"/>
+				<box topPadding="1" leftPadding="0" bottomPadding="1"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[:  ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="417" y="138" width="138" height="15"/>
+				<box leftPadding="7"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Tax_ID-vat}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="417" y="78" width="138" height="15">
+					<printWhenExpression><![CDATA[!$F{Invoice_Date-date_invoice}]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="7"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+				</textElement>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="417" y="93" width="138" height="15">
+					<printWhenExpression><![CDATA[!$F{Due_Date-date_due}]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="7"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+				</textElement>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="###0.00">
+				<reportElement positionType="Float" mode="Transparent" x="0" y="0" width="66" height="15" forecolor="#000000" backcolor="#FEFEFE"/>
+				<box topPadding="2" leftPadding="2" rightPadding="5">
+					<pen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<topPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<leftPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<bottomPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<rightPen lineWidth="0.75" lineColor="#9E9E9E"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{Quantity-quantity} == null ? 0.00 : $F{Quantity-quantity}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="66" y="0" width="268" height="15"/>
+				<box topPadding="2" leftPadding="5" rightPadding="2">
+					<pen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<topPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<leftPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<bottomPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<rightPen lineWidth="0.75" lineColor="#9E9E9E"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Description-name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="334" y="0" width="83" height="15"/>
+				<box topPadding="2" leftPadding="2" rightPadding="5">
+					<pen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<topPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<leftPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<bottomPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<rightPen lineWidth="0.75" lineColor="#9E9E9E"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{Unit_Price-price_unit} == null ? 0.00 : $F{Unit_Price-price_unit}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="417" y="0" width="83" height="15"/>
+				<box topPadding="2" leftPadding="2" rightPadding="5">
+					<pen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<topPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<leftPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<bottomPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<rightPen lineWidth="0.75" lineColor="#9E9E9E"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{Amount-price_subtotal} == null ? 0.00 : $F{Amount-price_subtotal}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="500" y="0" width="55" height="15"/>
+				<box topPadding="2" leftPadding="2" rightPadding="5">
+					<pen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<topPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<leftPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<bottomPen lineWidth="0.75" lineColor="#9E9E9E"/>
+					<rightPen lineWidth="0.75" lineColor="#9E9E9E"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$F{tax_amt} == null ? 0.00 : $F{tax_amt}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="18" splitType="Stretch">
+			<textField>
+				<reportElement x="211" y="8" width="80" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="7" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="291" y="8" width="40" height="10"/>
+				<textElement>
+					<font fontName="Times New Roman" size="7" pdfFontName="Times-Roman"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

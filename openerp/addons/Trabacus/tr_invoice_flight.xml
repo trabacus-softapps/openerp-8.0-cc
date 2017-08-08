@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+        <!--	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+       			Invoice: Flight 
+  		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^	
+-->
+
+        <record id="view_invoice_FTsector_tree" model="ir.ui.view">
+            <field name="name">view.invoice.FTsector.treer</field>
+            <field name="model">tr.invoice.flight.lines</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Sector Lines" editable="bottom">
+                    <field name="airline_id"/>
+                    <field name="ft_num"/>
+                    <field name="faretype_id"/>
+                    <field name="ftclass_id"/>
+                    <field name="from_id"/>
+                    <field name="to_id"/>
+                    <field name="dep" on_change="onchange_dep(dep)"/>
+                    <field name="arr"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <!--
+     Flight Tree view:
+-->
+
+        <record id="view_invoice_flight_tree" model="ir.ui.view">
+            <field name="name">view.invoice.flight.tree</field>
+            <field name="model">tr.invoice.flight</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Flight">
+                    <field name="tpartner_id"/>
+                    <field name="pax_name"/>
+                    <field name="ticket_no"/>
+                    <field name="basicother"/>
+                    <field name="a_tac"/>
+                    <field name="a_servicechrg"/>
+                    <field name="taxes"/>
+                    <field name="total"/>
+                    <field name="currency_id"/> 
+                    <field name="is_reconciled"/>
+                    <field name="state" invisible="1"/>
+                    <button name="%(action_tr_partialinvoice)d" string="Create Invoice"
+                        type="action" icon="gtk-go-forward" states="quotation,draft"/>
+                    <button name="%(action_tr_duplicate_ftpax)d" string="Duplicate" type="action"
+                        icon="gtk-copy" states="quotation,draft"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--
+     Flight Form view:
+-->
+        <record id="view_invoice_flight_form" model="ir.ui.view">
+            <field name="name">view.invoice.flight.form</field>
+            <field name="model">tr.invoice.flight</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Flight" version="7.0">
+                    <group colspan="2" col="6">
+                        <field name="tpartner_id"
+                            on_change="onchange_FT_airline(tpartner_id, flight_lines, context)"
+                            context="{'search_default_supplier':1,'default_supplier':1,'default_customer':0}"/>
+                        <field name="product_id" on_change="onchange_product(product_id)"
+                            domain="[('travel_type','=',context.get('travel_type'))]"
+                            context="{'default_travel_type':context.get('travel_type')}"/>
+                        <field name="account_id" invisible="1"/>
+                        <field name="name"/>
+                        <field name="currency_id"/> 
+                        <field name="is_showdetails" invisible="1"/>
+                    </group>
+                    <newline/>
+                    <notebook>
+                        <page string="Summary">
+                            <group colspan="3" col="6">
+                                <field name="a_tax"/>
+                                <field name="a_markup_perc"  	 on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)" invisible="context.get('is_purchase')" />
+                                <field name="a_markup" 			 on_change="onchange_FT_subTotal(inv_type, 'amt', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)" invisible="context.get('is_purchase')" class="trab_maroon_css"/>
+                                <field name="a_tac"       		 on_change="onchange_FT_subTotal(inv_type, 'amt', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)" class="trab_maroon_css"/>
+                                <field name="a_tds_perc"  		 on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                <field name="a_tds" 			 on_change="onchange_FT_subTotal(inv_type, 'amt', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)" class="trab_maroon_css"/>
+                                <field name="a_discount"     	 on_change="onchange_FT_subTotal(inv_type, 'amt', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)" invisible="context.get('is_purchase')"/>
+                                <field name="a_tds1_perc" 		 on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)" invisible="context.get('is_purchase')"/>
+                                <field name="a_tds1"  			 on_change="onchange_FT_subTotal(inv_type, 'amt', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)" invisible="context.get('is_purchase')" class="trab_maroon_css"/>
+                                <field name="a_tptax"/>
+                                <field name="a_servicechrg_perc" on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)" invisible="context.get('is_purchase')"/>
+                                <field name="a_servicechrg" 	 on_change="onchange_FT_subTotal(inv_type, 'amt', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)" invisible="context.get('is_purchase')" class="trab_maroon_css"/>
+                                <field name="a_cancel_markup" 	 on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+                                <field name="a_cancel_charges"	 on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+                                <field name="a_cancel_service" 	 on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+                                <field name="a_total" class="trab_boldc_css"/>
+                                <field name="inv_type" invisible="1"/>
+                            </group>
+                            <newline/>
+                            <separator string="Taxes"/>
+                            <group colspan="4" col="8">
+                                <field name="tax_basic" 	class="trab_maroon_css"/>
+                                <field name="tax_tac" 		class="trab_maroon_css"/>
+                                <field name="tax_tds" 		class="trab_maroon_css"/>
+                                <field name="tax_tds1" 		class="trab_maroon_css" invisible="context.get('is_purchase')"/>
+                                <field name="tax_mark" 		class="trab_maroon_css" invisible="context.get('is_purchase')"/>
+                                <field name="tax_raf" 		class="trab_maroon_css"/>
+                                <field name="tax_other" 	class="trab_maroon_css"/>
+                                <field name="tax_vendor" 	class="trab_maroon_css"/>
+                                <field name="tax_reissue" 	class="trab_maroon_css"/>
+                                <field name="tax_servicechrg" class="trab_maroon_css" invisible="context.get('is_purchase')"/>
+                                <field name="tax_airlntax" 	class="trab_maroon_css"/>
+                                <field name="tax_tptax" 	class="trab_maroon_css"/>
+                                <field name="tax_ids" widget="many2many_tags" colspan="4" class="trab_maroon_css"/>
+                            </group>
+                        </page>
+                        <page string="Passenger Details">
+                            <group name="passenger" colspan="2" col="6">
+                                <field name="paxpartner_id"
+                                    on_change="onchange_passenger(paxpartner_id)"/>
+                                <field name="pax_name" nolabel="1" required="1"/>
+                                <field name="pax_type"/>
+                                <newline/>
+                                <field name="pax_contact"/>
+                                <field name="pax_email"/>
+                                <newline/>
+                                <field name="ticket_no"/>
+                                <field name="pnr"/>
+                                <field name="airline_pnr"/>
+                            </group>
+                        </page>
+                        <page string="Sector Details">
+                            <field colspan="4" name="flight_lines" nolabel="1"
+                                widget="one2many_list"
+                                on_change="onchange_FT_airline(tpartner_id, flight_lines,context)"/>
+                        </page>
+                        <page string="Fare Details">
+                            <group colspan="3" col="6">
+                                <field name="a_basic"
+                                    on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                <field name="a_other"
+                                    on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                <field name="a_raf"
+                                    on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                <field name="a_reissue"
+                                    on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                <field name="a_vendor" invisible="1"
+                                    on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"
+                                />
+                            </group>
+                            <newline/>
+                            <notebook>
+                                <page string="TAC" attrs="{'invisible':[('is_showdetails','=',False)]}">
+                                    <group name="tac" colspan="2" col="6">
+                                        <group colspan="1" col="2">
+                                            <field name="a_tac_basic"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_tac_other"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_tac_tptax"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_tac_perc" string="A %%"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_tac_select"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"
+                                            />
+                                        </group>
+                                        <group colspan="1" col="2">
+                                            <field name="a_tac_basic1"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_tac_other1"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_tac_tptax1"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_tac_perc1" string="B %%"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"
+                                            />
+                                        </group>
+                                        <group colspan="1" col="2">
+                                            <field name="a_tac_basic2"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_tac_other2"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_tac_tptax2"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_tac_perc2" string="C %%"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"
+                                            />
+                                        </group>
+                                    </group>
+                                </page>
+                                <page string="Discount" invisible="context.get('is_purchase')" attrs="{'invisible':[('is_showdetails','=',False)]}">
+                                    <group name="discount" colspan="2" col="6">
+                                        <group colspan="1" col="2">
+                                            <field name="a_disc_basic"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_disc_other"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_disc_tptax"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_disc_perc" string="A %%"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_disc_select"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"
+                                            />
+                                        </group>
+                                        <group colspan="1" col="2">
+                                            <field name="a_disc_basic1"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_disc_other1"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_disc_tptax1"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_disc_perc1" string="B %%"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"
+                                            />
+                                        </group>
+                                        <group colspan="1" col="2">
+                                            <field name="a_disc_basic2"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_disc_other2"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_disc_tptax2"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                            <field name="a_disc_perc2" string="C %%"
+                                                on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"
+                                            />
+                                        </group>
+                                    </group>
+                                </page>
+                                <page string="Supplier Tax" attrs="{'invisible':[('is_showdetails','=',False)]}">
+                                    <group colspan="3" col="6" name="suplier_taxes">
+                                        <field name="tptax_basic"
+                                            on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                        <field name="tptax_airtax"
+                                            on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                        <field name="tptax_tac"
+                                            on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                        <field name="tptax_tds"
+                                            on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                        <field name="tptax_other"
+                                            on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"/>
+                                        <newline/>
+                                        <field name="tptax_ids" colspan="4"
+                                            on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)"
+                                            widget="many2many_tags"
+                                            domain="[('parent_id','=',False),('company_id', '=', company_id)]"
+                                        />
+                                    </group>
+                                </page>
+                                <page string="Airline TAX" >
+                                    <field mode="tree" name="airtax_ids" nolabel="1" colspan="6"
+                                        on_change="onchange_FT_subTotal(inv_type, 'all', a_basic, a_other, a_servicechrg_perc, a_servicechrg, a_markup_perc, a_markup, a_raf, a_tds_perc, a_tds, a_tds1_perc, a_tds1, a_vendor, a_reissue, a_tac_perc, a_tac, a_tac_select, a_tac_basic, a_tac_other, a_tac_tptax, a_tac_perc1, a_tac_basic1, a_tac_other1, a_tac_tptax1, a_tac_perc2, a_tac_basic2, a_tac_other2, a_tac_tptax2, tptax_basic, tptax_airtax, tptax_tac, tptax_tds, tptax_other, airtax_ids, tptax_ids, a_discount, a_disc_select, a_disc_perc, a_disc_basic, a_disc_other, a_disc_tptax, a_disc_perc1, a_disc_basic1, a_disc_other1, a_disc_tptax1, a_disc_perc2, a_disc_basic2, a_disc_other2, a_disc_tptax2, a_cancel_markup, a_cancel_charges, a_cancel_service)">
+                                        <tree string="Airline Taxes" editable="bottom">
+                                            <field name="component_id"/>
+                                            <field name="amount"/>
+                                            <field name="tac_a"/>
+                                            <field name="tac_b"/>
+                                            <field name="tac_c"/>
+                                            <field name="disc_a"/>
+                                            <field name="disc_b"/>
+                                            <field name="disc_c"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                                <page string="Reconcile" attrs="{'invisible':[('is_showdetails','=',False)]}">
+                                    <group name="reconcile" colspan="3" col="6">
+                                        <field name="reconcile_date"/>
+                                        <field name="reconcile_amount"/>
+                                        <newline/>
+                                        <field name="reconcile_remarks" colspan="6" nolabel="1"/>
+                                    </group>
+                                </page>
+                            </notebook>
+                        </page>
+                        <page string="Passport Details"
+                            attrs="{'invisible':[('ft_traveltype','=','dom_flight')]}">
+                            <group name="passport" colspan="2" col="6">
+                                <field name="passport_no"/>
+                                <field name="nation"/>
+                                <field name="issue_place"/>
+                                <field name="valid_from" on_change="onchange_validfrom(valid_from)"/>
+                                <field name="valid_to"/>
+                                <!-- TODO: add Address-->
+                            </group>
+                        </page>
+                    </notebook>
+                    <newline/>
+                    <field name="ft_traveltype" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+
+                </form>
+            </field>
+        </record>
+
+    </data>
+</openerp>

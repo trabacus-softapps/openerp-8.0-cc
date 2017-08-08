@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="0">
+        <!--     To update Admin groups -->
+        <record model="res.users" id="base.user_root">
+            <field name="partner_id" ref="base.partner_root"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+            <field name="menu_id" ref="base.action_menu_admin"/>
+            <field name="signature">--Administrator</field>
+            <field name="groups_id" eval="[(6,0,[ref('base.group_partner_manager')
+                ,ref('base.group_no_one')
+                ,ref('base.group_system')
+                ,ref('base.group_user')
+                ,ref('base.group_multi_company')
+                ,ref('base.group_multi_currency')
+                ,ref('project.group_project_manager')
+                ,ref('group_trproduct_user')
+                ,ref('group_trlead_manager')
+                ,ref('group_trsale_manager')
+                ,ref('group_trpurchase_manager')
+                ,ref('group_traccount_manager')
+                ,ref('group_trconfig_admin')])]"/>            
+        </record>
+        
+        
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    				Default - CRM Stages (Overridden/New)
+Note:
+     Excluding Stage: [New, Lost]
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+ 
+        <record model="crm.case.stage" id="crm.stage_lead2">
+            <field name="name">Quote Sent</field>
+            <field name="case_default">1</field>
+            <field name="probability">0</field>
+            <field name="on_change">1</field>
+            <field name="sequence">10</field>
+            <field name="type">opportunity</field>
+        </record>
+        <record model="crm.case.stage" id="crm.stage_lead3">
+            <field name="name">Follow-up</field>
+            <field name="case_default">1</field>
+            <field name="probability">20</field>
+            <field name="on_change">1</field>
+            <field name="sequence">20</field>
+            <field name="type">opportunity</field>
+        </record>
+        <record model="crm.case.stage" id="crm.stage_lead4">
+            <field name="name">Confirmed</field>
+            <field name="case_default">1</field>
+            <field name="probability">30</field>
+            <field name="sequence">30</field>
+            <field name="type">opportunity</field>
+        </record>
+        <record model="crm.case.stage" id="crm.stage_lead5">
+            <field name="name">Invoiced</field>
+            <field name="case_default">1</field>
+            <field name="probability">50</field>
+            <field name="sequence">50</field>
+            <field name="type">opportunity</field>
+        </record>
+        <record model="crm.case.stage" id="crm.stage_lead6">
+            <field name="name">Payment Received</field>
+            <field name="case_default">1</field>
+            <field name="probability">60</field>
+            <field name="on_change">1</field>
+            <field name="sequence">60</field>
+            <field name="type">opportunity</field>
+        </record> 
+        <record model="crm.case.stage" id="trstage_lead8">
+            <field name="name">Payment Made</field>
+            <field name="case_default">1</field>
+            <field name="probability">70</field>
+            <field name="on_change">1</field>
+            <field name="sequence">70</field>
+            <field name="type">opportunity</field>
+        </record> 
+        <record model="crm.case.stage" id="trstage_lead9">
+            <field name="name">Vouchers Issued</field>
+            <field name="case_default">1</field>
+            <field name="probability">80</field>
+            <field name="on_change">1</field>
+            <field name="sequence">80</field>
+            <field name="type">opportunity</field>
+        </record> 
+        <record model="crm.case.stage" id="trstage_lead10">
+            <field name="name">On Tour</field>
+            <field name="case_default">1</field>
+            <field name="probability">90</field>
+            <field name="on_change">1</field>
+            <field name="sequence">90</field>
+            <field name="type">opportunity</field>
+        </record> 
+        <record model="crm.case.stage" id="trstage_lead11">
+            <field name="name">Feedback</field>
+            <field name="case_default">1</field>
+            <field name="probability">91</field>
+            <field name="on_change">1</field>
+            <field name="sequence">91</field>
+            <field name="fold">1</field>
+            <field name="type">opportunity</field>
+        </record> 
+        <record model="crm.case.stage" id="trstage_lead12">
+            <field name="name">Completed</field>
+            <field name="case_default">1</field>
+            <field name="probability">100</field>
+            <field name="on_change">1</field>
+            <field name="sequence">100</field>
+            <field name="fold">1</field>
+            <field name="type">opportunity</field>
+        </record> 
+        
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+						 Default - Travel Type
+	 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        
+        <record id="dom_package" model="tr.travel.type">
+            <field name="name">Domestic Holiday</field> 
+        </record> 
+        <record id="int_package" model="tr.travel.type">
+            <field name="name">International Holiday</field> 
+        </record>  
+        <record id="dom_flight" model="tr.travel.type">
+            <field name="name">Domestic Flight</field> 
+        </record>  
+        <record id="int_flight" model="tr.travel.type">
+            <field name="name">International Flight</field> 
+        </record>  
+        <record id="dom_hotel" model="tr.travel.type">
+            <field name="name">Domestic Hotel</field> 
+        </record>
+        <record id="int_hotel" model="tr.travel.type">
+            <field name="name">International Hotel</field> 
+        </record>
+        <record id="car" model="tr.travel.type">
+            <field name="name">Transfers</field> 
+        </record>
+        <record id="activity" model="tr.travel.type">
+            <field name="name">Activities</field> 
+        </record>
+        <record id="add_on" model="tr.travel.type">
+            <field name="name">Add On</field> 
+        </record> 
+        <record id="visa" model="tr.travel.type">
+            <field name="name">Visa</field> 
+        </record>
+        <record id="insurance" model="tr.travel.type">
+            <field name="name">Insurance</field> 
+        </record>
+        <record id="railway" model="tr.travel.type">
+            <field name="name">Railway</field> 
+        </record>
+        <record id="cruise" model="tr.travel.type">
+            <field name="name">Cruise</field> 
+        </record>
+        
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+						 Default - Room Category 
+	 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+	<record id="rmc_1" model="tr.room.categ">
+        <field name="name">Deluxe Room</field> 
+    </record> 
+	<record id="rmc_2" model="tr.room.categ">
+        <field name="name">Deluxe Cottage</field> 
+    </record> 	
+	<record id="rmc_3" model="tr.room.categ">
+        <field name="name">1 Bedroom Suite</field> 
+    </record> 
+	<record id="rmc_4" model="tr.room.categ">
+        <field name="name">2 Bedroom Suite</field> 
+    </record> 	
+	<record id="rmc_5" model="tr.room.categ">
+        <field name="name">Classic Suite</field> 
+    </record>
+    
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+						 Default - Visa Category
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	
+	<record id="vi_tr" model="tr.visa.categ">
+        <field name="name">Transit</field>
+    </record>
+	<record id="vi_bs" model="tr.visa.categ">
+        <field name="name">Business</field>
+    </record>
+	<record id="vi_fv" model="tr.visa.categ">
+        <field name="name">Family Visit</field>
+    </record>
+	<record id="vi_wk" model="tr.visa.categ">
+        <field name="name">Work</field>
+    </record>
+	<record id="vi_to" model="tr.visa.categ">
+        <field name="name">Tourist</field>
+    </record>    
+    
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+						 Default - Meal Plan
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	
+	<record id="m_ap" model="tr.meal.plan">
+        <field name="name">CP</field>
+        <field name="sequence">1</field>
+    </record>
+	<record id="m_map" model="tr.meal.plan">
+        <field name="name">MAP</field>
+        <field name="sequence">2</field>
+    </record>   
+	<record id="m_ap" model="tr.meal.plan">
+        <field name="name">AP</field>
+        <field name="sequence">3</field>
+    </record>   
+	<record id="m_ep" model="tr.meal.plan">
+        <field name="name">EP</field>
+        <field name="sequence">4</field>
+    </record>   
+	<record id="m_jp" model="tr.meal.plan">
+        <field name="name">JP</field>
+        <field name="sequence">5</field>
+    </record>   
+	<record id="m_mapap" model="tr.meal.plan">
+        <field name="name">MAP/AP</field>
+        <field name="sequence">6</field>
+    </record>   
+	<record id="m_epcp" model="tr.meal.plan">
+        <field name="name">EP/CP</field>
+        <field name="sequence">7</field>
+    </record>   
+    
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+						 Default - Flight Categories
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	
+	<record id="fct_eco" model="tr.flight.category">
+        <field name="name">Economy</field>
+    </record>
+	<record id="fct_bus" model="tr.flight.category">
+        <field name="name">Business</field>
+    </record>   
+    
+    
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+						 Default - Feedback Rating
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    
+    <record id="one" model="tr.feedback.rating">
+        <field name="name">One *</field> 
+    </record> 	  
+    <record id="two" model="tr.feedback.rating">
+        <field name="name">Two **</field> 
+    </record> 	
+    <record id="three" model="tr.feedback.rating">
+        <field name="name">Three ***</field> 
+    </record> 	
+    <record id="four" model="tr.feedback.rating">
+        <field name="name">Four ****</field> 
+    </record> 
+    <record id="five" model="tr.feedback.rating">
+        <field name="name">Five *****</field> 
+    </record>
+    
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+						 Default - Theme
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	
+	<record id="th_wl" model="tr.theme">
+        <field name="name">Wild Life</field>
+    </record>
+    
+	<record id="th_me" model="tr.theme">
+        <field name="name">Mountain Escapes</field>
+    </record>
+    
+	<record id="th_lh" model="tr.theme">
+        <field name="name">Leisure / Honeymoon</field>
+    </record>
+         
+	<record id="th_ex" model="tr.theme">
+        <field name="name">Explorer</field>
+    </record>
+    
+	<record id="th_pilg" model="tr.theme">
+        <field name="name">Pilgrimage</field>
+    </record>           
+	
+	<record id="th_we" model="tr.theme">
+        <field name="name">Water Escapes</field>
+    </record>           
+	
+	<record id="th_her" model="tr.theme">
+        <field name="name">Heritage</field>
+    </record>           
+	
+	<record id="th_fg" model="tr.theme">
+        <field name="name">Family Getaway</field>
+    </record>           
+	
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+						 Default - Itinerary Meal Plan
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	
+	<record id="mp_bk" model="tr.itinerary.meal">
+        <field name="name">Breakfast Only</field> 
+        <field name="code">B</field> 
+    </record> 
+	<record id="mp_ln" model="tr.itinerary.meal">
+        <field name="name">Lunch Only</field> 
+        <field name="code">L</field> 
+    </record> 
+	<record id="mp_dn" model="tr.itinerary.meal">
+        <field name="name">Dinner Only</field> 
+        <field name="code">D</field> 
+    </record> 
+	<record id="mp_bd" model="tr.itinerary.meal">
+        <field name="name">Breakfast &amp; Dinner</field> 
+        <field name="code">B,D</field> 
+    </record> 
+	<record id="mp_bld" model="tr.itinerary.meal">
+        <field name="name">Breakfast, Lunch &amp; Dinner</field> 
+        <field name="code">B,L,D</field> 
+    </record> 
+	<record id="mp_bl" model="tr.itinerary.meal">
+        <field name="name">Breakfast &amp; Lunch</field> 
+        <field name="code">B,L</field> 
+    </record> 
+	<record id="mp_ld" model="tr.itinerary.meal">
+        <field name="name">Lunch &amp; Dinner</field> 
+        <field name="code">L,D</field> 
+    </record> 
+	<record id="mp_on" model="tr.itinerary.meal">
+        <field name="name">On Board</field> 
+        <field name="code">On Board</field> 
+    </record> 
+	<record id="mp_none" model="tr.itinerary.meal">
+        <field name="name">None</field> 
+        <field name="code">--</field> 
+    </record> 
+	<record id="mp_blod" model="tr.itinerary.meal">
+        <field name="name">Breakfast &amp; Lunch OR Dinner</field> 
+        <field name="code">B, L / D</field> 
+    </record> 
+        
+        
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+						 Default - Hotel Type 
+	 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	    
+	    <record id="hty_1" model="tr.hotel.type">
+	        <field name="name">Premier</field> 
+	    </record> 
+	    <record id="hty_2" model="tr.hotel.type">
+	        <field name="name">Luxury</field> 
+	    </record> 	
+	    <record id="hty_3" model="tr.hotel.type">
+	        <field name="name">Deluxe</field> 
+	    </record> 
+	    <record id="hty_4" model="tr.hotel.type">
+	        <field name="name">Standard</field> 
+	    </record>
+        
+    
+<!--	*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*. *.*.*.*.*.*.*.*.*.*.*.*.*.*.* .*.*.*
+						Scheduler to Create Invoice From Airfile 
+		*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*. *.*.*.*.*.*.*.*.*.*.*.*.*.*.* .*.*.* -->
+        
+        <record forcecreate="True" id="tr_ft_run_scheduler" model="ir.cron">
+            <field name="name">Airfile Scheduler</field>
+            <field eval="True" name="active" />
+            <field name="user_id" ref="base.user_root" />
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field eval="True" name="doall" />
+            <field eval="'account.invoice'" name="model" />
+            <field eval="'run_scheduler_Airfile'" name="function" />
+            <field eval="'()'" name="args" />
+        </record>
+
+
+
+    </data>
+</openerp>

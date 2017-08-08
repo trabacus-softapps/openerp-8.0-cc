@@ -1,0 +1,1176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <!-- 
+            TODO: filter custom tax as per company
+        -->
+        
+        <menuitem name="Supplier Invoice" id="menu_tr_suppinvoice" parent='menu_trabacus_invoice_refunds' sequence="2"
+        groups="base.group_no_one"/> 
+        <!--
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"
+        -->
+        
+        <menuitem name="Debit Note" id="menu_tr_debitnote" parent='menu_trabacus_invoice_refunds' sequence="4"
+         groups="base.group_no_one"/>
+            
+        <record id="view_invoice_supplier_form" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.form</field>
+            <field name="model">account.invoice</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <form string="Supplier Invoice" version="7.0">
+                    <header>
+                        <button name="button_order_confirm" states="quotation" string="Confirm Order"  type="object" class="oe_highlight" groups="base.group_user"/>
+                        <button name="invoice_open" states="draft,proforma2" string="Validate" class="oe_highlight" groups="account.group_account_invoice"/>
+<!--                        <button name="%(account.action_account_invoice_refund)d" type='action' string='Ask Refund' states='open,paid' groups="account.group_account_invoice"/>-->
+                        <button name="invoice_cancel" states="draft,proforma2,open" string="Cancel Invoice" groups="account.group_account_invoice"/>
+                        <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object" groups="account.group_account_invoice"/>
+                        <button name='%(account.action_account_state_open)d' type='action' string='Re-Open' groups="account.group_account_invoice" attrs="{'invisible':['|', ('state','&lt;&gt;','paid'), ('reconciled', '=', True)]}" help="This button only appears when the state of the invoice is 'paid' (showing that it has been fully reconciled) and auto-computed boolean 'reconciled' is False (depicting that it's not the case anymore). In other words, the invoice has been dereconciled and it does not fit anymore the 'paid' state. You should press this button to re-open it and let it continue its normal process after having resolved the eventual exceptions it may have created."/>
+                        <button name="invoice_pay_customer" type="object" string="Pay" states="open" class="oe_highlight" groups="base.group_user"/>
+                        <button name="button_order_cancel" states="quotation,draft" string="Cancel Order" type="object" />
+                        <button name="button_set_quotation" states="order_cancel" string="Reset to New" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="quotation,draft,open,paid" statusbar_colors='{"proforma":"blue","proforma2":"blue"}'/>
+                    </header>
+                    <sheet string="Supplier Invoice">
+                        <div class="oe_title">
+                            <h1>
+                                <label string="Purchase " attrs="{'invisible': ['|',('state','not in',('quotation',)), ('type','&lt;&gt;','in_invoice')]}"/>
+                                <label string="Draft Invoice" attrs="{'invisible': ['|',('state','&lt;&gt;','draft'), ('type','&lt;&gt;','in_invoice')]}"/>
+                                <label string="Draft Debit Note" attrs="{'invisible': ['|',('state','&lt;&gt;','draft'), ('type','&lt;&gt;','in_refund')]}"/>
+                                <label string="Invoice" attrs="{'invisible': ['|',('state', '=', 'draft'), ('type','&lt;&gt;','in_invoice')]}"/>
+                                <label string="Debit Note" attrs="{'invisible': ['|',('state', '=', 'draft'), ('type','&lt;&gt;','in_refund')]}"/>
+                                <field name="number" class="oe_inline"  attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                            </h1>
+                        </div>
+                        <field name="type" invisible="1"/>
+                        <field name="travel_type" invisible="1"/>
+                        <group>
+                            <group>
+                                <field string="Supplier" name="partner_id" required="1"
+                                    on_change="onchange_partner_id(type,partner_id,date_invoice,payment_term, partner_bank_id,company_id)"
+                                    context="{'default_customer': 0, 'search_default_supplier': 1, 'default_supplier': 1}"
+                                    domain="[('supplier', '=', True)]"/>
+                                <field name="supplier_invoice_number"/>
+                                <field name="project_code"/>
+                                <field name="auth_ref"/>
+                                <field name="date_due"/>
+                                <field name="psr_date"/>
+                            </group>
+                            <group>
+                                <field name="lead_id"/>
+                                <field name="create_date" readonly="1" widget="date"/>
+                                <field name="date_invoice"/>
+                                <field domain="[('company_id', '=', company_id), ('type', '=', 'payable')]"
+                                    name="account_id" groups="account.group_account_user"/>
+                                <field name="user_id"/>
+                                <field name="journal_id" invisible="1"
+                                    on_change="onchange_journal_id(journal_id, context)" widget="selection"/>
+                                <field name="currency_id" groups="base.group_multi_currency"/>
+                                <field name="check_total" groups="account.group_supplier_inv_check_total"/>
+                                <label for="reference_type"/>
+                                <div>
+                                    <field name="reference_type" class="oe_inline oe_edit_only"/>
+                                    <field name="reference" class="oe_inline"/>
+                                </div>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Invoice">
+                                <field name="insurance_ids" attrs="{'invisible':[('travel_type', '!=', 'insurance')]}" nolabel="1" widget="one2many_list" context="{'type': type}"/>
+                                <field name="flight_ids" attrs="{'invisible':[('travel_type', 'not in', ('dom_flight', 'int_flight'))]}" nolabel="1" widget="one2many_list" 
+                                    context="{'type': type, 'travel_type':travel_type, 'partner_id':partner_id, 'is_invoice':context.get('is_invoice'), 'is_purchase':context.get('is_purchase'), 'invoice_id': active_id}" />
+                                <field name="visa_ids" attrs="{'invisible':[('travel_type', '!=', 'visa')]}" nolabel="1" widget="one2many_list" context="{'type': type}"/>
+                                <field name="cruise_ids" attrs="{'invisible':[('travel_type', '!=', 'cruise')]}" nolabel="1" widget="one2many_list" context="{'type': type}"/>
+                                <field name="car_ids" attrs="{'invisible':[('travel_type', '!=', 'car')]}" nolabel="1" widget="one2many_list" context="{'type': type}"/>
+                                <field name="railway_ids" attrs="{'invisible':[('travel_type', '!=', 'railway')]}" nolabel="1" widget="one2many_list" context="{'type': type}"/>
+                                <field name="hotel_ids" attrs="{'invisible':[('travel_type', 'not in', ('dom_hotel','int_hotel'))]}" nolabel="1" widget="one2many_list" context="{'type': type}"/>
+                                <field name="activity_ids" attrs="{'invisible':[('travel_type', '!=', 'activity')]}" nolabel="1" widget="one2many_list" context="{'type': type}"/>
+                                <field name="addon_ids" attrs="{'invisible':[('travel_type', '!=', 'add_on')]}" nolabel="1" widget="one2many_list" context="{'type': type}"/>
+                                
+                               <!-- <field name="invoice_line" context="{'partner_id': partner_id, 'price_type': context.get('price_type') or False, 'type': type, 'form_view_ref':'Trabacus.view_invlines_supplier_form', 'is_invoice':context.get('is_invoice')}">
+                                    <!-\-<tree string="Invoice lines">
+                                        <field name="sequence" widget="handle" />
+                                        <field name="product_id"
+                                            on_change="product_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, parent.fiscal_position, price_unit, parent.currency_id, context, parent.company_id)"/>
+                                        <field name="name"/>
+                                        <field name="company_id" invisible="1"/>
+                                        <field name="account_id" groups="account.group_account_user"
+                                            domain="[('company_id', '=', parent.company_id), ('journal_id', '=', parent.journal_id), ('type', '=', 'other')]"
+                                            on_change="onchange_account_id(product_id, parent.partner_id, parent.type, parent.fiscal_position,account_id)"/>
+                                        <field name="account_analytic_id" groups="analytic.group_analytic_accounting"
+                                            domain="[('type','!=','view'), ('company_id', '=', parent.company_id)]"/>
+                                        <field name="quantity"/>
+                                        <field name="uos_id" groups="product.group_uom"
+                                            on_change="uos_id_change(product_id, uos_id, quantity, name, parent.type, parent.partner_id, parent.fiscal_position, price_unit, parent.currency_id, context, parent.company_id)"/>
+                                        <field name="price_unit"/>
+                                        <field name="discount" groups="sale.group_discount_per_so_line"/>
+                                        <field name="invoice_line_tax_id" widget="many2many_tags" context="{'type':parent.type}"
+                                            domain="[('parent_id','=',False),('company_id', '=', parent.company_id)]"/>
+                                        <field name="price_subtotal"/>
+                                    </tree>-\->
+                                </field>-->
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <div>
+                                        <label for="amount_tax"/>
+                                        <button name="button_reset_taxes" states="quotation,draft,proforma2"
+                                            string="(update)" class="oe_link oe_edit_only"
+                                            type="object" help="Recompute taxes and total"/>
+                                    </div>
+                                    <field name="amount_tax" nolabel="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="amount_total" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    
+                                    <field name="residual" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="reconciled" invisible="1"/>
+                                </group>
+                                <div style="width: 50%%">
+                                    <field name="tax_line">
+                                        <tree editable="bottom" string="Taxes">
+                                            <field name="name"/>
+                                            <field name="account_id" groups="account.group_account_invoice"/>
+                                            <field name="account_analytic_id" domain="[('type','&lt;&gt;','view'), ('company_id', '=', parent.company_id)]" groups="analytic.group_analytic_accounting"/>
+                                            <field name="base" on_change="base_change(base,parent.currency_id,parent.company_id,parent.date_invoice)" readonly="1"/>
+                                            <field name="amount" on_change="amount_change(amount,parent.currency_id,parent.company_id,parent.date_invoice)"/>
+                                            
+                                            <field invisible="True" name="base_amount"/>
+                                            <field invisible="True" name="tax_amount"/>
+                                            <field name="factor_base" invisible="True"/>
+                                            <field name="factor_tax" invisible="True"/>
+                                        </tree>
+                                    </field>
+                                </div>
+                                <div class="oe_clear">
+                                    <label for="comment"/>
+                                </div>
+                                <field name="comment"/>
+                            </page>
+                            <page string="Other Info" invisible="1">
+                                <group>
+                                    <group>
+                                        <field domain="[('partner_id', '=', partner_id)]" name="partner_bank_id" on_change="onchange_partner_bank(partner_bank_id)"/>
+                                        <field name="name" invisible="1"/>
+                                        <field name="payment_term" widget="selection"/>
+                                    </group>
+                                    <group>
+                                        <field name="move_id" groups="account.group_account_user"/>
+                                        <field name="period_id" domain="[('state', '=', 'draft'), ('company_id', '=', company_id)]" groups="account.group_account_user"/>
+<!--                                        <field name="company_id" on_change="onchange_company_id(company_id,partner_id,type,invoice_line,currency_id,context)" widget="selection" groups="base.group_multi_company"/>-->
+                                        <field name="company_id" widget="selection" groups="base.group_multi_company"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Payments">
+                                <field name="payment_ids">
+                                    <tree string="Payments">
+                                        <field name="date" string="Payment Date"/>
+                                        <field name="move_id"/>
+                                        <field name="ref"/>
+                                        <field name="name"/>
+                                        <field name="journal_id"/>
+                                        <field name="debit"/>
+                                        <field name="credit"/>
+                                        <field name="amount_currency"/>
+                                        <field name="currency_id" groups="base.group_multi_currency"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+<!--	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+       			Supplier Invoice: Insurance 
+  		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^	
+--> 
+<!--
+      SI:  Domestic Flight
+-->           
+        <record id="action_trsuppinvoice_domflight" model="ir.actions.act_window">
+            <field name="name">Supplier Invoices - Domestic Flight</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_invoice'), ('travel_type','=','dom_flight'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase',
+                'default_travel_type':'dom_flight', 'travel_type':'dom_flight', 'is_invoice':True, 'is_purchase':True,'flight_travel_type':True}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to record a new supplier invoice.
+                </p><p>
+                    You can control the invoice from your supplier according to
+                    what you purchased or received. OpenERP can also generate
+                    draft invoices automatically from purchase orders or receipts.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsuppinvoice_domflight_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsuppinvoice_domflight"/>
+        </record>
+        
+        <record id="action_trsuppinvoice_domflight_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trsuppinvoice_domflight"/>
+        </record>
+        
+        <menuitem action="action_trsuppinvoice_domflight" id="menu_action_trsuppinvoice_domflight" 
+            name="Domestic Flight" parent="menu_tr_suppinvoice" sequence="3"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>
+        
+<!--
+      SI:  International Flight
+-->           
+        <record id="action_trsuppinvoice_intflight" model="ir.actions.act_window">
+            <field name="name">Supplier Invoices - International Flight</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_invoice'), ('travel_type','=','int_flight'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase',
+                'default_travel_type':'int_flight', 'travel_type':'int_flight', 'is_invoice':True, 'is_purchase':True,'flight_travel_type':True}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to record a new supplier invoice.
+                </p><p>
+                    You can control the invoice from your supplier according to
+                    what you purchased or received. OpenERP can also generate
+                    draft invoices automatically from purchase orders or receipts.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsuppinvoice_intflight_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsuppinvoice_intflight"/>
+        </record>
+        
+        <record id="action_trsuppinvoice_domflight_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trsuppinvoice_intflight"/>
+        </record>
+        
+        <menuitem action="action_trsuppinvoice_intflight" id="menu_action_trsuppinvoice_intflight" 
+            name="International Flight" parent="menu_tr_suppinvoice" sequence="4"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>
+        
+<!--
+      SI:  Domestic Hotel
+-->           
+        <record id="action_trsuppinvoice_domhotel" model="ir.actions.act_window">
+            <field name="name">Supplier Invoices - Domestic Hotel</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_invoice'), ('travel_type','=','dom_hotel'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase',
+                'default_travel_type':'dom_hotel', 'travel_type':'dom_hotel', 'is_invoice':True, 'is_purchase':True}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to record a new supplier invoice.
+                </p><p>
+                    You can control the invoice from your supplier according to
+                    what you purchased or received. OpenERP can also generate
+                    draft invoices automatically from purchase orders or receipts.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsuppinvoice_domhotel_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsuppinvoice_domhotel"/>
+        </record>
+        
+        <record id="action_trsuppinvoice_domhotel_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trsuppinvoice_domhotel"/>
+        </record>
+        
+        <menuitem action="action_trsuppinvoice_domhotel" id="menu_action_trsuppinvoice_domhotel" 
+            name="Domestic Hotel" parent="menu_tr_suppinvoice" sequence="5"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>
+        
+<!--
+      SI:  International Hotel
+-->           
+        <record id="action_trsuppinvoice_inthotel" model="ir.actions.act_window">
+            <field name="name">Supplier Invoices - International Hotel</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_invoice'), ('travel_type','=','int_hotel'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase',
+                'default_travel_type':'int_hotel', 'travel_type':'int_hotel', 'is_invoice':True, 'is_purchase':True}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to record a new supplier invoice.
+                </p><p>
+                    You can control the invoice from your supplier according to
+                    what you purchased or received. OpenERP can also generate
+                    draft invoices automatically from purchase orders or receipts.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsuppinvoice_inthotel_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsuppinvoice_inthotel"/>
+        </record>
+        
+        <record id="action_trsuppinvoice_inhotel_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trsuppinvoice_inthotel"/>
+        </record>
+        
+        <menuitem action="action_trsuppinvoice_inthotel" id="menu_action_trsuppinvoice_inthotel" 
+            name="International Hotel" parent="menu_tr_suppinvoice" sequence="6"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>
+            
+<!--
+      SI:  Transfers
+-->           
+        <record id="action_trsuppinvoice_car" model="ir.actions.act_window">
+            <field name="name">Supplier Invoices - Transfers</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_invoice'), ('travel_type','=','car'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase',
+                'default_travel_type':'car', 'travel_type':'car', 'is_invoice':True, 'is_purchase':True}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to record a new supplier invoice.
+                </p><p>
+                    You can control the invoice from your supplier according to
+                    what you purchased or received. OpenERP can also generate
+                    draft invoices automatically from purchase orders or receipts.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsuppinvoice_car_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsuppinvoice_car"/>
+        </record>
+        
+        <record id="action_trsuppinvoice_car_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trsuppinvoice_car"/>
+        </record>
+        
+        <menuitem action="action_trsuppinvoice_car" id="menu_action_trsuppinvoice_car" 
+            name="Transfers" parent="menu_tr_suppinvoice" sequence="7"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>
+            
+<!--
+      SI:  Activities
+-->           
+        <record id="action_trsuppinvoice_activity" model="ir.actions.act_window">
+            <field name="name">Supplier Invoices - Activities</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_invoice'), ('travel_type','=','activity'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase',
+                'default_travel_type':'activity', 'travel_type':'activity', 'is_invoice':True, 'is_purchase':True}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to record a new supplier invoice.
+                </p><p>
+                    You can control the invoice from your supplier according to
+                    what you purchased or received. OpenERP can also generate
+                    draft invoices automatically from purchase orders or receipts.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsuppinvoice_activity_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsuppinvoice_activity"/>
+        </record>
+        
+        <record id="action_trsuppinvoice_activity_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trsuppinvoice_activity"/>
+        </record>
+        
+        <menuitem action="action_trsuppinvoice_activity" id="menu_action_trsuppinvoice_activity" 
+            name="Activities" parent="menu_tr_suppinvoice" sequence="8"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>
+            
+<!--
+      SI:  Add On
+-->           
+        <record id="action_trsuppinvoice_addon" model="ir.actions.act_window">
+            <field name="name">Supplier Invoices - Add On</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_invoice'), ('travel_type','=','add_on'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase',
+                'default_travel_type':'add_on', 'travel_type':'add_on', 'is_invoice':True, 'is_purchase':True}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to record a new supplier invoice.
+                </p><p>
+                    You can control the invoice from your supplier according to
+                    what you purchased or received. OpenERP can also generate
+                    draft invoices automatically from purchase orders or receipts.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsuppinvoice_addon_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsuppinvoice_addon"/>
+        </record>
+        
+        <record id="action_trsuppinvoice_addon_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trsuppinvoice_addon"/>
+        </record>
+        
+        <menuitem action="action_trsuppinvoice_addon" id="menu_action_trsuppinvoice_addon" 
+            name="Add On" parent="menu_tr_suppinvoice" sequence="9"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>    
+            
+<!--
+      SI:  Visa
+-->           
+        <record id="action_trsuppinvoice_visa" model="ir.actions.act_window">
+            <field name="name">Supplier Invoices - Visa</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_invoice'), ('travel_type','=','visa'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase',
+                'default_travel_type':'visa', 'travel_type':'visa', 'is_invoice':True, 'is_purchase':True}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to record a new supplier invoice.
+                </p><p>
+                    You can control the invoice from your supplier according to
+                    what you purchased or received. OpenERP can also generate
+                    draft invoices automatically from purchase orders or receipts.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsuppinvoice_visa_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsuppinvoice_visa"/>
+        </record>
+        
+        <record id="action_trsuppinvoice_visa_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trsuppinvoice_visa"/>
+        </record>
+        
+        <menuitem action="action_trsuppinvoice_visa" id="menu_action_trsuppinvoice_visa" 
+            name="Visa" parent="menu_tr_suppinvoice" sequence="10"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>                                         
+        
+<!--
+      SI:  Insurance
+-->           
+        <record id="action_trsuppinvoice_ins" model="ir.actions.act_window">
+            <field name="name">Supplier Invoices - Insurance</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_invoice'), ('travel_type','=','insurance'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase',
+                'default_travel_type':'insurance', 'travel_type':'insurance', 'is_invoice':True, 'is_purchase':True}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to record a new supplier invoice.
+                </p><p>
+                    You can control the invoice from your supplier according to
+                    what you purchased or received. OpenERP can also generate
+                    draft invoices automatically from purchase orders or receipts.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsuppinvoice_ins_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsuppinvoice_ins"/>
+        </record>
+        
+        <record id="action_trsuppinvoice_ins_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trsuppinvoice_ins"/>
+        </record>
+        
+        <menuitem action="action_trsuppinvoice_ins" id="menu_action_trsuppinvoice_ins" 
+            name="Insurance" parent="menu_tr_suppinvoice" sequence="11"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>
+            
+<!--
+      SI:  Cruise
+-->           
+        <record id="action_trsuppinvoice_cruise" model="ir.actions.act_window">
+            <field name="name">Supplier Invoices - Cruise</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_invoice'), ('travel_type','=','cruise'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase',
+                'default_travel_type':'cruise', 'travel_type':'cruise', 'is_invoice':True, 'is_purchase':True}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to record a new supplier invoice.
+                </p><p>
+                    You can control the invoice from your supplier according to
+                    what you purchased or received. OpenERP can also generate
+                    draft invoices automatically from purchase orders or receipts.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsuppinvoice_cruise_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsuppinvoice_cruise"/>
+        </record>
+        
+        <record id="action_trsuppinvoice_cruise_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trsuppinvoice_cruise"/>
+        </record>
+        
+        <menuitem action="action_trsuppinvoice_cruise" id="menu_action_trsuppinvoice_cruise" 
+            name="Cruise" parent="menu_tr_suppinvoice" sequence="12"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>     
+            
+<!--
+      SI:  Railway
+-->           
+        <record id="action_trsuppinvoice_rail" model="ir.actions.act_window">
+            <field name="name">Supplier Invoices - Railway</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_invoice'), ('travel_type','=','railway'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase',
+                'default_travel_type':'railway', 'travel_type':'railway', 'is_invoice':True, 'is_purchase':True}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to record a new supplier invoice.
+                </p><p>
+                    You can control the invoice from your supplier according to
+                    what you purchased or received. OpenERP can also generate
+                    draft invoices automatically from purchase orders or receipts.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsuppinvoice_rail_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsuppinvoice_rail"/>
+        </record>
+        
+        <record id="action_trsuppinvoice_rail_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trsuppinvoice_rail"/>
+        </record>
+        
+        <menuitem action="action_trsuppinvoice_rail" id="menu_action_trsuppinvoice_rail" 
+            name="Railway" parent="menu_tr_suppinvoice" sequence="13"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>
+            
+<!--
+      SI:  Miscellaneous
+-->           
+        <record id="action_trsuppinvoice_misc" model="ir.actions.act_window">
+            <field name="name">Supplier Invoices - Miscellaneous</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_invoice'), ('travel_type','=','direct'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase',
+                'default_travel_type':'direct', 'travel_type':'direct', 'is_invoice':True, 'is_purchase':True}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to record a new supplier invoice.
+                </p><p>
+                    You can control the invoice from your supplier according to
+                    what you purchased or received. OpenERP can also generate
+                    draft invoices automatically from purchase orders or receipts.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trsuppinvoice_misc_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trsuppinvoice_misc"/>
+        </record>
+        
+        <record id="action_trsuppinvoice_misc_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trsuppinvoice_misc"/>
+        </record>
+        
+        <menuitem action="action_trsuppinvoice_misc" id="menu_action_trsuppinvoice_misc" 
+            name="Miscellaneous" parent="menu_tr_suppinvoice" sequence="14"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>
+                     
+                   
+        
+<!--	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+       			Debit Note: Insurance 
+  		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^	
+-->         
+ <!--
+      DN:  Domestic Flight
+--> 
+         <record id="action_trdebitnote_domflight" model="ir.actions.act_window">
+            <field name="name">Debit Note - Domestic Flight</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+             <field name="domain">[('type','=','in_refund'), ('travel_type','=','dom_flight'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_refund', 'type': 'in_refund', 'journal_type': 'purchase_refund',
+                'default_travel_type':'dom_flight', 'travel_type':'dom_flight', 'is_purchase':True,'flight_travel_type':True}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to register a refund you received from a supplier.
+                </p><p>
+                    Instead of creating the supplier refund manually, you can generate
+                    refunds and reconcile them directly from the related supplier invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trdebitnote_domflight_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trdebitnote_domflight"/>
+        </record>
+        
+        <record id="action_trdebitnote_domflight_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trdebitnote_domflight"/>
+        </record>
+        
+        <menuitem action="action_trdebitnote_domflight" id="menu_action_trdebitnote_domflight" 
+            name="Domestic Flight" parent="menu_tr_debitnote" sequence="3"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>   
+               
+        
+        
+<!--
+      DN:  International Flight
+--> 
+        <record id="action_trdebitnote_intflight" model="ir.actions.act_window">
+            <field name="name">Debit Note - International Flight</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_refund'), ('travel_type','=','int_flight'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_refund', 'type': 'in_refund', 'journal_type': 'purchase_refund',
+                'default_travel_type':'int_flight', 'travel_type':'int_flight', 'is_purchase':True ,'flight_travel_type':True}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to register a refund you received from a supplier.
+                </p><p>
+                    Instead of creating the supplier refund manually, you can generate
+                    refunds and reconcile them directly from the related supplier invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trdebitnote_intflight_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trdebitnote_intflight"/>
+        </record>
+        
+        <record id="action_trdebitnote_intflight_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trdebitnote_intflight"/>
+        </record>
+        
+        <menuitem action="action_trdebitnote_intflight" id="menu_action_trdebitnote_intflight" 
+            name="International Flight" parent="menu_tr_debitnote" sequence="4"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>
+        
+<!--
+      DN:  Domestic Hotel
+--> 
+        <record id="action_trdebitnote_domhotel" model="ir.actions.act_window">
+            <field name="name">Debit Note - Domestic Hotel</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_refund'), ('travel_type','=','dom_hotel'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_refund', 'type': 'in_refund', 'journal_type': 'purchase_refund',
+                'default_travel_type':'dom_hotel', 'travel_type':'dom_hotel', 'is_purchase':True,'flight_travel_type':True}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to register a refund you received from a supplier.
+                </p><p>
+                    Instead of creating the supplier refund manually, you can generate
+                    refunds and reconcile them directly from the related supplier invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trdebitnote_domhotel_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trdebitnote_domhotel"/>
+        </record>
+        
+        <record id="action_trdebitnote_domhotel_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trdebitnote_domhotel"/>
+        </record>
+        
+        <menuitem action="action_trdebitnote_domhotel" id="menu_action_trdebitnote_domhotel" 
+            name="Domestic Hotel" parent="menu_tr_debitnote" sequence="5"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>      
+        
+        
+<!--
+      DN:  International Hotel
+--> 
+        <record id="action_trdebitnote_inthotel" model="ir.actions.act_window">
+            <field name="name">Debit Note - International Hotel</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_refund'), ('travel_type','=','int_hotel'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_refund', 'type': 'in_refund', 'journal_type': 'purchase_refund',
+                'default_travel_type':'int_hotel', 'travel_type':'int_hotel', 'is_purchase':True }</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to register a refund you received from a supplier.
+                </p><p>
+                    Instead of creating the supplier refund manually, you can generate
+                    refunds and reconcile them directly from the related supplier invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trdebitnote_inthotel_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trdebitnote_inthotel"/>
+        </record>
+        
+        <record id="action_trdebitnote_inthotel_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trdebitnote_inthotel"/>
+        </record>
+        
+        <menuitem action="action_trdebitnote_inthotel" id="menu_action_trdebitnote_inthotel" 
+            name="International Hotel" parent="menu_tr_debitnote" sequence="6"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>    
+            
+<!--
+      DN:  Transfers
+--> 
+        <record id="action_trdebitnote_car" model="ir.actions.act_window">
+            <field name="name">Debit Note - Transfers</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_refund'), ('travel_type','=','car'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_refund', 'type': 'in_refund', 'journal_type': 'purchase_refund',
+                'default_travel_type':'car', 'travel_type':'car', 'is_purchase':True }</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to register a refund you received from a supplier.
+                </p><p>
+                    Instead of creating the supplier refund manually, you can generate
+                    refunds and reconcile them directly from the related supplier invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trdebitnote_car_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trdebitnote_car"/>
+        </record>
+        
+        <record id="action_trdebitnote_car_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trdebitnote_car"/>
+        </record>
+        
+        <menuitem action="action_trdebitnote_car" id="menu_action_trdebitnote_car" 
+            name="Transfers" parent="menu_tr_debitnote" sequence="7"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>
+            
+<!--
+      DN:  Activities
+--> 
+        <record id="action_trdebitnote_activity" model="ir.actions.act_window">
+            <field name="name">Debit Note - Activities</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_refund'), ('travel_type','=','activity'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_refund', 'type': 'in_refund', 'journal_type': 'purchase_refund',
+                'default_travel_type':'activity', 'travel_type':'activity', 'is_purchase':True }</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to register a refund you received from a supplier.
+                </p><p>
+                    Instead of creating the supplier refund manually, you can generate
+                    refunds and reconcile them directly from the related supplier invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trdebitnote_activity_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trdebitnote_activity"/>
+        </record>
+        
+        <record id="action_trdebitnote_activity_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trdebitnote_activity"/>
+        </record>
+        
+        <menuitem action="action_trdebitnote_activity" id="menu_action_trdebitnote_activity" 
+            name="Activities" parent="menu_tr_debitnote" sequence="8"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/> 
+            
+<!--
+      DN:  Add On
+--> 
+        <record id="action_trdebitnote_addon" model="ir.actions.act_window">
+            <field name="name">Debit Note - Addon</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_refund'), ('travel_type','=','add_on'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_refund', 'type': 'in_refund', 'journal_type': 'purchase_refund',
+                'default_travel_type':'add_on', 'travel_type':'add_on', 'is_purchase':True }</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to register a refund you received from a supplier.
+                </p><p>
+                    Instead of creating the supplier refund manually, you can generate
+                    refunds and reconcile them directly from the related supplier invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trdebitnote_addon_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trdebitnote_addon"/>
+        </record>
+        
+        <record id="action_trdebitnote_addon_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trdebitnote_addon"/>
+        </record>
+        
+        <menuitem action="action_trdebitnote_addon" id="menu_action_trdebitnote_addon" 
+            name="Add On" parent="menu_tr_debitnote" sequence="9"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>   
+            
+<!--
+      DN:  Visa
+--> 
+        <record id="action_trdebitnote_visa" model="ir.actions.act_window">
+            <field name="name">Debit Note - Visa</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_refund'), ('travel_type','=','visa'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_refund', 'type': 'in_refund', 'journal_type': 'purchase_refund',
+                'default_travel_type':'visa', 'travel_type':'visa', 'is_purchase':True }</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to register a refund you received from a supplier.
+                </p><p>
+                    Instead of creating the supplier refund manually, you can generate
+                    refunds and reconcile them directly from the related supplier invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trdebitnote_visa_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trdebitnote_visa"/>
+        </record>
+        
+        <record id="action_trdebitnote_visa_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trdebitnote_visa"/>
+        </record>
+        
+        <menuitem action="action_trdebitnote_visa" id="menu_action_trdebitnote_visa" 
+            name="Visa" parent="menu_tr_debitnote" sequence="10"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>                                            
+        
+<!--
+      DN:  Insurance
+--> 
+        <record id="action_trdebitnote_ins" model="ir.actions.act_window">
+            <field name="name">Debit Note - Insurance</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_refund'), ('travel_type','=','insurance'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_refund', 'type': 'in_refund', 'journal_type': 'purchase_refund',
+                'default_travel_type':'insurance', 'travel_type':'insurance', 'is_purchase':True }</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to register a refund you received from a supplier.
+                </p><p>
+                    Instead of creating the supplier refund manually, you can generate
+                    refunds and reconcile them directly from the related supplier invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trdebitnote_ins_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trdebitnote_ins"/>
+        </record>
+        
+        <record id="action_trdebitnote_ins_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trdebitnote_ins"/>
+        </record>
+        
+        <menuitem action="action_trdebitnote_ins" id="menu_action_trdebitnote_ins" 
+            name="Insurance" parent="menu_tr_debitnote" sequence="11"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>
+            
+<!--
+      DN:  Cruise
+--> 
+        <record id="action_trdebitnote_cruise" model="ir.actions.act_window">
+            <field name="name">Debit Note - Cruise</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_refund'), ('travel_type','=','cruise'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_refund', 'type': 'in_refund', 'journal_type': 'purchase_refund',
+                'default_travel_type':'cruise', 'travel_type':'cruise', 'is_purchase':True }</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to register a refund you received from a supplier.
+                </p><p>
+                    Instead of creating the supplier refund manually, you can generate
+                    refunds and reconcile them directly from the related supplier invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trdebitnote_cruise_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trdebitnote_cruise"/>
+        </record>
+        
+        <record id="action_trdebitnote_cruise_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trdebitnote_cruise"/>
+        </record>
+        
+        <menuitem action="action_trdebitnote_cruise" id="menu_action_trdebitnote_cruise" 
+            name="Cruise" parent="menu_tr_debitnote" sequence="12"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>
+            
+<!--
+      DN:  Railway
+--> 
+        <record id="action_trdebitnote_rail" model="ir.actions.act_window">
+            <field name="name">Debit Note - Railway</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_refund'), ('travel_type','=','railway'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_refund', 'type': 'in_refund', 'journal_type': 'purchase_refund',
+                'default_travel_type':'railway', 'travel_type':'railway', 'is_purchase':True }</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to register a refund you received from a supplier.
+                </p><p>
+                    Instead of creating the supplier refund manually, you can generate
+                    refunds and reconcile them directly from the related supplier invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trdebitnote_rail_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trdebitnote_rail"/>
+        </record>
+        
+        <record id="action_trdebitnote_rail_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trdebitnote_rail"/>
+        </record>
+        
+        <menuitem action="action_trdebitnote_rail" id="menu_action_trdebitnote_rail" 
+            name="Railway" parent="menu_tr_debitnote" sequence="13"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>
+            
+          
+<!--
+      DN:  Miscellaneous
+--> 
+        <record id="action_trdebitnote_misc" model="ir.actions.act_window">
+            <field name="name">Debit Note - Railway</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_refund'), ('travel_type','=','direct'), ('state','not in',('quotation','order_cancel'))]</field>
+            <field name="context">{'default_type': 'in_refund', 'type': 'in_refund', 'journal_type': 'purchase_refund',
+                'default_travel_type':'direct', 'travel_type':'direct', 'is_purchase':True }</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to register a refund you received from a supplier.
+                </p><p>
+                    Instead of creating the supplier refund manually, you can generate
+                    refunds and reconcile them directly from the related supplier invoice.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_trdebitnote_misc_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_trdebitnote_misc"/>
+        </record>
+        
+        <record id="action_trdebitnote_misc_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_invoice_supplier_form"/>
+            <field name="act_window_id" ref="action_trdebitnote_misc"/>
+        </record>
+        
+        <menuitem action="action_trdebitnote_misc" id="menu_action_trdebitnote_misc" 
+            name="Miscellaneous" parent="menu_tr_debitnote" sequence="14"
+            groups="Trabacus.group_traccount_user,Trabacus.group_traccount_consultant,Trabacus.group_traccount_manager"/>                                     
+        
+    </data>
+</openerp>

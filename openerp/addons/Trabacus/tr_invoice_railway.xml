@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        
+<!--	^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+       			Invoice: Railway 
+  		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^	
+--> 
+        
+        <record id="view_invoice_rail_tree" model="ir.ui.view">
+            <field name="name">view.invoice.rail.tree</field>
+            <field name="model">tr.invoice.railway</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Railway">
+                    <field name="tpartner_id"/> 
+                    <field name="name"/>
+                    <field name="basic"/> 
+                    <field name="tac"/>
+                    <field name="taxes"/>
+                    <field name="servicechrg"/>
+                    <field name="total"/>
+                    <field name="currency_id"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_invoice_rail_form" model="ir.ui.view">
+            <field name="name">view.invoice.rail.form</field>
+            <field name="model">tr.invoice.railway</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Railway" version="8.0">
+                    <group col="6" colspan="3">   
+                        <field name="tpartner_id" context="{'search_default_supplier':1,'default_supplier':1,'default_customer':0}"/>                        
+                        <field name="product_id" on_change="onchange_product(product_id)" context="{'default_travel_type':context.get('travel_type')}"/> 
+                        <field name="name"/>
+                        <field name="currency_id"/>
+                        <field name="account_id" invisible="1"/>
+                    </group>
+                    <notebook>
+                    	<page string="Passenger Details">
+                    		<group name='passenger' colspan="3" col="6">
+                    				<field name = "rail_lines" widget = "one2many_tags" nolabel="1" >
+                    				  <tree string="Passenger Details" editable="bottom">	
+                    				  	  <field name="pax_id" on_change="onchange_passenger(pax_id)" />
+	                                      <field name="pax_name" nolabel="1"/>
+	                                      <field name="pax_age"/>
+	                                      <field name="coach_no"/>
+	                                      <field name="seat_no"/>
+                                      </tree>	                    				  
+                                    </field>
+                             </group>
+                    	</page>
+                    	<page string="Journey Details">
+	                    	<group col="6" colspan="3">
+		                        <field name="ticket_no"/>
+		                        <field name="travel_dt"/>
+		                        <field name="train_no"/>
+		                        <field name="source"/>
+		                        <field name="dest"/>
+		                        <field name="train_name"/>
+		                        <field name="dep" on_change="onchange_dep(dep)"/>
+		                        <field name="arr"/>
+		                        <field name="rl_class"/>
+		                        <field name="company_id" invisible="1"/>  
+                        	</group>
+                     	</page>
+                        <page string="Fare Details">
+                            <group col="6" colspan="3">
+                                <field name="basic" 	  		 on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)"/>
+                                <field name="tac_perc" 			 on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)"/>
+                                <field name="tac" 				 on_change="onchange_RAIL_total(inv_type, 'amt', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)" class="trab_maroon_css"/>
+                                <field name="irctc" 			 on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)"/>
+                                <field name="markup_perc"  		 on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)"/>
+                                <field name="markup" 			 on_change="onchange_RAIL_total(inv_type, 'amt', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)" class="trab_maroon_css"/>
+                                <field name="gateway" 			 on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)" />
+                                <field name="tds_perc" 			 on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)"/>
+                                <field name="tds" 				 on_change="onchange_RAIL_total(inv_type, 'amt', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)" class="trab_maroon_css"/>
+                                <field name="discount" 			 on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)"/>
+                                <field name="tds1_perc" 		 on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)"/>
+                                <field name="tds1" 				 on_change="onchange_RAIL_total(inv_type, 'amt', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)" class="trab_maroon_css"/>
+                                <newline/>
+                                <field name="tptax"/>
+                                <field name="servicechrg_perc" 	 on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)"/>
+                                <field name="servicechrg" 	   	 on_change="onchange_RAIL_total(inv_type, 'amt', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)" class="trab_maroon_css"/>
+                                <newline/>
+                                <field name="cancel_markup" 	 on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+                                <field name="cancel_charges" 	 on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+                                <field name="cancel_service" on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)" invisible="not context.get('credit_view')" class="trab_maroon_css"/>
+                                <field name="subtotal" class="trab_boldc_css"/>
+                            </group>
+                            <separator string="T.P.Taxes"/>
+                            <group col="8" colspan="4">
+                                <field name="tptax_basic" 		on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)"/>
+                                <field name="tptax_irctc" 		on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)"/>
+                                <field name="tptax_gateway" 	on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)"/>
+                                <field name="tptax_tac" 		on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)"/>
+                                <field name="tptax_tds" 		on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)"/>
+                                <field name="tptax_ids" colspan="4" widget="many2many_tags" 
+                                								on_change="onchange_RAIL_total(inv_type, 'all', basic, irctc, gateway, tac_perc, tac, markup_perc, markup, tds_perc, tds, tds1_perc, tds1, servicechrg_perc, servicechrg, discount, cancel_markup, cancel_charges, cancel_service, tptax_basic, tptax_irctc, tptax_tac, tptax_tds, tptax_gateway, tptax_ids)"/>
+                                <field name="inv_type" invisible="1"/>
+                            </group>
+                            <separator string="Taxes"/>
+		                    <group col="8" colspan="4">
+		                        <field name="tax_basic"  	  class="trab_maroon_css"/>
+		                        <field name="tax_irctc" 	  class="trab_maroon_css"/>
+		                        <field name="tax_gateway" 	  class="trab_maroon_css"/>
+		                        <field name="tax_tac" 		  class="trab_maroon_css"/>
+		                        <field name="tax_tds" 		  class="trab_maroon_css"/>
+		                        <field name="tax_tds1" 		  class="trab_maroon_css"/>
+		                        <field name="tax_mark" 		  class="trab_maroon_css"/>
+		                        <field name="tax_tptax" 	  class="trab_maroon_css"/>
+		                        <field name="tax_servicechrg" class="trab_maroon_css"/>
+		                        <field name="tax_ids" widget = "many2many_tags" colspan="4" class="trab_maroon_css"/>                    			
+		                    </group>
+		                 </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+        
+    </data>
+</openerp>
