@@ -1094,7 +1094,8 @@ def db_filter(dbs, httprequest=None):
     db = d
     if d == 'apidemo':
        d = 'apidemo'
-    
+    else:
+       d = 'capitalcentric'
     #m = h.split('.')[1]
     r = openerp.tools.config['dbfilter'].replace('%h', h).replace('%d', d)
     dbs = [i for i in dbs if re.match(r, i)]
